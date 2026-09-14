@@ -1,0 +1,165 @@
+---
+import Button from './Button.astro';
+import { site } from '../data/site';
+import { buyerTypes } from '../data/taxonomy';
+
+interface Props {
+  compact?: boolean;
+  prefillProduct?: string;
+}
+const { compact = false, prefillProduct = '' } = Astro.props;
+---
+
+<form
+  id="quote-form"
+  data-endpoint={site.formEndpoint}
+  data-fallback-email={site.email}
+  class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm"
+  novalidate
+>
+  <div class="grid sm:grid-cols-2 gap-5">
+    <div>
+      <label for="qf-name" class="block text-sm font-medium text-slate-700 mb-1.5">Full Name *</label>
+      <input id="qf-name" name="fullName" type="text" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div>
+      <label for="qf-company" class="block text-sm font-medium text-slate-700 mb-1.5">Company Name *</label>
+      <input id="qf-company" name="companyName" type="text" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div>
+      <label for="qf-email" class="block text-sm font-medium text-slate-700 mb-1.5">Business Email *</label>
+      <input id="qf-email" name="email" type="email" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div>
+      <label for="qf-phone" class="block text-sm font-medium text-slate-700 mb-1.5">Phone / WhatsApp *</label>
+      <input id="qf-phone" name="phone" type="tel" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div>
+      <label for="qf-country" class="block text-sm font-medium text-slate-700 mb-1.5">Country *</label>
+      <input id="qf-country" name="country" type="text" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div>
+      <label for="qf-buyer-type" class="block text-sm font-medium text-slate-700 mb-1.5">Buyer Type *</label>
+      <select id="qf-buyer-type" name="buyerType" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none bg-white">
+        <option value="">Select buyer type…</option>
+        {buyerTypes.map((b) => <option value={b.name}>{b.name}</option>)}
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div>
+      <label for="qf-product" class="block text-sm font-medium text-slate-700 mb-1.5">Product / Molecule *</label>
+      <input id="qf-product" name="product" type="text" required value={prefillProduct} placeholder="e.g. Paracetamol, Amoxicillin, Metformin" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div>
+      <label for="qf-dosage" class="block text-sm font-medium text-slate-700 mb-1.5">Dosage Form</label>
+      <input id="qf-dosage" name="dosageForm" type="text" placeholder="Tablet, capsule, injection…" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div>
+      <label for="qf-strength" class="block text-sm font-medium text-slate-700 mb-1.5">Strength</label>
+      <input id="qf-strength" name="strength" type="text" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div>
+      <label for="qf-quantity" class="block text-sm font-medium text-slate-700 mb-1.5">Estimated Quantity</label>
+      <input id="qf-quantity" name="quantity" type="text" placeholder="e.g. 100,000 units / month" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div>
+      <label for="qf-packaging" class="block text-sm font-medium text-slate-700 mb-1.5">Packaging Requirement</label>
+      <input id="qf-packaging" name="packaging" type="text" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div>
+      <label for="qf-market" class="block text-sm font-medium text-slate-700 mb-1.5">Target Market</label>
+      <input id="qf-market" name="targetMarket" type="text" placeholder="e.g. Nigeria, UAE, Philippines" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div class="sm:col-span-2">
+      <label for="qf-date" class="block text-sm font-medium text-slate-700 mb-1.5">Required Delivery Date</label>
+      <input id="qf-date" name="deliveryDate" type="date" class="w-full sm:w-1/2 rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none" />
+    </div>
+    <div class="sm:col-span-2">
+      <label for="qf-message" class="block text-sm font-medium text-slate-700 mb-1.5">Message</label>
+      <textarea id="qf-message" name="message" rows="4" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm focus:border-[color:var(--color-blue)] focus:ring-1 focus:ring-[color:var(--color-blue)] outline-none"></textarea>
+    </div>
+    <div class="sm:col-span-2">
+      <label for="qf-file" class="block text-sm font-medium text-slate-700 mb-1.5">Upload Product List / RFQ (optional)</label>
+      <input id="qf-file" name="attachment" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv" class="w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-[color:var(--color-blue-light)] file:text-[color:var(--color-navy)] file:text-sm file:font-semibold" />
+    </div>
+
+    <!-- Honeypot anti-spam field — hidden from real users, left blank -->
+    <div class="hidden" aria-hidden="true">
+      <label for="qf-hp">Leave this field blank</label>
+      <input id="qf-hp" name="companyWebsite" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+  </div>
+
+  <p id="qf-status" class="mt-4 text-sm hidden" role="status"></p>
+
+  <div class="mt-6 flex items-center justify-between flex-wrap gap-3">
+    <p class="text-xs text-slate-400 max-w-sm">By submitting, you agree to be contacted about your enquiry. We do not sell or share your details.</p>
+    <Button type="submit" size="lg">Request Export Quote</Button>
+  </div>
+</form>
+
+<script>
+  const form = document.getElementById('quote-form') as HTMLFormElement | null;
+  const status = document.getElementById('qf-status');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const honeypot = (form.elements.namedItem('companyWebsite') as HTMLInputElement)?.value;
+    if (honeypot) return; // silently drop likely-bot submissions
+
+    const endpoint = form.dataset.endpoint;
+    const fallbackEmail = form.dataset.fallbackEmail;
+    const data = new FormData(form);
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+    if (endpoint) {
+      if (submitBtn) submitBtn.disabled = true;
+      try {
+        const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error('Request failed');
+        if (status) {
+          status.textContent = 'Thank you — your enquiry has been received. Our team will respond within 1–2 business days.';
+          status.className = 'mt-4 text-sm text-[color:var(--color-success)]';
+        }
+        form.reset();
+      } catch {
+        if (status) {
+          status.textContent = `Something went wrong sending this automatically. Please email us directly at ${fallbackEmail}.`;
+          status.className = 'mt-4 text-sm text-[color:var(--color-error)]';
+        }
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+      return;
+    }
+
+    // No backend configured yet — open a pre-filled email as an honest fallback.
+    const lines = [
+      `Full Name: ${data.get('fullName') ?? ''}`,
+      `Company: ${data.get('companyName') ?? ''}`,
+      `Email: ${data.get('email') ?? ''}`,
+      `Phone/WhatsApp: ${data.get('phone') ?? ''}`,
+      `Country: ${data.get('country') ?? ''}`,
+      `Buyer Type: ${data.get('buyerType') ?? ''}`,
+      `Product/Molecule: ${data.get('product') ?? ''}`,
+      `Dosage Form: ${data.get('dosageForm') ?? ''}`,
+      `Strength: ${data.get('strength') ?? ''}`,
+      `Estimated Quantity: ${data.get('quantity') ?? ''}`,
+      `Packaging Requirement: ${data.get('packaging') ?? ''}`,
+      `Target Market: ${data.get('targetMarket') ?? ''}`,
+      `Required Delivery Date: ${data.get('deliveryDate') ?? ''}`,
+      `Message: ${data.get('message') ?? ''}`,
+    ];
+    const subject = encodeURIComponent(`Export Quote Request — ${data.get('companyName') ?? 'New Enquiry'}`);
+    const body = encodeURIComponent(lines.join('\n'));
+    window.location.href = `mailto:${fallbackEmail}?subject=${subject}&body=${body}`;
+    if (status) {
+      status.textContent = 'Opening your email client with this enquiry pre-filled — please attach any product list and send it to complete your request.';
+      status.className = 'mt-4 text-sm text-slate-600';
+    }
+  });
+</script>

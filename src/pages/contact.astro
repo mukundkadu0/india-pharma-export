@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+import { site } from '../data/site';
+
+const enquiryTypes = [
+  { icon: 'truck', title: 'Export Enquiry', desc: 'Bulk sourcing, tender supply or a specific market requirement.', href: '/request-quote/' },
+  { icon: 'capsule', title: 'Product Enquiry', desc: 'Questions about a specific molecule, formulation or category.', href: '/products/' },
+  { icon: 'user-group', title: 'Partnership', desc: 'Manufacturing partnership, distribution or agent enquiries.', email: site.partnershipEmail },
+  { icon: 'mail', title: 'General Enquiry', desc: 'Anything else — we will route it to the right team.', email: site.email },
+];
+
+const contactJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact India Pharma Export',
+};
+---
+
+<BaseLayout
+  title="Contact Us — India Pharma Export"
+  description="Contact India Pharma Export for bulk pharmaceutical sourcing, product enquiries, manufacturing partnerships or general questions."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(contactJsonLd)} />
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
+  </div>
+
+  <section class="container-page pt-6 pb-14">
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Contact</p>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Talk to Our Export Team</h1>
+    <p class="mt-3 text-slate-600 max-w-2xl">Choose the enquiry type below, or use the details to reach us directly. We do not provide medical advice or handle individual consumer orders.</p>
+  </section>
+
+  <section class="container-page pb-16 grid lg:grid-cols-2 gap-6">
+    {enquiryTypes.map((e) => (
+      <div class="rounded-2xl border border-slate-200 p-6 flex flex-col">
+        <span class="grid place-items-center w-11 h-11 rounded-xl bg-[color:var(--color-blue-light)] text-[color:var(--color-navy)] mb-4">
+          <Icon name={e.icon} class="w-5 h-5" />
+        </span>
+        <h2 class="font-semibold text-[color:var(--color-navy)]">{e.title}</h2>
+        <p class="mt-1.5 text-sm text-slate-600 leading-relaxed flex-1">{e.desc}</p>
+        {e.href ? (
+          <Button href={e.href} variant="ghost" class="mt-4 self-start !px-0">Get Started</Button>
+        ) : (
+          <a href={`mailto:${e.email}`} class="mt-4 text-sm font-semibold text-[color:var(--color-blue)] hover:underline">{e.email}</a>
+        )}
+      </div>
+    ))}
+  </section>
+
+  <section class="bg-[color:var(--color-blue-light)]">
+    <div class="container-page py-14 grid sm:grid-cols-3 gap-8">
+      <div class="flex items-start gap-3">
+        <Icon name="mail" class="w-5 h-5 text-[color:var(--color-navy)] mt-0.5" />
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Email</p>
+          <a href={`mailto:${site.email}`} class="text-sm font-medium text-[color:var(--color-navy)]">{site.email}</a>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <Icon name="phone" class="w-5 h-5 text-[color:var(--color-navy)] mt-0.5" />
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Phone / WhatsApp</p>
+          <a href={`tel:${site.phone.replace(/\s+/g, '')}`} class="text-sm font-medium text-[color:var(--color-navy)]">{site.phone}</a>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <Icon name="map-pin" class="w-5 h-5 text-[color:var(--color-navy)] mt-0.5" />
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Location</p>
+          <p class="text-sm font-medium text-[color:var(--color-navy)]">{site.address}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

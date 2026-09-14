@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import TrustPillar from '../components/TrustPillar.astro';
+import CTASection from '../components/CTASection.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="About Us — India Pharma Export"
+  description="India Pharma Export is a B2B pharmaceutical sourcing and export platform, operating as a merchant exporter sourcing from WHO-GMP certified Indian manufacturing partners."
+>
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
+  </div>
+
+  <section class="container-page pt-6 pb-14 max-w-3xl">
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">About Us</p>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)]">India's Trusted Partner in Pharmaceutical Exports</h1>
+    <div class="mt-6 prose-body">
+      <p>
+        {site.name} is a B2B pharmaceutical sourcing and export platform. We connect international importers, distributors, wholesalers, hospital groups and government procurement bodies with pharmaceutical supply from India — formulations, active pharmaceutical ingredients, medical devices, AYUSH and nutraceutical products.
+      </p>
+      <h2>How We Operate</h2>
+      <p>
+        We operate as a merchant exporter: we source from WHO-GMP certified Indian manufacturing partners and handle the export transaction, documentation and buyer relationship. We do not operate our own manufacturing facilities, and we do not claim certifications, registrations or approvals that belong to our manufacturing partners as our own — where a product's compliance rests on a manufacturer's WHO-GMP status or COPP, we say so plainly.
+      </p>
+      <p>
+        This is a B2B platform, not a consumer pharmacy. We work with licensed buyers who hold the import authorisation for their own country, and we do not sell prescription medicines directly to individual consumers.
+      </p>
+      <h2>Our Approach</h2>
+      <p>
+        Every enquiry runs through the same discipline: confirm the product and manufacturing partner, check current export and prescription status against the specific destination, and provide complete, accurate documentation. We would rather tell a buyer a product needs further verification than overstate what we can deliver.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-slate-50 border-y border-slate-100">
+    <div class="container-page py-16">
+      <h2 class="font-display text-2xl text-[color:var(--color-navy)] mb-8">What We Stand On</h2>
+      <div class="grid sm:grid-cols-2 gap-x-8 gap-y-7">
+        <TrustPillar icon="building" title="Manufacturing Partner Network" description="Sourcing from WHO-GMP certified Indian manufacturing partners rather than claiming in-house manufacturing." />
+        <TrustPillar icon="shield-check" title="Regulatory Awareness" description="Export and prescription status checked per product and destination before any quotation is issued." />
+        <TrustPillar icon="document" title="Documentation Discipline" description="COPP, Certificate of Analysis, GMP certificates and full shipment paperwork coordinated for every consignment." />
+        <TrustPillar icon="user-group" title="B2B, Not Consumer Retail" description="We serve licensed importers, wholesalers, hospitals and government buyers — never direct-to-consumer prescription sales." />
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page py-16 max-w-3xl">
+    <h2 class="font-display text-2xl text-[color:var(--color-navy)] mb-4">Where We Are Building Our Track Record</h2>
+    <p class="text-slate-600 leading-relaxed">
+      We're transparent that new export relationships take time to build. Rather than list unverified certifications, awards or client rosters, we invite buyers to evaluate us on the specifics of an actual enquiry — the manufacturing partner behind a product, the documentation we provide, and how clearly we explain the regulatory pathway for your destination market.
+    </p>
+  </section>
+
+  <CTASection
+    heading="Evaluate Us on a Real Enquiry"
+    body="Send us a product and destination market, and see the documentation and regulatory clarity we provide."
+    primaryLabel="Request a Quote"
+    primaryHref="/request-quote/"
+    secondaryLabel="View Compliance Framework"
+    secondaryHref="/compliance/"
+  />
+</BaseLayout>

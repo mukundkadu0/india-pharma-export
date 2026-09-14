@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Icon from '../components/Icon.astro';
+import Badge from '../components/Badge.astro';
+import CTASection from '../components/CTASection.astro';
+
+const licenceSteps = [
+  { n: '01', title: 'Company, PAN & Current Account', authority: 'MCA / Bank', body: 'A private limited company or LLP, PAN and current account — foreign buyers and banks treat a private limited structure as materially more credible.' },
+  { n: '02', title: 'Importer-Exporter Code (IEC)', authority: 'DGFT', body: 'The ten-digit code without which no consignment can leave India, linked to PAN.' },
+  { n: '03', title: 'Wholesale Drug Licence — Form 20B & 21B', authority: 'State FDA', body: 'Form 20B covers general medicines; 21B covers Schedule C and C(1) — biologicals, injectables and vaccines. Both are required to access the full catalogue.' },
+  { n: '04', title: 'RCMC from Pharmexcil', authority: 'Pharmexcil', body: 'Registration-cum-Membership Certificate, mandatory for all pharmaceutical exporters and the gateway to export incentives and market intelligence.' },
+  { n: '05', title: 'AD Code Registration + ICEGATE', authority: 'Bank / Customs', body: "The exporter's bank-issued Authorised Dealer code, registered at each port, without which customs cannot generate a shipping bill." },
+  { n: '06', title: 'COPP / WHO-GMP Certificate', authority: 'State FDA / CDSCO', body: "The Certificate of Pharmaceutical Product, in WHO format — for a merchant exporter, obtained through the manufacturing partner and issued against their plant." },
+  { n: '07', title: 'Export NOC from CDSCO', authority: 'CDSCO Zonal Office', body: 'Required for new drugs, drugs unapproved in India but legal at the destination, banned drugs and NDPS substances — filed via the SUGAM portal. Not required for most standard, approved formulations.' },
+  { n: '08', title: 'Destination-Country Registration', authority: 'Foreign Regulator', body: 'Each destination country registers each product separately. This is usually the longest step — foreign regulators, not Indian ones, set the real timeline.' },
+];
+
+const documents = [
+  'Commercial invoice — HS code, Incoterm, country of origin',
+  'Packing list — batch-wise, net and gross weights',
+  'Shipping bill — generated on ICEGATE against the AD Code',
+  'Bill of lading / airway bill',
+  'Certificate of Origin — preferential where an FTA applies',
+  'Certificate of Analysis — batch-specific',
+  'Certificate of Pharmaceutical Product (COPP) — WHO format',
+  'Free Sale Certificate',
+  'GMP certificate of the manufacturing plant',
+  'Manufacturing & wholesale licence copies — Form 25/28, 20B/21B',
+  'Import permit or licence of the buyer',
+  'Export NOC — where the product category requires one',
+  'Cold-chain / temperature log — for Schedule C & C(1) goods',
+  'Insurance certificate — for CIF terms',
+];
+
+const exportStatuses = [
+  { label: 'Free', desc: 'Freely exportable under a wholesale licence and RCMC. No CDSCO Export NOC needed for standard approved formulations.', className: 'text-[color:var(--color-success)]' },
+  { label: 'NOC / Conditional', desc: 'Needs a CDSCO Export NOC, a sector permission, or is subject to periodic DGFT quantity restrictions.', className: 'text-[color:var(--color-warning)]' },
+  { label: 'Controlled', desc: 'NDPS or psychotropic. Narcotics Commissioner authorisation, PO-specific quantity NOC, and destination bans may apply.', className: 'text-[color:var(--color-error)]' },
+  { label: 'Prohibited', desc: 'Cannot be exported, or only under exceptional case-by-case central government permission.', className: 'text-[color:var(--color-error)]' },
+];
+---
+
+<BaseLayout
+  title="Compliance — Pharmaceutical Export Regulatory Framework"
+  description="How India Pharma Export operates within Indian pharmaceutical export regulation: the licence stack, export status classifications, shipment documentation, and why this is a B2B-only platform."
+>
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Compliance' }]} />
+  </div>
+
+  <section class="container-page pt-6 pb-10">
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Compliance</p>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Compliance You Can Trust</h1>
+    <p class="mt-3 text-slate-600 max-w-2xl">
+      We operate as a merchant exporter — sourcing from WHO-GMP certified Indian manufacturing partners — within the regulatory framework below. Requirements vary by product, destination and export status; this page explains the framework, not a guarantee of outcome for any specific shipment.
+    </p>
+  </section>
+
+  <section class="bg-amber-50 border-y border-amber-200">
+    <div class="container-page py-6 flex items-start gap-3">
+      <Icon name="shield" class="w-6 h-6 text-amber-700 shrink-0 mt-0.5" />
+      <p class="text-sm text-amber-800 leading-relaxed">
+        <strong>Direct-to-consumer prescription medicine export is illegal into almost every market.</strong> This platform operates strictly B2B — selling to licensed importers, wholesalers, hospital groups and government buyers who hold the import authorisation in their own country. We do not process consumer orders or ship prescription medicines to individuals. Read more in our guide on
+        <a href="/resources/why-b2b-not-consumer-checkout/" class="underline font-medium">why this is a B2B platform</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-page py-16">
+    <h2 class="font-display text-2xl sm:text-3xl text-[color:var(--color-navy)] mb-8">The Licence Stack, in Order</h2>
+    <p class="text-slate-600 max-w-2xl mb-8">These steps are sequential — several later steps require an earlier certificate as an input. Not every step applies identically to every product; a standard freely-exportable formulation, for example, does not require an Export NOC.</p>
+    <div class="grid sm:grid-cols-2 gap-5">
+      {licenceSteps.map((step) => (
+        <div class="rounded-2xl border border-slate-200 p-5">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="font-display text-2xl text-[color:var(--color-accent)]">{step.n}</span>
+            <h3 class="font-semibold text-[color:var(--color-navy)]">{step.title}</h3>
+          </div>
+          <p class="text-sm text-slate-600 leading-relaxed">{step.body}</p>
+          <p class="mt-2 text-xs font-medium text-slate-400 uppercase tracking-wide">{step.authority}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="bg-[color:var(--color-blue-light)]">
+    <div class="container-page py-16">
+      <h2 class="font-display text-2xl sm:text-3xl text-[color:var(--color-navy)] mb-8">Export Status Classification</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {exportStatuses.map((s) => (
+          <div class="bg-white rounded-2xl p-5">
+            <p class={`font-semibold ${s.className}`}>{s.label}</p>
+            <p class="mt-2 text-sm text-slate-600 leading-relaxed">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+      <p class="mt-6 text-sm text-slate-600 max-w-2xl">
+        Prescription status (whether a molecule can be sold without a prescription) is a separate question from export status. A molecule can be prescription-only in India but freely exportable — most of our catalogue — because the buyer's own pharmacy holds the prescription obligation, not us. See our <a href="/glossary/schedule-h/" class="underline text-[color:var(--color-blue)]">Schedule H</a> glossary entry for more.
+      </p>
+    </div>
+  </section>
+
+  <section class="container-page py-16">
+    <h2 class="font-display text-2xl sm:text-3xl text-[color:var(--color-navy)] mb-8">Documents That Travel With Every Consignment</h2>
+    <div class="grid sm:grid-cols-2 gap-3">
+      {documents.map((d) => (
+        <div class="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          <Icon name="document" class="w-4.5 h-4.5 text-slate-400 shrink-0" /> {d}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="bg-[color:var(--color-navy-deep)] text-white">
+    <div class="container-page py-16">
+      <h2 class="font-display text-2xl sm:text-3xl mb-6">Special-Handling Categories</h2>
+      <div class="grid sm:grid-cols-2 gap-5 text-sm">
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+          <h3 class="font-semibold mb-2">NDPS-Controlled Molecules</h3>
+          <p class="text-white/70 leading-relaxed">Narcotics, psychotropics and a defined Schedule X list require Narcotics Commissioner authorisation under NDPS Rules 55 & 58, decided within 21 working days, plus a purchase-order-specific CDSCO NOC. These are not part of our standard quotable catalogue.</p>
+        </div>
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+          <h3 class="font-semibold mb-2">Vaccines & Biologicals</h3>
+          <p class="text-white/70 leading-relaxed">Requires Form 21B, a validated cold chain, and — for UN procurement — WHO Prequalification. Quoted only against verified institutional or programme buyers.</p>
+        </div>
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+          <h3 class="font-semibold mb-2">Nutraceuticals & AYUSH</h3>
+          <p class="text-white/70 leading-relaxed">Regulated as food supplements in most markets — an FSSAI licence, not a drug licence, governs manufacture and export. Structure-function claims only; no disease-treatment claims.</p>
+        </div>
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+          <h3 class="font-semibold mb-2">Tier 1 Markets (US, EU, UK, Japan)</h3>
+          <p class="text-white/70 leading-relaxed">Finished-formulation supply requires an ANDA/EU-GMP-inspected manufacturing partner. We do not claim capability we do not hold — see our <a href="/markets/united-states/" class="underline">United States</a> and <a href="/markets/europe-uk/" class="underline">Europe & UK</a> market pages.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page py-16">
+    <div class="rounded-2xl border-2 border-amber-300 bg-amber-50 p-6 sm:p-8">
+      <h2 class="font-display text-xl text-amber-900 mb-2">Important Disclaimer</h2>
+      <p class="text-sm text-amber-800 leading-relaxed">
+        Product availability, export eligibility, prescription classification, registration requirements, licensing requirements and destination-country rules may vary by product, formulation, strength, manufacturer and destination, and can change without notice — DGFT can move any formulation from "Free" to "Restricted" overnight. Content on this website is provided for sourcing and informational purposes and does not constitute legal, regulatory or medical advice. Verify current requirements with the relevant Indian and destination-country authorities before shipment, and engage a qualified regulatory consultant and customs broker before your first consignment. See our full <a href="/disclaimer/" class="underline font-medium">Disclaimer</a>.
+      </p>
+    </div>
+  </section>
+
+  <CTASection
+    heading="Questions About a Specific Product's Compliance Status?"
+    primaryLabel="Ask Our Team"
+    primaryHref="/contact/"
+    secondaryLabel="Browse the Glossary"
+    secondaryHref="/glossary/"
+  />
+</BaseLayout>

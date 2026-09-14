@@ -1,0 +1,117 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Badge from '../../../components/Badge.astro';
+import Button from '../../../components/Button.astro';
+import ProductCard from '../../../components/ProductCard.astro';
+import CTASection from '../../../components/CTASection.astro';
+import { getCategoryGroup, exportStatusMeta, prescriptionStatusMeta } from '../../../data/taxonomy';
+
+export async function getStaticPaths() {
+  const classes = await getCollection('classes');
+  return classes.map((c) => ({ params: { slug: c.data.id }, props: { classData: c.data } }));
+}
+
+const { classData } = Astro.props;
+const category = getCategoryGroup(classData.categoryGroup);
+const es = exportStatusMeta[classData.exportStatus];
+const ps = prescriptionStatusMeta[classData.prescriptionStatus];
+const allProducts = (await getCollection('products')).map((p) => p.data);
+const relatedProducts = allProducts.filter((p) => p.therapeuticClass === classData.id);
+---
+
+<BaseLayout
+  title={`${classData.name} — Export Status, HS Code & Molecules`}
+  description={`${classData.summary} HS code ${classData.hsCode}. ${classData.description.slice(0, 120)}`}
+>
+  <div class="container-page pt-6">
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Products', href: '/products/' },
+        { label: category?.name ?? 'Products', href: `/products/${classData.categoryGroup}/` },
+        { label: classData.name },
+      ]}
+    />
+  </div>
+
+  <section class="container-page pt-6 pb-10">
+    <div class="flex flex-wrap gap-2 mb-4">
+      <Badge label={es.label} className={es.className} size="md" />
+      <Badge label={ps.label} className={ps.className} size="md" />
+    </div>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">{classData.name}</h1>
+    <p class="mt-3 text-slate-600 max-w-2xl">{classData.summary}</p>
+
+    <div class="mt-6 flex flex-wrap gap-6 text-sm text-slate-500">
+      <span><strong class="text-[color:var(--color-navy)]">HS Code:</strong> {classData.hsCode}</span>
+      <span><strong class="text-[color:var(--color-navy)]">Markets:</strong> {classData.markets.join(', ')}</span>
+      <span><strong class="text-[color:var(--color-navy)]">Molecules Tracked:</strong> {classData.listedCount}</span>
+    </div>
+  </section>
+
+  <section class="container-page pb-14 grid lg:grid-cols-3 gap-10">
+    <div class="lg:col-span-2 prose-body">
+      <h2>What This Class Covers</h2>
+      <p>{classData.description}</p>
+      {classData.exportNote && (
+        <>
+          <h2>Export Status Notes</h2>
+          <p>{classData.exportNote}</p>
+        </>
+      )}
+      {classData.prescriptionNote && (
+        <>
+          <h2>Prescription Status Notes</h2>
+          <p>{classData.prescriptionNote}</p>
+        </>
+      )}
+
+      <h2>Representative Molecules</h2>
+      <div class="flex flex-wrap gap-2 not-prose">
+        {classData.molecules.map((m: string) => (
+          <span class="text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-700">{m}</span>
+        ))}
+      </div>
+      <p class="text-xs text-slate-400 mt-3">
+        Showing {classData.molecules.length} of {classData.listedCount} molecules tracked in this class. Contact us for a specific molecule not listed here.
+      </p>
+    </div>
+
+    <div>
+      {(classData.otcCount !== undefined) && (
+        <div class="rounded-2xl border border-slate-200 p-5 mb-5">
+          <h3 class="font-semibold text-[color:var(--color-navy)] mb-3">Prescription Breakdown</h3>
+          <dl class="space-y-2 text-sm">
+            <div class="flex justify-between"><dt class="text-slate-500">OTC</dt><dd class="font-medium">{classData.otcCount}</dd></div>
+            <div class="flex justify-between"><dt class="text-slate-500">Prescription (Rx)</dt><dd class="font-medium">{classData.rxCount ?? 0}</dd></div>
+            <div class="flex justify-between"><dt class="text-slate-500">Restricted / Controlled</dt><dd class="font-medium">{classData.restrictedCount ?? 0}</dd></div>
+          </dl>
+        </div>
+      )}
+      <div class="rounded-2xl bg-amber-50 border border-amber-200 p-5 text-sm text-amber-800 leading-relaxed">
+        Export and prescription status vary by molecule, strength, pack size and destination. Verify current requirements with the relevant authority before shipment.
+      </div>
+      <Button href="/request-quote/" size="lg" class="w-full justify-center mt-5">Request Quote for This Class</Button>
+    </div>
+  </section>
+
+  {relatedProducts.length > 0 && (
+    <section class="bg-slate-50 border-t border-slate-100">
+      <div class="container-page py-14">
+        <h2 class="font-display text-2xl text-[color:var(--color-navy)] mb-6">Catalogued Products in This Class</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {relatedProducts.map((p) => <ProductCard {...p} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CTASection
+    heading="Need a Molecule Not Listed Here?"
+    body="Our manufacturing-partner network covers a broad range beyond this catalogue. Send us your requirement."
+    primaryLabel="Request a Quote"
+    primaryHref="/request-quote/"
+  />
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CTASection from '../../components/CTASection.astro';
+
+const terms = (await getCollection('glossary')).sort((a, b) => a.data.term.localeCompare(b.data.term));
+---
+
+<BaseLayout
+  title="Glossary — Pharmaceutical Export Terms Explained"
+  description="Definitions for the terms that matter in Indian pharmaceutical export: API, COPP, WHO-GMP, IEC, RCMC, Schedule H, NDPS, HS codes and more."
+>
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Glossary' }]} />
+  </div>
+  <section class="container-page pt-6 pb-10">
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Reference</p>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Pharmaceutical Export Glossary</h1>
+    <p class="mt-3 text-slate-600 max-w-2xl">Plain-language definitions for the licences, schedules and trade terms referenced throughout this site.</p>
+  </section>
+
+  <section class="container-page pb-20">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {terms.map((t) => (
+        <a href={`/glossary/${t.id}/`} class="p-5 rounded-2xl border border-slate-200 bg-white hover:border-[color:var(--color-blue)]/40 hover:shadow-md transition-all">
+          <h2 class="font-semibold text-[color:var(--color-navy)]">{t.data.term}</h2>
+          <p class="mt-1.5 text-sm text-slate-600 leading-relaxed">{t.data.shortDef}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <CTASection heading="Still Have a Compliance Question?" primaryLabel="Contact Our Team" primaryHref="/contact/" secondaryLabel="View Compliance Framework" secondaryHref="/compliance/" />
+</BaseLayout>

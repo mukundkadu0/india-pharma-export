@@ -1,0 +1,145 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Seo from '../components/Seo.astro';
+import Icon from '../components/Icon.astro';
+import '../styles/global.css';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  ogType?: string;
+  image?: string;
+  hideMobileCta?: boolean;
+}
+const { title, description, noindex, ogType, image, hideMobileCta = false } = Astro.props;
+
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.legalName,
+  url: site.url,
+  slogan: site.tagline,
+  description:
+    'India Pharma Export is a B2B pharmaceutical sourcing and export platform connecting international importers, distributors, wholesalers and institutional buyers with WHO-GMP certified manufacturing partners in India.',
+  ...(site.email ? { email: site.email } : {}),
+  ...(site.address ? { address: { '@type': 'PostalAddress', addressCountry: 'IN', addressLocality: site.address } } : {}),
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${site.url}/products/?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0B2A4A" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <Seo title={title} description={description} noindex={noindex} ogType={ogType} image={image} />
+    <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+  </head>
+  <body class:list={[{ 'pb-20 lg:pb-0': !hideMobileCta }]}>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    {!hideMobileCta && (
+      <div class="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-white border-t border-slate-200 p-3 flex gap-2" style="padding-bottom: max(0.75rem, env(safe-area-inset-bottom));">
+        <a href="/request-quote/" class="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-accent)] text-white font-semibold py-3 text-sm">
+          <Icon name="quote" class="w-4 h-4" /> Get a Quote
+        </a>
+        <a href="/products/" aria-label="Browse products" class="grid place-items-center w-12 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)]">
+          <Icon name="search" class="w-5 h-5" />
+        </a>
+      </div>
+    )}
+
+    <div id="toast-root" class="fixed bottom-24 lg:bottom-6 inset-x-0 z-50 flex flex-col items-center gap-2 pointer-events-none px-4"></div>
+
+    <script>
+      const STORAGE_KEY = 'ipe-inquiry-list';
+
+      type InquiryItem = { id: string; name: string; meta?: string };
+
+      function readList(): InquiryItem[] {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function writeList(list: InquiryItem[]) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        } catch {
+          /* storage unavailable — inquiry list simply won't persist */
+        }
+        updateBadge();
+      }
+
+      function updateBadge() {
+        const badge = document.getElementById('inquiry-badge');
+        if (!badge) return;
+        const count = readList().length;
+        if (count > 0) {
+          badge.textContent = String(count);
+          badge.removeAttribute('hidden');
+        } else {
+          badge.setAttribute('hidden', '');
+        }
+      }
+
+      function showToast(message: string) {
+        const root = document.getElementById('toast-root');
+        if (!root) return;
+        const toast = document.createElement('div');
+        toast.className =
+          'pointer-events-auto bg-[color:var(--color-navy-deep)] text-white text-sm px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 max-w-sm';
+        toast.textContent = message;
+        root.appendChild(toast);
+        setTimeout(() => toast.remove(), 2600);
+      }
+
+      document.addEventListener('click', (e) => {
+        const target = (e.target as HTMLElement)?.closest('.add-to-inquiry') as HTMLElement | null;
+        if (!target) return;
+        e.preventDefault();
+        const id = target.dataset.id;
+        const name = target.dataset.name ?? id;
+        if (!id) return;
+        const list = readList();
+        if (list.some((item) => item.id === id)) {
+          showToast(`${name} is already on your inquiry list.`);
+          return;
+        }
+        list.push({ id, name: name!, meta: target.dataset.meta });
+        writeList(list);
+        showToast(`Added ${name} to your inquiry list.`);
+      });
+
+      updateBadge();
+      window.addEventListener('storage', updateBadge);
+    </script>
+  </body>
+</html>

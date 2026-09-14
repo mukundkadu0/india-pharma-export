@@ -1,0 +1,257 @@
+---
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products/' },
+  { label: 'Markets', href: '/markets/' },
+  { label: 'Compliance', href: '/compliance/' },
+  { label: 'About', href: '/about/' },
+  { label: 'Resources', href: '/resources/' },
+  { label: 'Contact', href: '/contact/' },
+];
+
+const path = Astro.url.pathname;
+function isActive(href: string) {
+  if (href === '/') return path === '/';
+  return path.startsWith(href);
+}
+---
+
+<a href="#main" class="skip-link">Skip to main content</a>
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
+  <div class="container-page flex items-center justify-between h-18 py-3">
+    <a href="/" class="flex items-center gap-2.5 shrink-0">
+      <span class="grid place-items-center w-10 h-10 rounded-xl bg-[color:var(--color-navy)] text-white">
+        <Icon name="capsule" class="w-5 h-5" />
+      </span>
+      <span class="leading-tight">
+        <span class="block font-display text-lg text-[color:var(--color-navy)]">India Pharma Export</span>
+        <span class="block text-[10px] tracking-wide uppercase text-slate-500">Trusted Medicines. Healthier Tomorrow.</span>
+      </span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden lg:flex items-center gap-1">
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class={`relative px-3.5 py-2 text-sm font-medium rounded-full transition-colors ${
+            isActive(item.href) ? 'text-[color:var(--color-navy)] bg-[color:var(--color-blue-light)]' : 'text-slate-600 hover:text-[color:var(--color-navy)] hover:bg-slate-50'
+          }`}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        id="search-trigger"
+        aria-label="Search products, markets and resources"
+        class="hidden sm:grid place-items-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100"
+      >
+        <Icon name="search" class="w-5 h-5" />
+      </button>
+
+      <a href="/inquiry/" aria-label="View inquiry list" class="relative hidden sm:grid place-items-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100">
+        <Icon name="clipboard" class="w-5 h-5" />
+        <span id="inquiry-badge" hidden class="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-[color:var(--color-accent)] text-white text-[10px] font-bold">0</span>
+      </a>
+
+      <div class="relative hidden sm:block">
+        <button
+          type="button"
+          id="lang-trigger"
+          aria-haspopup="true"
+          aria-expanded="false"
+          class="flex items-center gap-1 px-2.5 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-full"
+        >
+          <Icon name="globe" class="w-4 h-4" /> EN
+        </button>
+        <div id="lang-menu" hidden class="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-lg p-3 text-sm text-slate-600">
+          <p class="font-semibold text-[color:var(--color-ink)] mb-1">English</p>
+          <p>Additional languages for international buyers are planned. Contact us if you need correspondence in another language.</p>
+        </div>
+      </div>
+
+      <div class="hidden sm:block">
+        <Button href="/request-quote/" size="md">Get a Quote</Button>
+      </div>
+
+      <button
+        type="button"
+        id="mobile-menu-trigger"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="lg:hidden grid place-items-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100"
+      >
+        <Icon name="menu" class="w-6 h-6" />
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" hidden class="lg:hidden border-t border-slate-200 bg-white">
+    <nav aria-label="Mobile" class="container-page py-3 flex flex-col">
+      {navItems.map((item) => (
+        <a href={item.href} class="py-2.5 text-base font-medium text-slate-700 border-b border-slate-100 last:border-0">
+          {item.label}
+        </a>
+      ))}
+      <div class="flex gap-3 pt-4">
+        <Button href="/request-quote/" size="md" class="flex-1 justify-center">Get a Quote</Button>
+        <button type="button" id="mobile-search-trigger" class="flex-1 inline-flex items-center justify-center gap-2 border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] rounded-full py-2.5 text-sm font-semibold">
+          <Icon name="search" class="w-4 h-4" /> Search
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div id="search-overlay" hidden class="fixed inset-0 z-[60] bg-[color:var(--color-navy-deep)]/60 backdrop-blur-sm">
+  <div class="container-page pt-20 sm:pt-28">
+    <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100">
+        <Icon name="search" class="w-5 h-5 text-slate-400 shrink-0" />
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Search molecule, formulation, API, market or HS code…"
+          class="w-full outline-none text-base placeholder:text-slate-400"
+          autocomplete="off"
+        />
+        <button type="button" id="search-close" aria-label="Close search" class="shrink-0 text-slate-400 hover:text-slate-600">
+          <Icon name="close" class="w-5 h-5" />
+        </button>
+      </div>
+      <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2"></div>
+      <p class="px-5 py-3 text-xs text-slate-400 border-t border-slate-100">Try: Paracetamol, Amoxicillin, Dolutegravir, HS code, Africa, RCMC</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const mobileTrigger = document.getElementById('mobile-menu-trigger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  mobileTrigger?.addEventListener('click', () => {
+    const isHidden = mobileMenu?.hasAttribute('hidden');
+    if (isHidden) mobileMenu?.removeAttribute('hidden');
+    else mobileMenu?.setAttribute('hidden', '');
+    mobileTrigger.setAttribute('aria-expanded', String(!!isHidden));
+  });
+
+  const langTrigger = document.getElementById('lang-trigger');
+  const langMenu = document.getElementById('lang-menu');
+  langTrigger?.addEventListener('click', () => {
+    const isHidden = langMenu?.hasAttribute('hidden');
+    if (isHidden) langMenu?.removeAttribute('hidden');
+    else langMenu?.setAttribute('hidden', '');
+    langTrigger.setAttribute('aria-expanded', String(!!isHidden));
+  });
+  document.addEventListener('click', (e) => {
+    if (!langMenu || !langTrigger) return;
+    if (!langMenu.contains(e.target as Node) && !langTrigger.contains(e.target as Node)) {
+      langMenu.setAttribute('hidden', '');
+    }
+  });
+
+  const overlay = document.getElementById('search-overlay');
+  const input = document.getElementById('search-input') as HTMLInputElement | null;
+  function openSearch() {
+    overlay?.removeAttribute('hidden');
+    setTimeout(() => input?.focus(), 50);
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSearch() {
+    overlay?.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('search-trigger')?.addEventListener('click', openSearch);
+  document.getElementById('mobile-search-trigger')?.addEventListener('click', openSearch);
+  document.getElementById('search-close')?.addEventListener('click', closeSearch);
+  overlay?.addEventListener('click', (e) => { if (e.target === overlay) closeSearch(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 'Escape') closeSearch();
+  });
+</script>
+
+<script>
+  import Fuse from 'fuse.js';
+
+  type SearchItem = { type: string; title: string; subtitle?: string; url: string; keywords?: string[] };
+
+  let fuse: import('fuse.js').default<SearchItem> | null = null;
+  let items: SearchItem[] = [];
+
+  async function ensureIndex() {
+    if (fuse) return;
+    const res = await fetch('/search-index.json');
+    items = await res.json();
+    fuse = new Fuse(items, {
+      keys: [
+        { name: 'title', weight: 0.6 },
+        { name: 'keywords', weight: 0.3 },
+        { name: 'subtitle', weight: 0.1 },
+      ],
+      threshold: 0.34,
+      ignoreLocation: true,
+    });
+  }
+
+  const typeLabels: Record<string, string> = {
+    product: 'Product',
+    class: 'Category',
+    market: 'Market',
+    glossary: 'Glossary',
+    faq: 'FAQ',
+    resource: 'Resource',
+  };
+
+  const resultsEl = document.getElementById('search-results');
+  const inputEl = document.getElementById('search-input') as HTMLInputElement | null;
+
+  function render(list: SearchItem[]) {
+    if (!resultsEl) return;
+    if (list.length === 0) {
+      resultsEl.innerHTML = '<p class="px-4 py-6 text-sm text-slate-400 text-center">No matches yet — try a molecule name, market or HS code.</p>';
+      return;
+    }
+    resultsEl.innerHTML = list
+      .slice(0, 8)
+      .map(
+        (item) => `
+        <a href="${item.url}" class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl hover:bg-slate-50">
+          <span>
+            <span class="block text-sm font-medium text-[color:var(--color-ink)]">${item.title}</span>
+            ${item.subtitle ? `<span class="block text-xs text-slate-500">${item.subtitle}</span>` : ''}
+          </span>
+          <span class="text-[10px] uppercase tracking-wide font-semibold text-slate-400 shrink-0">${typeLabels[item.type] ?? item.type}</span>
+        </a>`
+      )
+      .join('');
+  }
+
+  inputEl?.addEventListener('input', async () => {
+    await ensureIndex();
+    const q = inputEl.value.trim();
+    if (!q) { render(items.slice(0, 8)); return; }
+    const results = fuse!.search(q).map((r) => r.item);
+    render(results);
+  });
+
+  document.getElementById('search-trigger')?.addEventListener('click', async () => {
+    await ensureIndex();
+    render(items.slice(0, 8));
+  });
+  document.getElementById('mobile-search-trigger')?.addEventListener('click', async () => {
+    await ensureIndex();
+    render(items.slice(0, 8));
+  });
+</script>

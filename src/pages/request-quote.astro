@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<BaseLayout
+  title="Request a Quote — Bulk Pharmaceutical Export Enquiry"
+  description="Submit a bulk pharmaceutical requirement to India Pharma Export. Tell us the product, quantity, packaging and target market, and our team will respond with a formal B2B quotation."
+>
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Request a Quote' }]} />
+  </div>
+
+  <section class="container-page pt-6 pb-16 grid lg:grid-cols-5 gap-10">
+    <div class="lg:col-span-2">
+      <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Request a Quote</p>
+      <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] leading-tight">Looking for Bulk Pharmaceutical Supply?</h1>
+      <p class="mt-4 text-slate-600 leading-relaxed">
+        This form is for licensed importers, distributors, wholesalers, hospitals and government procurement buyers. Tell us the products, quantities and markets you're targeting — our team reviews regulatory and supply considerations before responding with a formal quotation.
+      </p>
+      <div class="mt-6 space-y-3 text-sm text-slate-600">
+        <p class="flex items-center gap-2"><Icon name="clock" class="w-4.5 h-4.5 text-[color:var(--color-blue)]" /> We aim to respond within 1–2 business days.</p>
+        <p class="flex items-center gap-2"><Icon name="shield-check" class="w-4.5 h-4.5 text-[color:var(--color-blue)]" /> Your details are used only to respond to this enquiry.</p>
+      </div>
+      <p class="mt-6 text-sm">
+        Building a multi-product request? Use <a href="/inquiry/" class="text-[color:var(--color-blue)] underline font-medium">your inquiry list</a> instead to submit several products at once.
+      </p>
+    </div>
+    <div class="lg:col-span-3">
+      <QuoteForm />
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const product = params.get('product');
+  if (product) {
+    const field = document.getElementById('qf-product') as HTMLInputElement | null;
+    if (field) field.value = product;
+  }
+</script>

@@ -1,0 +1,72 @@
+---
+import Icon from './Icon.astro';
+import { site, legalNav } from '../data/site';
+import { categoryGroups } from '../data/taxonomy';
+---
+
+<footer class="bg-[color:var(--color-navy-deep)] text-slate-300">
+  <div class="container-page py-14 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8">
+    <div class="col-span-2 lg:col-span-2">
+      <a href="/" class="flex items-center gap-2.5">
+        <span class="grid place-items-center w-9 h-9 rounded-lg bg-white/10 text-white">
+          <Icon name="capsule" class="w-4.5 h-4.5" />
+        </span>
+        <span class="font-display text-white text-base">India Pharma Export</span>
+      </a>
+      <p class="mt-3 text-sm leading-relaxed max-w-xs">{site.tagline}</p>
+      <p class="mt-4 text-xs leading-relaxed text-slate-400 max-w-xs">
+        A B2B pharmaceutical sourcing and export platform. We do not sell prescription medicines to individual consumers.
+      </p>
+    </div>
+
+    <div>
+      <h3 class="text-xs font-semibold uppercase tracking-wide text-white mb-3">Company</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/about/" class="hover:text-white">About Us</a></li>
+        <li><a href="/compliance/" class="hover:text-white">Quality &amp; Compliance</a></li>
+        <li><a href="/resources/" class="hover:text-white">Buyer Resources</a></li>
+        <li><a href="/contact/" class="hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xs font-semibold uppercase tracking-wide text-white mb-3">Products</h3>
+      <ul class="space-y-2 text-sm">
+        {categoryGroups.slice(0, 6).map((c) => (
+          <li><a href={`/products/${c.id}/`} class="hover:text-white">{c.name}</a></li>
+        ))}
+        <li><a href="/products/" class="hover:text-white font-medium">View all →</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xs font-semibold uppercase tracking-wide text-white mb-3">Markets</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/markets/africa/" class="hover:text-white">Africa</a></li>
+        <li><a href="/markets/southeast-asia/" class="hover:text-white">South-East Asia</a></li>
+        <li><a href="/markets/middle-east/" class="hover:text-white">Middle East</a></li>
+        <li><a href="/markets/latin-america/" class="hover:text-white">Latin America</a></li>
+        <li><a href="/markets/" class="hover:text-white font-medium">View all →</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xs font-semibold uppercase tracking-wide text-white mb-3">Support</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/request-quote/" class="hover:text-white">Export Enquiry</a></li>
+        <li><a href="/glossary/" class="hover:text-white">Glossary</a></li>
+        <li><a href="/faqs/" class="hover:text-white">FAQs</a></li>
+        {legalNav.map((l) => (
+          <li><a href={l.href} class="hover:text-white">{l.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-white/10">
+    <div class="container-page py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      <p>&copy; {new Date().getFullYear()} {site.legalName}. All rights reserved.</p>
+      <p class="flex items-center gap-2">Made in India · For a Healthier World</p>
+    </div>
+  </div>
+</footer>

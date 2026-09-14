@@ -1,0 +1,31 @@
+---
+import Button from './Button.astro';
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  body?: string;
+  primaryLabel: string;
+  primaryHref: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+  secondaryIcon?: string;
+  variant?: 'navy' | 'light';
+}
+const { eyebrow, heading, body, primaryLabel, primaryHref, secondaryLabel, secondaryHref, secondaryIcon = 'arrow-right', variant = 'navy' } = Astro.props;
+---
+
+<section class={variant === 'navy' ? 'bg-[color:var(--color-navy-deep)] text-white' : 'bg-[color:var(--color-blue-light)] text-[color:var(--color-ink)]'}>
+  <div class="container-page py-16 sm:py-20 text-center">
+    {eyebrow && <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-4">{eyebrow}</p>}
+    <h2 class="font-display text-3xl sm:text-4xl max-w-3xl mx-auto leading-tight">{heading}</h2>
+    {body && <p class={`mt-4 max-w-2xl mx-auto text-base sm:text-lg ${variant === 'navy' ? 'text-slate-300' : 'text-slate-600'}`}>{body}</p>}
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+      <Button href={primaryHref} variant="primary" size="lg">{primaryLabel}</Button>
+      {secondaryLabel && secondaryHref && (
+        <Button href={secondaryHref} variant="outline" size="lg" icon={secondaryIcon} class={variant === 'navy' ? '!border-white !text-white hover:!bg-white hover:!text-[color:var(--color-navy)]' : ''}>
+          {secondaryLabel}
+        </Button>
+      )}
+    </div>
+  </div>
+</section>

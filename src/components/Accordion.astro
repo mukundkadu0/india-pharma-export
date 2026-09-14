@@ -1,0 +1,51 @@
+---
+interface Item { question: string; answer: string }
+interface Props {
+  items: Item[];
+  idPrefix?: string;
+}
+const { items, idPrefix = 'faq' } = Astro.props;
+---
+
+<div class="divide-y divide-slate-200 border-y border-slate-200">
+  {items.map((item, i) => {
+    const panelId = `${idPrefix}-panel-${i}`;
+    const buttonId = `${idPrefix}-button-${i}`;
+    return (
+      <div class="accordion-item">
+        <h3>
+          <button
+            type="button"
+            id={buttonId}
+            aria-expanded="false"
+            aria-controls={panelId}
+            class="accordion-trigger w-full flex items-center justify-between gap-4 py-5 text-left"
+          >
+            <span class="font-medium text-[color:var(--color-ink)]">{item.question}</span>
+            <svg class="accordion-icon w-5 h-5 text-slate-400 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </button>
+        </h3>
+        <div id={panelId} role="region" aria-labelledby={buttonId} class="accordion-panel overflow-hidden max-h-0 transition-[max-height] duration-300">
+          <p class="pb-5 text-sm text-slate-600 leading-relaxed pr-8">{item.answer}</p>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
+<script>
+  document.querySelectorAll('.accordion-trigger').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      const panel = document.getElementById(btn.getAttribute('aria-controls') || '');
+      const icon = btn.querySelector('.accordion-icon') as HTMLElement | null;
+      btn.setAttribute('aria-expanded', String(!expanded));
+      if (panel) {
+        panel.style.maxHeight = expanded ? '0px' : `${panel.scrollHeight}px`;
+      }
+      if (icon) icon.style.transform = expanded ? 'rotate(0deg)' : 'rotate(180deg)';
+    });
+  });
+</script>

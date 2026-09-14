@@ -1,0 +1,234 @@
+[
+  {
+    "id": "api",
+    "term": "API (Active Pharmaceutical Ingredient)",
+    "shortDef": "The biologically active component of a medicine, before it is formulated into a tablet, capsule or injection.",
+    "definition": "An Active Pharmaceutical Ingredient is the bulk chemical or biological substance responsible for a medicine's therapeutic effect. Formulators combine an API with excipients to produce the finished dosage form — a tablet, capsule, injection or cream. India exports roughly a quarter of its pharmaceutical value as bulk APIs, supplying formulators and manufacturers worldwide.",
+    "whyItMatters": "Buyers sourcing APIs need a Certificate of Analysis and, for Tier 1 markets, a Drug Master File (DMF) or EDQM Certificate of Suitability (CEP) from the manufacturer — not the finished-formulation documentation used for tablets and capsules.",
+    "relatedTerms": ["dmf", "cep", "hs-code"]
+  },
+  {
+    "id": "copp",
+    "term": "COPP (Certificate of Pharmaceutical Product)",
+    "shortDef": "A WHO-format certificate confirming a product is manufactured and approved for sale in India, used by destination-country regulators to assess an import application.",
+    "definition": "The Certificate of Pharmaceutical Product, issued in WHO format by the State FDA or CDSCO, is the document a destination country's drug regulator actually reads when assessing an import registration. It confirms the product's approval status, manufacturing site and GMP compliance in the country of origin.",
+    "whyItMatters": "For a merchant exporter, the COPP is obtained through the manufacturing partner — it is issued against their plant, not the exporter's office. Confirming a manufacturing partner holds a live COPP and WHO-GMP certificate is a standard step before any export quotation is issued.",
+    "relatedTerms": ["who-gmp", "dossier", "merchant-exporter"]
+  },
+  {
+    "id": "who-gmp",
+    "term": "WHO-GMP (WHO Good Manufacturing Practice)",
+    "shortDef": "A manufacturing-quality certification aligned to World Health Organization standards, widely accepted across Tier 2 and Tier 3 export markets.",
+    "definition": "WHO-GMP certification confirms a manufacturing facility meets World Health Organization good manufacturing practice standards. It is the baseline quality credential accepted by most Tier 2 and Tier 3 destination-country regulators, though Tier 1 markets (US, EU, UK, Japan) require their own plant inspection (USFDA, EU-GMP) — WHO-GMP alone is not sufficient there.",
+    "whyItMatters": "Confirming which certification a specific manufacturing partner and product line actually holds is a standard part of every quotation, since WHO-GMP status does not automatically extend across every product a manufacturer makes.",
+    "relatedTerms": ["copp", "who-pq"]
+  },
+  {
+    "id": "iec",
+    "term": "IEC (Importer-Exporter Code)",
+    "shortDef": "The ten-digit code, issued by DGFT, without which no consignment can legally leave India.",
+    "definition": "The Importer-Exporter Code is a mandatory ten-digit registration issued by the Directorate General of Foreign Trade (DGFT), linked to the exporting entity's PAN. No shipment of any kind can clear Indian customs for export without a valid IEC.",
+    "whyItMatters": "It's the first and most basic credential any legitimate Indian export business holds — a foundational, not differentiating, requirement.",
+    "relatedTerms": ["dgft", "rcmc"]
+  },
+  {
+    "id": "rcmc",
+    "term": "RCMC (Registration-cum-Membership Certificate)",
+    "shortDef": "A mandatory export-council registration for pharmaceutical exporters, issued by Pharmexcil.",
+    "definition": "The Registration-cum-Membership Certificate is mandatory for all pharmaceutical exporters under DGFT guidelines and is issued by Pharmexcil, the Pharmaceuticals Export Promotion Council of India. It is the gateway to export incentives, buyer-seller meets and country-specific market intelligence.",
+    "whyItMatters": "RCMC registration is a baseline compliance requirement for any legitimate pharmaceutical export business operating from India.",
+    "relatedTerms": ["iec", "dgft"]
+  },
+  {
+    "id": "ad-code",
+    "term": "AD Code (Authorised Dealer Code)",
+    "shortDef": "A bank-issued code registered with customs at each port of shipment, required before a shipping bill can be generated.",
+    "definition": "The Authorised Dealer Code is issued by an exporter's bank and must be registered at each port from which they ship. Without it, Indian customs will not generate a shipping bill through the ICEGATE electronic filing system.",
+    "whyItMatters": "It is a procedural, port-specific requirement that sits alongside the IEC in the basic legal-export setup.",
+    "relatedTerms": ["icegate", "iec"]
+  },
+  {
+    "id": "icegate",
+    "term": "ICEGATE",
+    "shortDef": "India Customs' electronic gateway for filing shipping bills and other export/import documentation.",
+    "definition": "ICEGATE (Indian Customs Electronic Gateway) is the online portal through which shipping bills, bills of entry and related customs documentation are filed electronically for Indian import and export consignments.",
+    "whyItMatters": "Every legitimate consignment leaving India is filed through this system against a registered AD Code.",
+    "relatedTerms": ["ad-code"]
+  },
+  {
+    "id": "ctd",
+    "term": "CTD (Common Technical Document)",
+    "shortDef": "The internationally standardised dossier format used to register a pharmaceutical product with a regulator.",
+    "definition": "The Common Technical Document is an internationally harmonised format for the regulatory dossier submitted to register a pharmaceutical product. Tier 1 markets require a full CTD; many Tier 3 markets accept a lighter 'CTD-lite' version alongside a COPP and free-sale certificate.",
+    "whyItMatters": "Dossier complexity is one of the biggest drivers of registration cost and timeline difference between market tiers.",
+    "relatedTerms": ["dossier", "copp"]
+  },
+  {
+    "id": "dmf",
+    "term": "DMF (Drug Master File)",
+    "shortDef": "A confidential technical file on an API's manufacturing process, filed with a regulator such as the US FDA.",
+    "definition": "A Drug Master File contains detailed, confidential information about the facilities, processes and quality controls used to manufacture an API. In the US, an API supplier files a DMF with the FDA, which formulators can then reference in their own drug applications.",
+    "whyItMatters": "A live US DMF (or EU equivalent CEP) is generally the entry ticket for an API to reach Tier 1 formulator customers.",
+    "relatedTerms": ["cep", "api"]
+  },
+  {
+    "id": "cep",
+    "term": "CEP (Certificate of Suitability)",
+    "shortDef": "An EDQM-issued certificate confirming an API meets European Pharmacopoeia quality standards.",
+    "definition": "A Certificate of Suitability, issued by the European Directorate for the Quality of Medicines (EDQM), confirms that an API's specifications comply with the relevant European Pharmacopoeia monograph. It is the EU equivalent of a US DMF for API market access.",
+    "whyItMatters": "Buyers formulating for the EU market will typically ask whether an API is CEP-backed before proceeding.",
+    "relatedTerms": ["dmf", "api"]
+  },
+  {
+    "id": "moq",
+    "term": "MOQ (Minimum Order Quantity)",
+    "shortDef": "The smallest quantity of a product a supplier is willing to fulfil in a single order.",
+    "definition": "Minimum Order Quantity is the smallest batch size a manufacturer or exporter will produce or ship per order. In B2B pharmaceutical export, MOQ varies by product, packaging format and manufacturing partner, and is generally confirmed at quotation stage rather than fixed.",
+    "whyItMatters": "We do not publish fixed MOQ figures on product listings, since actual minimums depend on the specific manufacturing partner, packaging and destination — buyers get an accurate figure as part of their quotation.",
+    "relatedTerms": []
+  },
+  {
+    "id": "fob",
+    "term": "FOB (Free on Board)",
+    "shortDef": "An Incoterm meaning the seller's responsibility ends once goods are loaded onto the shipping vessel.",
+    "definition": "Free on Board is a standard international trade term (Incoterm) under which the seller covers costs and risk up to the point the goods are loaded onto the vessel at the port of origin. The buyer arranges and pays for shipping insurance and freight from that point.",
+    "whyItMatters": "Quotations specify the Incoterm (FOB, CIF or another) since it materially changes what is included in the quoted price.",
+    "relatedTerms": ["cif"]
+  },
+  {
+    "id": "cif",
+    "term": "CIF (Cost, Insurance and Freight)",
+    "shortDef": "An Incoterm under which the seller's quoted price includes shipping and insurance to the destination port.",
+    "definition": "Cost, Insurance and Freight is an Incoterm under which the seller's price covers the cost of goods, marine insurance and freight to the named destination port. Risk transfers to the buyer once goods are loaded, but the seller arranges and pays for transport and insurance.",
+    "whyItMatters": "Buyers should confirm which Incoterm a quotation uses, since FOB and CIF pricing on the same product are not directly comparable without adjusting for freight and insurance.",
+    "relatedTerms": ["fob"]
+  },
+  {
+    "id": "export-noc",
+    "term": "Export NOC (No Objection Certificate)",
+    "shortDef": "A CDSCO clearance required for new, unapproved, banned or NDPS-scheduled drugs before they can be exported.",
+    "definition": "An Export NOC is a No Objection Certificate issued by the Central Drugs Standard Control Organisation (CDSCO), required for drugs that are new, unapproved in India but legal in the destination, banned in India under section 26A, or scheduled under the NDPS Act. It is filed online through the SUGAM portal.",
+    "whyItMatters": "Not every product needs one — most standard, approved formulations are freely exportable under a wholesale licence and RCMC alone. Understanding whether a specific product falls into the NOC-required category is a routine part of assessing an enquiry.",
+    "relatedTerms": ["cdsco", "ndps", "schedule-x"]
+  },
+  {
+    "id": "schedule-h",
+    "term": "Schedule H",
+    "shortDef": "The Indian drug schedule covering prescription-only medicines, dispensed against a registered practitioner's prescription.",
+    "definition": "Schedule H, under the Drugs and Cosmetics Rules, covers medicines that can only be dispensed against a registered medical practitioner's prescription, retained by the pharmacy. It covers the bulk of the pharmaceutical export catalogue and is the reason B2B — not direct-to-consumer — is the legal export model for most products.",
+    "whyItMatters": "Schedule H status in India does not by itself determine a molecule's prescription classification abroad — the same molecule can be pharmacy-only in India and general-sale in another market, or the reverse.",
+    "relatedTerms": ["schedule-h1", "schedule-x", "b2b"]
+  },
+  {
+    "id": "schedule-h1",
+    "term": "Schedule H1",
+    "shortDef": "A higher-control subset of prescription-only drugs — including certain antibiotics and anti-TB drugs — requiring a separate pharmacy register.",
+    "definition": "Schedule H1 covers a higher-control subset of prescription drugs, including third- and fourth-generation antibiotics, anti-TB drugs and some psychotropics. Dispensing pharmacies must maintain a separate H1 register, retained for three years.",
+    "whyItMatters": "H1 status signals additional record-keeping obligations that flow through the supply chain, even though it does not itself change export eligibility.",
+    "relatedTerms": ["schedule-h", "schedule-x"]
+  },
+  {
+    "id": "schedule-x",
+    "term": "Schedule X",
+    "shortDef": "The Indian drug schedule covering narcotics and a defined list of high-control substances, requiring a special licence.",
+    "definition": "Schedule X, together with the NDPS Act, covers narcotics, psychotropics and a defined list of especially high-control substances. It requires a separate licence and two-year record retention, and export requires specific Narcotics Commissioner authorisation on top of standard export documentation.",
+    "whyItMatters": "Products in this category are not part of our standard B2B catalogue; enquiries involving Schedule X or NDPS-controlled molecules require a fully separate, verified compliance pathway.",
+    "relatedTerms": ["ndps", "schedule-h1", "export-noc"]
+  },
+  {
+    "id": "ndps",
+    "term": "NDPS (Narcotic Drugs and Psychotropic Substances Act)",
+    "shortDef": "The Indian law governing narcotics and psychotropic substances, under which certain medicines require special export authorisation.",
+    "definition": "The Narcotic Drugs and Psychotropic Substances Act, 1985 governs the manufacture, sale and export of narcotics and psychotropic substances in India. Export of any NDPS-controlled substance requires specific authorisation from the Narcotics Commissioner, decided within 21 working days, and is subject to purchase-order-specific, quantity-specific clearance.",
+    "whyItMatters": "This is the single most heavily enforced area of Indian pharmaceutical export compliance — opioids, benzodiazepines, Z-drugs and related substances are handled under this framework, not the standard export process.",
+    "relatedTerms": ["schedule-x", "export-noc"]
+  },
+  {
+    "id": "b2b",
+    "term": "B2B (Business-to-Business)",
+    "shortDef": "Trade between businesses — here, an Indian exporter and a foreign importer, wholesaler or institutional buyer holding their own import licence.",
+    "definition": "Business-to-Business trade, in the pharmaceutical export context, means selling to a licensed importer, wholesaler, hospital group, pharmacy chain or government procurement body abroad, who holds the import authorisation for their own country. The exporter's compliance burden is to verify the buyer's licence and supply correct documentation; the buyer's own regulator governs onward sale.",
+    "whyItMatters": "This is the legal, scalable model for exporting most pharmaceutical categories from India, and is the model this platform operates on — we do not sell prescription medicines directly to individual consumers.",
+    "relatedTerms": ["schedule-h"]
+  },
+  {
+    "id": "dossier",
+    "term": "Dossier",
+    "shortDef": "The complete technical and regulatory file submitted to register a product with a destination-country regulator.",
+    "definition": "A regulatory dossier is the full set of technical, quality and clinical documentation submitted to a destination country's drug regulator to register a product for import and sale. Dossier requirements range from a full Common Technical Document (CTD) in Tier 1 markets to a lighter 'CTD-lite' format in many Tier 3 markets.",
+    "whyItMatters": "Dossier complexity is a primary driver of how long and how expensive it is to register the same product in different markets.",
+    "relatedTerms": ["ctd", "copp"]
+  },
+  {
+    "id": "hs-code",
+    "term": "HS Code (Harmonized System Code)",
+    "shortDef": "The internationally standardised customs classification code that determines duty, incentives and export-restriction status.",
+    "definition": "The Harmonized System is an internationally standardised numerical classification for traded products. Pharmaceutical formulations generally fall under Chapter 30 (headings 3001–3006), while APIs typically fall under Chapter 29 (organic chemicals). The specific 8-digit code determines customs duty, export-incentive eligibility, and whether a DGFT export restriction currently applies.",
+    "whyItMatters": "HS classification is confirmed against the current DGFT ITC(HS) database at the time of shipment, since a molecule's restriction status can change by notification without changing its underlying HS code.",
+    "relatedTerms": ["api"]
+  },
+  {
+    "id": "dgft",
+    "term": "DGFT (Directorate General of Foreign Trade)",
+    "shortDef": "The Indian government body that regulates foreign trade policy, issues IEC codes, and can restrict export of specific goods.",
+    "definition": "The Directorate General of Foreign Trade, under the Ministry of Commerce and Industry, administers India's foreign trade policy — including issuing Importer-Exporter Codes and maintaining the ITC(HS) classification and export-policy database that determines whether a given product is currently 'Free', 'Restricted' or 'Prohibited' for export.",
+    "whyItMatters": "DGFT can move a formulation or API from Free to Restricted status overnight during a domestic shortage — export status is checked on the day of shipment, not assumed from an earlier quotation.",
+    "relatedTerms": ["hs-code", "iec"]
+  },
+  {
+    "id": "cdsco",
+    "term": "CDSCO (Central Drugs Standard Control Organisation)",
+    "shortDef": "India's central drug regulatory authority, responsible for Export NOCs and new-drug approvals.",
+    "definition": "The Central Drugs Standard Control Organisation is India's national drug regulatory authority, responsible for approving new drugs, issuing Export NOCs for restricted categories, and maintaining the banned-drugs list under section 26A of the Drugs and Cosmetics Act.",
+    "whyItMatters": "CDSCO's SUGAM portal is where Export NOC applications are filed for the categories that require one.",
+    "relatedTerms": ["export-noc"]
+  },
+  {
+    "id": "pharmexcil",
+    "term": "Pharmexcil",
+    "shortDef": "The Pharmaceuticals Export Promotion Council of India, which issues RCMC and supports market intelligence and buyer-seller meets.",
+    "definition": "Pharmexcil is the government-recognised export promotion council for the Indian pharmaceutical industry. It issues the mandatory RCMC registration, and supports exporters through market intelligence, trade-fair participation and buyer-seller meet programmes such as those held alongside CPHI and iPHEX.",
+    "whyItMatters": "Buyers can independently verify an Indian pharmaceutical exporter's RCMC registration status through Pharmexcil.",
+    "relatedTerms": ["rcmc"]
+  },
+  {
+    "id": "who-pq",
+    "term": "WHO PQ (WHO Prequalification)",
+    "shortDef": "A World Health Organization quality assessment that unlocks procurement by UN agencies and major donor-funded health programmes.",
+    "definition": "WHO Prequalification is a rigorous assessment process confirming a specific product from a specific manufacturing site meets international quality, safety and efficacy standards. It is effectively mandatory for a manufacturer to reach Global Fund, PEPFAR, UNICEF and Gavi procurement, which together represent the majority of donor-funded volume in categories like ARVs, antimalarials and anti-TB medicines.",
+    "whyItMatters": "WHO PQ status is manufacturer- and product-specific, not a general certification — we confirm current status with the relevant manufacturing partner for any tender-track enquiry.",
+    "relatedTerms": ["who-gmp", "copp"]
+  },
+  {
+    "id": "anda",
+    "term": "ANDA (Abbreviated New Drug Application)",
+    "shortDef": "The US FDA application pathway for approving a generic drug, requiring bioequivalence data and a USFDA-inspected manufacturing facility.",
+    "definition": "An Abbreviated New Drug Application is the US FDA's regulatory pathway for approving a generic pharmaceutical, requiring bioequivalence studies and manufacture at a USFDA-inspected facility. It is a multi-year, high-cost process — WHO-GMP certification alone does not qualify a product for the US market.",
+    "whyItMatters": "This is why finished-formulation export to the US is not a realistic near-term goal for a new merchant exporter without an ANDA-holding manufacturing partner — we're transparent about this rather than implying otherwise.",
+    "relatedTerms": ["dmf"]
+  },
+  {
+    "id": "e-brc",
+    "term": "e-BRC (Electronic Bank Realisation Certificate)",
+    "shortDef": "An electronic certificate confirming an exporter has received payment for a shipment, generated after funds are realised.",
+    "definition": "The Electronic Bank Realisation Certificate is generated once payment for an export shipment has been received and processed by the exporter's bank. It is part of the standard post-shipment documentation trail and is often required to claim export incentives.",
+    "whyItMatters": "It closes the compliance loop on a consignment, confirming that the underlying trade was genuinely settled.",
+    "relatedTerms": ["ad-code"]
+  },
+  {
+    "id": "fssai",
+    "term": "FSSAI (Food Safety and Standards Authority of India)",
+    "shortDef": "The regulator governing food-category products, including nutraceuticals and most AYUSH supplements, rather than a drug licence.",
+    "definition": "The Food Safety and Standards Authority of India licenses and regulates food-category products. Nutraceuticals, vitamins and most AYUSH supplements are typically classified as food supplements rather than medicines both in India and in most destination markets, so an FSSAI licence — not a drug licence — governs their manufacture and export.",
+    "whyItMatters": "This is why nutraceutical and AYUSH categories carry a materially lighter regulatory burden than Chapter 30 pharmaceuticals, and why claims on these products are limited to structure-function language rather than disease-treatment claims.",
+    "relatedTerms": []
+  },
+  {
+    "id": "merchant-exporter",
+    "term": "Merchant Exporter",
+    "shortDef": "An exporter who trades and ships pharmaceutical products sourced from manufacturing partners, rather than manufacturing in-house.",
+    "definition": "A merchant exporter sources finished products, APIs or devices from licensed manufacturing partners and handles the export transaction, documentation and buyer relationship, without operating its own manufacturing facility. Compliance credentials like COPP and WHO-GMP are obtained through the manufacturing partner, issued against their plant.",
+    "whyItMatters": "This is the model India Pharma Export operates under — we are transparent that we source from WHO-GMP certified manufacturing partners rather than claiming in-house manufacturing capability.",
+    "relatedTerms": ["copp", "who-gmp", "b2b"]
+  }
+]

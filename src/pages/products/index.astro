@@ -1,0 +1,162 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Icon from '../../components/Icon.astro';
+import { categoryGroups } from '../../data/taxonomy';
+
+const products = (await getCollection('products')).map((p) => p.data);
+const classes = (await getCollection('classes')).map((c) => c.data);
+
+const prescriptionOptions = [
+  { value: 'otc', label: 'OTC / Non-scheduled' },
+  { value: 'rx', label: 'Schedule H (Rx)' },
+  { value: 'h1', label: 'Schedule H1' },
+  { value: 'x', label: 'Schedule X / NDPS' },
+];
+const exportOptions = [
+  { value: 'free', label: 'Freely Exportable' },
+  { value: 'noc', label: 'NOC / Conditional' },
+  { value: 'controlled', label: 'Controlled' },
+];
+const markets = [
+  { value: 'africa', label: 'Africa' },
+  { value: 'southeast-asia', label: 'South-East Asia' },
+  { value: 'middle-east', label: 'Middle East' },
+  { value: 'latin-america', label: 'Latin America' },
+  { value: 'cis-russia', label: 'CIS & Russia' },
+  { value: 'europe-uk', label: 'Europe & UK' },
+  { value: 'united-states', label: 'United States' },
+];
+---
+
+<BaseLayout
+  title="Products — Pharmaceutical Export Catalogue from India"
+  description="Browse India Pharma Export's B2B catalogue: formulations, APIs, biologicals, medical devices, AYUSH and nutraceuticals. Search by molecule, HS code, therapeutic class or market."
+>
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Products' }]} />
+  </div>
+
+  <section class="container-page pt-6 pb-10">
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Product Catalogue</p>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Source Pharmaceutical Products from India</h1>
+    <p class="mt-3 text-slate-600 max-w-2xl">
+      A B2B catalogue across formulations, APIs, biologicals, medical devices, AYUSH and nutraceuticals. Every listing shows export and prescription status — verify requirements against your destination before ordering.
+    </p>
+  </section>
+
+  <section class="container-page pb-14">
+    <h2 class="font-display text-2xl text-[color:var(--color-navy)] mb-5">Browse by Category</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {categoryGroups.map((c) => (
+        <CategoryCard {...c} count={classes.filter((cl) => cl.categoryGroup === c.id).length} />
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page pb-20">
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="font-display text-2xl text-[color:var(--color-navy)]">All Products</h2>
+      <p id="result-count" class="text-sm text-slate-500"></p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 mb-8">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <Icon name="search" class="w-4.5 h-4.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input id="filter-search" type="text" placeholder="Search molecule, formulation, API or HS code…" class="w-full rounded-lg border border-slate-300 pl-10 pr-3 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+        </div>
+        <button id="filter-toggle" type="button" class="sm:hidden inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-600">
+          <Icon name="filter" class="w-4 h-4" /> Filters
+        </button>
+      </div>
+      <div id="filter-panel" class="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+        <select id="filter-category" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white">
+          <option value="">All Categories</option>
+          {categoryGroups.map((c) => <option value={c.id}>{c.name}</option>)}
+        </select>
+        <select id="filter-prescription" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white">
+          <option value="">Any Prescription Status</option>
+          {prescriptionOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+        </select>
+        <select id="filter-export" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white">
+          <option value="">Any Export Status</option>
+          {exportOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+        </select>
+        <select id="filter-market" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white">
+          <option value="">Any Market</option>
+          {markets.map((o) => <option value={o.value}>{o.label}</option>)}
+        </select>
+      </div>
+    </div>
+
+    <div id="product-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {products.map((p) => (
+        <div
+          class="product-card-wrap"
+          data-search={`${p.name} ${p.genericName} ${p.therapeuticClass} ${p.hsCode}`.toLowerCase()}
+          data-category={p.category}
+          data-prescription={p.prescriptionStatus}
+          data-export={p.exportStatus}
+          data-markets={p.marketRegions.join(',')}
+        >
+          <ProductCard {...p} />
+        </div>
+      ))}
+    </div>
+    <p id="empty-state" class="hidden text-center text-slate-500 py-16">No products match your filters yet. Try clearing a filter, or <a href="/request-quote/" class="text-[color:var(--color-blue)] underline">send us your requirement directly</a>.</p>
+  </section>
+</BaseLayout>
+
+<script>
+  const grid = document.getElementById('product-grid');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.product-card-wrap'));
+  const searchInput = document.getElementById('filter-search') as HTMLInputElement | null;
+  const categorySelect = document.getElementById('filter-category') as HTMLSelectElement | null;
+  const prescriptionSelect = document.getElementById('filter-prescription') as HTMLSelectElement | null;
+  const exportSelect = document.getElementById('filter-export') as HTMLSelectElement | null;
+  const marketSelect = document.getElementById('filter-market') as HTMLSelectElement | null;
+  const countEl = document.getElementById('result-count');
+  const emptyState = document.getElementById('empty-state');
+
+  function applyFilters() {
+    const q = (searchInput?.value ?? '').trim().toLowerCase();
+    const category = categorySelect?.value ?? '';
+    const prescription = prescriptionSelect?.value ?? '';
+    const exportStatus = exportSelect?.value ?? '';
+    const market = marketSelect?.value ?? '';
+
+    let visible = 0;
+    cards.forEach((card) => {
+      const matchesQ = !q || card.dataset.search?.includes(q);
+      const matchesCategory = !category || card.dataset.category === category;
+      const matchesPrescription = !prescription || card.dataset.prescription === prescription;
+      const matchesExport = !exportStatus || card.dataset.export === exportStatus;
+      const matchesMarket = !market || card.dataset.markets?.split(',').includes(market);
+      const show = matchesQ && matchesCategory && matchesPrescription && matchesExport && matchesMarket;
+      card.style.display = show ? '' : 'none';
+      if (show) visible += 1;
+    });
+
+    if (countEl) countEl.textContent = `${visible} product${visible === 1 ? '' : 's'}`;
+    if (emptyState) emptyState.classList.toggle('hidden', visible !== 0);
+    if (grid) grid.classList.toggle('hidden', visible === 0);
+  }
+
+  [searchInput, categorySelect, prescriptionSelect, exportSelect, marketSelect].forEach((el) =>
+    el?.addEventListener('input', applyFilters)
+  );
+
+  const params = new URLSearchParams(window.location.search);
+  const initialQ = params.get('q');
+  if (initialQ && searchInput) searchInput.value = initialQ;
+
+  document.getElementById('filter-toggle')?.addEventListener('click', () => {
+    document.getElementById('filter-panel')?.classList.toggle('hidden');
+  });
+
+  applyFilters();
+</script>

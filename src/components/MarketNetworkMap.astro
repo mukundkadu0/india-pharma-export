@@ -1,0 +1,60 @@
+---
+import Icon from './Icon.astro';
+
+interface Node { id: string; name: string; top: string; left: string }
+const nodes: Node[] = [
+  { id: 'united-states', name: 'United States', top: '20%', left: '10%' },
+  { id: 'europe-uk', name: 'Europe & UK', top: '14%', left: '46%' },
+  { id: 'cis-russia', name: 'CIS & Russia', top: '16%', left: '68%' },
+  { id: 'middle-east', name: 'Middle East', top: '48%', left: '58%' },
+  { id: 'africa', name: 'Africa', top: '70%', left: '42%' },
+  { id: 'southeast-asia', name: 'South-East Asia', top: '58%', left: '84%' },
+  { id: 'latin-america', name: 'Latin America', top: '78%', left: '14%' },
+];
+---
+
+<div class="relative w-full aspect-[16/10] sm:aspect-[16/8] rounded-3xl bg-[color:var(--color-navy-deep)] overflow-hidden">
+  <svg class="absolute inset-0 w-full h-full opacity-20" aria-hidden="true">
+    <defs>
+      <pattern id="dot-grid" width="18" height="18" patternUnits="userSpaceOnUse">
+        <circle cx="1.5" cy="1.5" r="1.2" fill="#ffffff" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#dot-grid)" />
+  </svg>
+
+  <svg class="absolute inset-0 w-full h-full" aria-hidden="true">
+    {nodes.map((n) => (
+      <line
+        x1="50%" y1="46%"
+        x2={n.left} y2={n.top}
+        stroke="rgba(234,244,251,0.35)"
+        stroke-width="1.5"
+        stroke-dasharray="4 4"
+      />
+    ))}
+  </svg>
+
+  <!-- India, the origin node -->
+  <div class="absolute flex flex-col items-center gap-1.5 -translate-x-1/2 -translate-y-1/2" style="top:46%; left:50%;">
+    <span class="grid place-items-center w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-[color:var(--color-accent)] text-white shadow-lg ring-4 ring-white/10">
+      <Icon name="map-pin" class="w-5 h-5 sm:w-6 sm:h-6" />
+    </span>
+    <span class="text-[10px] sm:text-xs font-semibold text-white bg-black/20 px-2 py-0.5 rounded-full">India</span>
+  </div>
+
+  {nodes.map((n) => (
+    <a
+      href={`/markets/${n.id}/`}
+      class="absolute flex flex-col items-center gap-1.5 -translate-x-1/2 -translate-y-1/2 group"
+      style={`top:${n.top}; left:${n.left};`}
+    >
+      <span class="grid place-items-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white text-[color:var(--color-navy)] shadow-md group-hover:bg-[color:var(--color-accent)] group-hover:text-white transition-colors">
+        <Icon name="globe" class="w-4 h-4 sm:w-5 sm:h-5" />
+      </span>
+      <span class="text-[10px] sm:text-xs font-medium text-white bg-black/25 group-hover:bg-[color:var(--color-accent)] px-2 py-0.5 rounded-full whitespace-nowrap transition-colors">
+        {n.name}
+      </span>
+    </a>
+  ))}
+</div>

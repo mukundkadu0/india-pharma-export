@@ -1,0 +1,134 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Badge from '../../components/Badge.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Accordion from '../../components/Accordion.astro';
+import CTASection from '../../components/CTASection.astro';
+
+export async function getStaticPaths() {
+  const markets = await getCollection('markets');
+  return markets.map((m) => ({ params: { id: m.data.id }, props: { market: m.data } }));
+}
+
+const { market } = Astro.props;
+const allProducts = (await getCollection('products')).map((p) => p.data);
+const relevantProducts = allProducts.filter((p) => p.marketRegions.includes(market.id)).slice(0, 6);
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: market.faqs.map((f: { q: string; a: string }) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<BaseLayout title={market.seoTitle} description={market.seoDescription}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Markets', href: '/markets/' }, { label: market.name }]} />
+  </div>
+
+  <section class="container-page pt-6 pb-10">
+    <Badge label={market.tierLabel} className="bg-slate-500/10 text-slate-600 border-slate-400/30 normal-case" size="md" />
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl mt-4">Pharma Export to {market.name} from India</h1>
+    <p class="mt-3 text-slate-600 max-w-2xl">{market.overview}</p>
+    <p class="mt-4 text-sm text-slate-500"><strong class="text-[color:var(--color-navy)]">Countries:</strong> {market.countries.join(', ')}</p>
+  </section>
+
+  <section class="container-page pb-14 grid lg:grid-cols-3 gap-10">
+    <div class="lg:col-span-2 space-y-10">
+      <div>
+        <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">What Sells in This Market</h2>
+        <div class="flex flex-wrap gap-2">
+          {market.whatSells.map((s: string) => <span class="text-xs px-3 py-1.5 rounded-full bg-[color:var(--color-blue-light)] text-[color:var(--color-navy)]">{s}</span>)}
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">Regulatory Pathway</h2>
+        <div class="grid sm:grid-cols-2 gap-4 text-sm">
+          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-400 text-xs mb-1">Pathway</p><p class="text-slate-700">{market.pathway}</p></div>
+          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-400 text-xs mb-1">Plant Requirement</p><p class="text-slate-700">{market.plantRequirement}</p></div>
+          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-400 text-xs mb-1">Timeline</p><p class="text-slate-700">{market.timeline}</p></div>
+          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-400 text-xs mb-1">Barrier to Entry</p><p class="text-slate-700">{market.barrierToEntry}</p></div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">Regulatory Considerations</h2>
+        <ul class="space-y-2">
+          {market.regulatoryConsiderations.map((r: string) => (
+            <li class="flex items-start gap-2 text-sm text-slate-600">
+              <Icon name="check-circle" class="w-4.5 h-4.5 text-[color:var(--color-success)] mt-0.5 shrink-0" /> <span>{r}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">Documentation</h2>
+        <ul class="grid sm:grid-cols-2 gap-2">
+          {market.documents.map((d: string) => (
+            <li class="flex items-center gap-2 text-sm text-slate-600 rounded-lg bg-slate-50 px-3 py-2">
+              <Icon name="document" class="w-4 h-4 text-slate-400 shrink-0" /> {d}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">Market Opportunity</h2>
+        <p class="text-slate-600 leading-relaxed">{market.opportunity}</p>
+      </div>
+
+      <div>
+        <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">Frequently Asked Questions</h2>
+        <Accordion items={market.faqs.map((f: { q: string; a: string }) => ({ question: f.q, answer: f.a }))} idPrefix={`market-${market.id}`} />
+      </div>
+    </div>
+
+    <div>
+      <div class="sticky top-24 space-y-5">
+        <div>
+          <h3 class="font-semibold text-[color:var(--color-navy)] mb-2">Typical Buyer Types</h3>
+          <ul class="space-y-1.5">
+            {market.buyerTypes.map((b: string) => (
+              <li class="text-sm text-slate-600 flex items-center gap-2"><Icon name="user-group" class="w-4 h-4 text-slate-400" /> {b}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="rounded-2xl bg-amber-50 border border-amber-200 p-5 text-sm text-amber-800 leading-relaxed">
+          Requirements vary by product and destination. This page describes the general market landscape, not company-specific sales coverage or a guarantee of registration outcome.
+        </div>
+        <Button href="/request-quote/" size="lg" class="w-full justify-center">Request a Quote for {market.name}</Button>
+      </div>
+    </div>
+  </section>
+
+  {relevantProducts.length > 0 && (
+    <section class="bg-slate-50 border-t border-slate-100">
+      <div class="container-page py-14">
+        <h2 class="font-display text-2xl text-[color:var(--color-navy)] mb-6">Related Products for This Market</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {relevantProducts.map((p) => <ProductCard {...p} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CTASection
+    heading={`Ready to Source for ${market.name}?`}
+    primaryLabel="Get an Export Quote"
+    primaryHref="/request-quote/"
+    secondaryLabel="View Compliance Framework"
+    secondaryHref="/compliance/"
+  />
+</BaseLayout>

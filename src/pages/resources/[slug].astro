@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Icon from '../../components/Icon.astro';
+import CTASection from '../../components/CTASection.astro';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const resources = await getCollection('resources');
+  return resources.map((r) => ({ params: { slug: r.data.id }, props: { resource: r.data } }));
+}
+
+const { resource } = Astro.props;
+const allProducts = (await getCollection('products')).map((p) => p.data);
+const allMarkets = (await getCollection('markets')).map((m) => m.data);
+const allGlossary = (await getCollection('glossary')).map((g) => g.data);
+
+const relatedProducts = (resource.relatedProducts ?? []).map((id: string) => allProducts.find((p) => p.id === id)).filter(Boolean);
+const relatedMarkets = (resource.relatedMarkets ?? []).map((id: string) => allMarkets.find((m) => m.id === id)).filter(Boolean);
+const relatedGlossary = (resource.relatedGlossary ?? []).map((id: string) => allGlossary.find((g) => g.id === id)).filter(Boolean);
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: resource.title,
+  description: resource.excerpt,
+  datePublished: resource.publishedDate,
+  dateModified: resource.updatedDate ?? resource.publishedDate,
+  publisher: { '@type': 'Organization', name: site.legalName },
+  articleSection: resource.category,
+};
+---
+
+<BaseLayout title={resource.seoTitle} description={resource.seoDescription} ogType="article">
+  <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Resources', href: '/resources/' }, { label: resource.title }]} />
+  </div>
+
+  <article class="container-page pt-6 pb-16 max-w-3xl">
+    <span class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-blue)]">{resource.category}</span>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] mt-2 leading-tight">{resource.title}</h1>
+    <div class="mt-3 flex items-center gap-3 text-xs text-slate-400">
+      <span>Published {new Date(resource.publishedDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+      {resource.updatedDate && <span>· Updated {new Date(resource.updatedDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>}
+    </div>
+    <p class="mt-5 text-lg text-slate-600 leading-relaxed">{resource.excerpt}</p>
+
+    <div class="mt-8 prose-body">
+      {resource.body.map((block: { heading?: string; paragraphs?: string[]; list?: string[] }) => (
+        <>
+          {block.heading && <h2>{block.heading}</h2>}
+          {block.paragraphs?.map((p) => <p>{p}</p>)}
+          {block.list && (
+            <ul>
+              {block.list.map((item) => <li>{item}</li>)}
+            </ul>
+          )}
+        </>
+      ))}
+    </div>
+
+    {(relatedGlossary.length > 0 || relatedMarkets.length > 0) && (
+      <div class="mt-10 pt-8 border-t border-slate-200 flex flex-wrap gap-6">
+        {relatedGlossary.length > 0 && (
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Related Terms</p>
+            <div class="flex flex-wrap gap-2">
+              {relatedGlossary.map((g: any) => <a href={`/glossary/${g.id}/`} class="text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200">{g.term}</a>)}
+            </div>
+          </div>
+        )}
+        {relatedMarkets.length > 0 && (
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Related Markets</p>
+            <div class="flex flex-wrap gap-2">
+              {relatedMarkets.map((m: any) => <a href={`/markets/${m.id}/`} class="text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200">{m.name}</a>)}
+            </div>
+          </div>
+        )}
+      </div>
+    )}
+  </article>
+
+  {relatedProducts.length > 0 && (
+    <section class="bg-slate-50 border-t border-slate-100">
+      <div class="container-page py-14">
+        <h2 class="font-display text-2xl text-[color:var(--color-navy)] mb-6">Related Products</h2>
+        <div class="flex flex-wrap gap-3">
+          {relatedProducts.map((p: any) => (
+            <a href={`/products/${p.id}/`} class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 hover:border-[color:var(--color-blue)]">
+              {p.name} <Icon name="arrow-right" class="w-3.5 h-3.5" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CTASection heading="Have a Sourcing Question?" primaryLabel="Request a Quote" primaryHref="/request-quote/" secondaryLabel="Read More Resources" secondaryHref="/resources/" />
+</BaseLayout>

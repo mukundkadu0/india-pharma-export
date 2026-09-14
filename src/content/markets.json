@@ -1,0 +1,199 @@
+[
+  {
+    "id": "africa",
+    "name": "Africa",
+    "tier": "tier3",
+    "tierLabel": "Tier 3 — Emerging (with Tier 2 South Africa)",
+    "countries": ["Nigeria", "Kenya", "Tanzania", "Ghana", "Uganda", "Ethiopia", "South Africa"],
+    "character": "Volume and donor-funded tenders",
+    "overview": "Africa is the highest-volume, most accessible corridor for Indian pharmaceutical exports and the recommended starting market for a new exporter. Registration bodies such as NAFDAC (Nigeria), the Pharmacy and Poisons Board (Kenya) and TMDA (Tanzania) generally accept a WHO-GMP certificate and Certificate of Pharmaceutical Product (COPP) from an Indian manufacturing partner without requiring your own inspected facility.",
+    "whatSells": ["Antiretrovirals (ARVs)", "Antimalarials", "Anti-TB medicines", "Broad-spectrum antibiotics", "Essential medicines for hospital tenders"],
+    "buyerTypes": ["Licensed importers and wholesalers", "Hospital groups", "Ministry of health / government tenders", "NGOs and donor-funded procurement programmes"],
+    "categories": ["formulations", "apis", "medical-devices", "nutraceuticals"],
+    "pathway": "NAFDAC (Nigeria), PPB (Kenya), TMDA (Tanzania), and equivalent national regulators. Dossier is typically CTD-lite plus a COPP and free-sale certificate.",
+    "plantRequirement": "WHO-GMP certification plus COPP from the manufacturing partner is generally sufficient. WHO Prequalification (WHO PQ) unlocks Global Fund, PEPFAR, UNICEF and Gavi tender procurement — the single highest-leverage certification for this corridor.",
+    "timeline": "4–18 months per product registration, plus local agent appointment",
+    "barrierToEntry": "Low to medium",
+    "regulatoryConsiderations": [
+      "Each destination country registers each product separately — dossier, samples, fees and a local agent are required per country",
+      "Several destinations now require an antibiotic-specific import permit under antimicrobial stewardship rules",
+      "WHO Prequalification is close to mandatory for donor-funded ARV, antimalarial and anti-TB tenders",
+      "Products withdrawn or banned in other markets (e.g. some fixed-dose combinations) are checked against each destination's own register, not assumed safe because they are approved in India"
+    ],
+    "documents": ["Commercial invoice", "Packing list", "Certificate of Origin", "Certificate of Analysis", "Certificate of Pharmaceutical Product (COPP)", "Free Sale Certificate", "GMP certificate of the manufacturing plant", "Import permit of the buyer"],
+    "opportunity": "Africa buys the categories India is strongest in — ARVs, antimalarials, anti-TB medicines, antibiotics and essential-medicine generics — largely through donor-funded and government-tender channels rather than open retail. This is where the handbook's own guidance recommends a new merchant exporter start.",
+    "faqs": [
+      { "q": "Is Africa a realistic first export market for a new Indian exporter?", "a": "Yes. Africa is widely regarded as the most accessible corridor for a new merchant exporter, since most regulators accept a WHO-GMP + COPP dossier from an Indian manufacturing partner rather than requiring your own inspected facility." },
+      { "q": "Do all African countries have the same registration requirements?", "a": "No — each country (Nigeria, Kenya, Tanzania, Ghana, Uganda, Ethiopia, South Africa and others) maintains its own regulator, dossier requirements and timeline. We confirm the specific pathway for your target country before quoting." }
+    ],
+    "seoTitle": "Pharma Export to Africa from India — Markets, Categories & Compliance",
+    "seoDescription": "How India Pharma Export supports pharmaceutical export to Africa: registration pathway, buyer types, categories in demand, and documentation requirements."
+  },
+  {
+    "id": "southeast-asia",
+    "name": "South-East Asia",
+    "tier": "tier2-3",
+    "tierLabel": "Tier 2 (Korea) and Tier 3 (Philippines, Vietnam, Myanmar, Cambodia, Sri Lanka, Nepal)",
+    "countries": ["Philippines", "Vietnam", "Myanmar", "Cambodia", "Sri Lanka", "Nepal", "South Korea"],
+    "character": "Price-competitive, fast-growing",
+    "overview": "A fast-growing, price-competitive corridor where India already has an established generics presence. Most South-East Asian markets outside Korea fall into the emerging/ROW registration tier, making this — alongside Africa — a realistic starting corridor for new exporters, particularly for generics, APIs and AYUSH categories.",
+    "whatSells": ["Generic formulations across most therapeutic classes", "APIs", "AYUSH and nutraceutical products", "Antimalarials (Cambodia, Myanmar — Greater Mekong region)"],
+    "buyerTypes": ["Licensed importers and distributors", "Wholesale pharmacy chains", "Hospital groups", "Government and institutional tenders"],
+    "categories": ["formulations", "apis", "ayush", "nutraceuticals", "medical-devices"],
+    "pathway": "FDA Philippines, DAV (Vietnam), and equivalent national regulators for Tier 3 countries; a more structured, semi-regulated pathway applies in South Korea.",
+    "plantRequirement": "WHO-GMP + COPP is generally accepted across Tier 3 countries in this region.",
+    "timeline": "4–18 months per product in Tier 3 countries; longer in South Korea",
+    "barrierToEntry": "Low to medium, varies sharply by country",
+    "regulatoryConsiderations": [
+      "Registration requirements vary sharply from country to country within this region — there is no single 'South-East Asia' dossier",
+      "AYUSH and nutraceutical products generally face a lighter food-supplement pathway rather than drug registration",
+      "APIs are a strong fit for this corridor given the region's own formulation manufacturing base"
+    ],
+    "documents": ["Commercial invoice", "Packing list", "Certificate of Origin", "Certificate of Analysis", "Certificate of Pharmaceutical Product (COPP)", "Free Sale Certificate", "Import permit of the buyer"],
+    "opportunity": "A realistic and growing corridor for generics, APIs and AYUSH/nutraceutical categories, with fewer regulatory barriers than Tier 1 or Tier 2 markets outside Korea.",
+    "faqs": [
+      { "q": "Which South-East Asian countries are easiest to start with?", "a": "Philippines, Vietnam, Myanmar, Cambodia, Sri Lanka and Nepal fall into the emerging/ROW registration tier and are generally the most accessible for a new exporter; South Korea is a more structured, semi-regulated market." }
+    ],
+    "seoTitle": "Pharma Export to South-East Asia from India — Markets & Compliance",
+    "seoDescription": "How India Pharma Export supports pharmaceutical export to South-East Asia: registration pathway, categories in demand, and documentation requirements."
+  },
+  {
+    "id": "middle-east",
+    "name": "Middle East",
+    "tier": "tier2",
+    "tierLabel": "Tier 2 — Semi-regulated",
+    "countries": ["United Arab Emirates", "Saudi Arabia"],
+    "character": "High margin, brand-sensitive",
+    "overview": "A semi-regulated, higher-margin corridor for generics, nutraceuticals and devices. Regulatory bodies such as SFDA (Saudi Arabia) and MoHAP (UAE) generally accept a WHO-GMP + COPP dossier, though several conduct their own plant inspection, and halal certification is a common buyer requirement.",
+    "whatSells": ["Generic formulations", "Nutraceuticals and AYUSH", "Medical devices", "Dermatology and topical products"],
+    "buyerTypes": ["Licensed importers and distributors", "Wholesale pharmacy chains", "Hospital groups"],
+    "categories": ["formulations", "nutraceuticals", "ayush", "devices"],
+    "pathway": "SFDA (Saudi Arabia), MoHAP (UAE) and equivalent Gulf regulators.",
+    "plantRequirement": "WHO-GMP + COPP is generally accepted; some Gulf regulators conduct their own plant inspection for higher-risk categories.",
+    "timeline": "12–36 months per product",
+    "barrierToEntry": "Medium",
+    "regulatoryConsiderations": [
+      "Halal certification is a common buyer and, in some cases, regulatory requirement",
+      "A mandatory local agent or legal representative is typically required",
+      "Brand and packaging presentation carry more commercial weight in this corridor than in price-led Tier 3 markets"
+    ],
+    "documents": ["Commercial invoice", "Packing list", "Certificate of Origin", "Certificate of Analysis", "Certificate of Pharmaceutical Product (COPP)", "GMP certificate", "Halal certificate (where applicable)", "Import permit of the buyer"],
+    "opportunity": "Good margins for generics, nutraceuticals and devices, best approached in year two or three once documentation processes are established, per the region's semi-regulated status.",
+    "faqs": [
+      { "q": "Is the Middle East realistic for a new exporter's first year?", "a": "It's typically a year-two or year-three market rather than a starting corridor — the semi-regulated registration process and local-agent requirement take longer to establish than the emerging-market route." }
+    ],
+    "seoTitle": "Pharma Export to the Middle East from India — Markets & Compliance",
+    "seoDescription": "How India Pharma Export supports pharmaceutical export to the Middle East: registration pathway, categories in demand, and documentation requirements."
+  },
+  {
+    "id": "latin-america",
+    "name": "Latin America",
+    "tier": "tier2-3",
+    "tierLabel": "Tier 2 (Brazil, Mexico) and Tier 3 (Guatemala, Peru, Bolivia, Dominican Republic)",
+    "countries": ["Brazil", "Mexico", "Guatemala", "Peru", "Bolivia", "Dominican Republic"],
+    "character": "Growing, protectionist paperwork",
+    "overview": "A growing but protectionist corridor. Brazil (ANVISA) and Mexico (COFEPRIS) are semi-regulated markets with substantial paperwork requirements, while Central American and Andean markets such as Guatemala, Peru, Bolivia and the Dominican Republic fall into the more accessible emerging-market tier.",
+    "whatSells": ["Generics", "Oncology", "Cardiovascular medicines", "Antiparasitics"],
+    "buyerTypes": ["Licensed importers and distributors", "Hospital groups", "Government tenders"],
+    "categories": ["formulations", "specialty", "apis"],
+    "pathway": "ANVISA (Brazil), COFEPRIS (Mexico) for Tier 2 markets; national regulators with a CTD-lite dossier for Tier 3 Central American and Andean markets.",
+    "plantRequirement": "WHO-GMP + COPP usually accepted; ANVISA and COFEPRIS may conduct their own plant inspection.",
+    "timeline": "12–36 months in Brazil/Mexico; 4–18 months in Tier 3 Central/South American markets",
+    "barrierToEntry": "Medium to high in Brazil/Mexico; low to medium elsewhere",
+    "regulatoryConsiderations": [
+      "Brazil and Mexico require a mandatory local agent or legal representative and carry materially heavier paperwork than the region's smaller markets",
+      "Central American and Andean markets are a more realistic entry point for a new exporter than Brazil or Mexico"
+    ],
+    "documents": ["Commercial invoice", "Packing list", "Certificate of Origin", "Certificate of Analysis", "Certificate of Pharmaceutical Product (COPP)", "GMP certificate", "Import permit of the buyer"],
+    "opportunity": "Central America and the Andean markets are a realistic entry point; Brazil and Mexico are longer-horizon markets once documentation processes are established.",
+    "faqs": [
+      { "q": "Is Brazil a good first market in Latin America?", "a": "Not typically for a new exporter — ANVISA registration is semi-regulated with 12–36 month timelines and mandatory local representation. Guatemala, Peru, Bolivia and the Dominican Republic are more accessible starting points." }
+    ],
+    "seoTitle": "Pharma Export to Latin America from India — Markets & Compliance",
+    "seoDescription": "How India Pharma Export supports pharmaceutical export to Latin America: registration pathway, categories in demand, and documentation requirements."
+  },
+  {
+    "id": "cis-russia",
+    "name": "CIS & Russia",
+    "tier": "tier2",
+    "tierLabel": "Tier 2 — Semi-regulated",
+    "countries": ["Russia"],
+    "character": "Established Indian presence",
+    "overview": "India has a long-established generics presence across the CIS region. Roszdravnadzor (Russia) and equivalent national regulators generally accept a WHO-GMP + COPP dossier, with local registration (GOST standards) required per country.",
+    "whatSells": ["Broad generics", "OTC formulations", "Cardiovascular and CNS medicines"],
+    "buyerTypes": ["Licensed importers and distributors", "Wholesale pharmacy chains"],
+    "categories": ["formulations", "apis"],
+    "pathway": "Roszdravnadzor (Russia) and equivalent national regulators across the CIS.",
+    "plantRequirement": "WHO-GMP + COPP usually accepted; local registration to GOST standards required.",
+    "timeline": "12–36 months per product",
+    "barrierToEntry": "Medium",
+    "regulatoryConsiderations": [
+      "Local registration to GOST standards is required per country",
+      "Established Indian generic brands already compete in this corridor, so differentiation on category or documentation quality matters"
+    ],
+    "documents": ["Commercial invoice", "Packing list", "Certificate of Origin", "Certificate of Analysis", "Certificate of Pharmaceutical Product (COPP)", "GMP certificate", "Import permit of the buyer"],
+    "opportunity": "A semi-regulated corridor with an established Indian generics presence, realistic for year two or three of an export programme.",
+    "faqs": [
+      { "q": "Does India have an established presence in the CIS pharma market?", "a": "Yes — India has a long-established generics presence across the CIS region, though local GOST registration and a semi-regulated timeline (12–36 months per product) still apply." }
+    ],
+    "seoTitle": "Pharma Export to CIS & Russia from India — Markets & Compliance",
+    "seoDescription": "How India Pharma Export supports pharmaceutical export to CIS and Russia: registration pathway, categories in demand, and documentation requirements."
+  },
+  {
+    "id": "europe-uk",
+    "name": "Europe & UK",
+    "tier": "tier1",
+    "tierLabel": "Tier 1 — Highly regulated",
+    "countries": ["European Union member states", "United Kingdom", "Switzerland"],
+    "character": "High-value, quality-gated",
+    "overview": "A highly regulated, quality-gated market requiring EU-GMP inspection and, for APIs, an EDQM Certificate of Suitability (CEP). This is not a realistic finished-formulation market for a new merchant exporter in year one — WHO-GMP certification alone is not sufficient. The realistic route into this corridor is bulk API supply backed by a CEP or DMF, or acting as the distribution arm of an already EU-GMP-approved manufacturer.",
+    "whatSells": ["APIs with EDQM CEP", "Generics (via an approved manufacturing partner)", "Biosimilars"],
+    "buyerTypes": ["Licensed importers and distributors (finished dose, via approved partners)", "Formulators and manufacturers (API)"],
+    "categories": ["apis", "formulations"],
+    "pathway": "MAA / decentralised procedure (EU), MHRA (UK). APIs require an EDQM Certificate of Suitability (CEP) or equivalent DMF.",
+    "plantRequirement": "EU-GMP inspected facility. WHO-GMP alone is not sufficient for finished formulations.",
+    "timeline": "2–4 years per product from dossier start",
+    "barrierToEntry": "Very high",
+    "regulatoryConsiderations": [
+      "Not a realistic finished-formulation entry market for a new exporter — the honest route is API supply or partnering with an already-approved manufacturer",
+      "APIs require an EDQM CEP or equivalent DMF, confirmed per manufacturing partner",
+      "The EU's own biocidal-products and novel-food regimes can be stricter than the drug route for adjacent categories"
+    ],
+    "documents": ["Commercial invoice", "Packing list", "Certificate of Origin (preferential where an FTA applies)", "Certificate of Analysis", "EDQM CEP or DMF reference (API)", "EU-GMP certificate of the manufacturing plant"],
+    "opportunity": "High-value but a multi-year market. We support buyers here primarily through API supply with CEP/DMF documentation, and through distribution partnerships with EU-GMP-approved Indian manufacturers rather than claiming direct finished-dose registration capability we do not yet hold.",
+    "faqs": [
+      { "q": "Can India Pharma Export supply finished formulations directly into the EU or UK?", "a": "Not as a new merchant exporter in year one — this requires an EU-GMP inspected manufacturing partner and a multi-year dossier process. We can support API supply backed by a CEP/DMF, and can discuss partnership routes for finished-dose products with buyers who have specific requirements." }
+    ],
+    "seoTitle": "Pharma Export to Europe & UK from India — Markets & Compliance",
+    "seoDescription": "An honest look at what it takes to export pharmaceuticals from India to Europe and the UK: EU-GMP requirements, CEP/DMF for APIs, and realistic timelines."
+  },
+  {
+    "id": "united-states",
+    "name": "United States",
+    "tier": "tier1",
+    "tierLabel": "Tier 1 — Highly regulated",
+    "countries": ["United States"],
+    "character": "Largest single global pharma market",
+    "overview": "The largest single destination market for Indian pharma exports at the industry level, but the most heavily regulated. Finished formulations require an ANDA and a USFDA-inspected manufacturing facility — WHO-GMP alone does not qualify. This is not a realistic market for a new merchant exporter to enter directly with finished dosage forms; APIs backed by a US DMF are the more realistic near-term route.",
+    "whatSells": ["APIs with US DMF", "Generics and injectables (via an ANDA-holding manufacturing partner)"],
+    "buyerTypes": ["Formulators and manufacturers (API)", "Distribution partnerships with ANDA-approved manufacturers"],
+    "categories": ["apis"],
+    "pathway": "ANDA (Abbreviated New Drug Application) for finished formulations; a US Drug Master File (DMF) for APIs.",
+    "plantRequirement": "USFDA-inspected facility. WHO-GMP alone is not sufficient.",
+    "timeline": "2–4 years per product from dossier start",
+    "barrierToEntry": "Very high",
+    "regulatoryConsiderations": [
+      "Direct-to-consumer prescription medicine export into the US is illegal and has produced criminal convictions of India-based operators — this is a B2B-institutional-only market, and this site is not a consumer pharmacy",
+      "Not realistic for a new exporter to enter directly in year one; the honest route is API supply with a US DMF, or a distribution relationship with an already ANDA-approved manufacturer",
+      "Sildenafil, tadalafil and similar molecules are notorious counterfeit-and-spam categories — B2C shipment attracts customs and payment-processor scrutiny even where the generic is legitimately registered"
+    ],
+    "documents": ["Commercial invoice", "Packing list", "Certificate of Analysis", "US DMF reference (API)", "USFDA facility registration"],
+    "opportunity": "We support US-market buyers primarily through API supply backed by a US DMF. We do not claim ANDA-backed finished-formulation supply capability we do not hold, and we do not sell prescription medicines to individual consumers under any circumstances.",
+    "faqs": [
+      { "q": "Does India Pharma Export ship prescription medicine to individual consumers in the US?", "a": "No. Direct-to-consumer prescription medicine export into the US is illegal regardless of prescription status, and we operate strictly as a B2B platform serving licensed importers, manufacturers and institutional buyers." },
+      { "q": "Can India Pharma Export supply finished generics to the US market?", "a": "Only via a distribution relationship with an already ANDA-approved, USFDA-inspected manufacturing partner — this is not a capability we claim to hold independently as a merchant exporter." }
+    ],
+    "seoTitle": "Pharma Export to the United States from India — Markets & Compliance",
+    "seoDescription": "An honest look at exporting pharmaceuticals from India to the United States: ANDA/DMF requirements, USFDA plant inspection, and why direct-to-consumer export is illegal."
+  }
+]

@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title="Disclaimer" description="Regulatory and content disclaimer for India Pharma Export.">
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Disclaimer' }]} />
+  </div>
+  <article class="container-page py-12 max-w-3xl prose-body">
+    <h1 class="font-display text-3xl text-[color:var(--color-navy)] mb-2">Disclaimer</h1>
+    <p class="text-sm text-slate-400 mb-6">Last updated: September 2026</p>
+
+    <div class="not-prose rounded-2xl border-2 border-amber-300 bg-amber-50 p-5 mb-8">
+      <p class="text-sm text-amber-800 leading-relaxed">
+        Product availability, export eligibility, prescription classification, registration requirements, licensing requirements and destination-country rules may vary by product, formulation, strength, manufacturer and destination, and can change without notice. Users must verify current regulatory requirements with the relevant authorities before shipment.
+      </p>
+    </div>
+
+    <h2>Not Medical Advice</h2>
+    <p>Nothing on this website is intended as, and should not be relied on as, medical advice, a diagnosis, or a treatment recommendation. Prescription-status information reflects Indian drug schedules and general destination guidance and is not a substitute for consulting a licensed healthcare professional or the relevant national drug regulator.</p>
+
+    <h2>Not Legal or Regulatory Advice</h2>
+    <p>Compliance, licensing and documentation content on this website is provided for general informational purposes and reflects publicly available regulatory frameworks as understood at the time of writing. It is not legal or regulatory advice. We recommend engaging a qualified pharma regulatory consultant and customs broker before any shipment.</p>
+
+    <h2>Business Model</h2>
+    <p>{site.legalName} operates as a merchant exporter, sourcing pharmaceutical products from WHO-GMP certified Indian manufacturing partners. We do not operate our own manufacturing facilities. Certifications such as WHO-GMP and COPP referenced on product and category pages belong to the relevant manufacturing partner and are confirmed on a per-enquiry basis, not guaranteed for every product at all times.</p>
+
+    <h2>No Guarantee of Registration or Export Outcome</h2>
+    <p>References to a product being "freely exportable," a market being at a particular registration tier, or a typical timeline, describe the general regulatory landscape as documented in industry reference material. They are not a guarantee that any specific product can be exported to any specific destination on any given date. Export and prescription status can change by government notification without notice.</p>
+
+    <h2>B2B Only</h2>
+    <p>This platform is for business buyers only — licensed importers, distributors, wholesalers, hospital groups, government procurement bodies and manufacturers. We do not sell or ship prescription medicines to individual consumers.</p>
+
+    <h2>Third-Party Sources</h2>
+    <p>Industry statistics referenced on this site (such as pharmaceutical export values and growth figures) are drawn from industry reference material and are clearly labelled as industry-wide data, not company-specific performance figures.</p>
+
+    <h2>Contact</h2>
+    <p>Questions about this disclaimer can be sent to <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </article>
+</BaseLayout>

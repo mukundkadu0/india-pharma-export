@@ -1,0 +1,100 @@
+[
+  {
+    "id": "pharma-export-market-compliance-guide-2026",
+    "title": "Pharma Export from India: A 2026 Market & Compliance Guide",
+    "category": "Pharma Export Guides",
+    "excerpt": "The scale of India's pharmaceutical export industry, the licence stack a compliant exporter operates under, and how destination market tiers determine what's realistic — in one reference.",
+    "featured": true,
+    "publishedDate": "2026-09-14",
+    "body": [
+      { "paragraphs": ["India is the world's third-largest drug producer by volume and supplies roughly a fifth of global generic medicine. In FY 2024–25, Indian pharmaceutical exports reached $30.4 billion, up 9.4% year-on-year, with formulations and biologicals accounting for 75.7% of that value across more than 200 destination countries. The scale is real — and so is the competition, which is why differentiation by category, corridor and documentation quality matters more than price alone."] },
+      { "heading": "The single fact that shapes every legitimate export business", "paragraphs": ["Direct-to-consumer export of prescription medicine is illegal into almost every market worth selling to. This isn't a grey area — regulators including the US FDA treat unsolicited commercial shipment of prescription drugs to consumers as drug importation without approval, and it has produced criminal convictions of India-based operators. The legal, scalable route is B2B: selling to licensed importers, wholesalers, hospital groups and government tenders who hold the import authorisation in their own country. That is the model this platform, and the wider $30 billion legitimate export industry, actually runs on."] },
+      { "heading": "The licence stack, in brief", "list": ["Company incorporation, PAN and current account", "Importer-Exporter Code (IEC) from DGFT", "Wholesale drug licence — Form 20B (general) and 21B (biologicals/injectables)", "RCMC from Pharmexcil", "AD Code registration and ICEGATE customs filing", "COPP / WHO-GMP certificate (held by the manufacturing partner for a merchant exporter)", "Export NOC from CDSCO, where the specific product category requires one", "Destination-country product registration — the step that usually takes the longest"] },
+      { "heading": "Market tiers, not one global market", "paragraphs": ["Destination regulators, not Indian ones, set the real timeline for any export relationship. Highly regulated markets (the US, EU, UK, Japan) require a USFDA- or EU-GMP-inspected facility and a multi-year dossier process for finished formulations. Semi-regulated markets (Brazil, Mexico, Russia, the Gulf states, South Africa) generally accept a WHO-GMP and COPP dossier alongside their own registration process, typically 12–36 months. Emerging markets across Africa, South-East Asia and parts of Latin America accept a lighter CTD dossier plus COPP, often in 4–18 months — the realistic starting corridor for a new export relationship. Nutraceuticals, AYUSH, cosmetics and Class A medical devices require no drug registration at all in most markets, making that the one category where genuine direct-to-consumer trade is legal worldwide."] },
+      { "heading": "What this means for buyers", "paragraphs": ["If you're a licensed importer, wholesaler or institutional buyer evaluating an Indian supply partner, the questions worth asking are: which manufacturing partner actually holds the WHO-GMP/COPP for the specific product, what documentation set travels with the consignment, and whether the export status of your specific product and destination has been checked against the current DGFT notification — not assumed from a general product listing. See our Compliance page for how we handle each of these."] }
+    ],
+    "relatedMarkets": ["africa", "southeast-asia"],
+    "relatedGlossary": ["copp", "who-gmp", "b2b", "merchant-exporter"],
+    "seoTitle": "Pharma Export from India: 2026 Market & Compliance Guide",
+    "seoDescription": "A practical guide to India's pharmaceutical export industry: market scale, the licence stack, and how destination market tiers shape a realistic export strategy."
+  },
+  {
+    "id": "understanding-hs-codes-pharma-exports",
+    "title": "Understanding HS Codes for Pharmaceutical Exports from India",
+    "category": "HS Codes",
+    "excerpt": "Chapter 30 covers finished pharmaceutical products; Chapter 29 covers the APIs. Here's how the classification actually works and why it matters for every quotation.",
+    "publishedDate": "2026-09-14",
+    "body": [
+      { "paragraphs": ["Customs classification under the Harmonized System determines duty, export-incentive eligibility, and — critically — whether a current DGFT export restriction applies to a specific product. Getting the 8-digit code right against the official DGFT ITC(HS) lookup, rather than a generic blog reference, is a basic diligence step on every quotation."] },
+      { "heading": "The headings that matter most", "list": ["3001 — Glands, organs and human/animal-derived substances (e.g. heparin)", "3002 — Vaccines, antisera, biologicals, diagnostic reagents", "3003 / 3004 — Medicaments in bulk (3003) or measured retail doses (3004) — the main heading for finished formulations, split into sub-headings by therapeutic class", "3005 / 3006 — Dressings, sutures, contraceptives, dental materials and similar device-classified goods", "2933 / 2934 / 2941 — The organic-chemistry headings covering the bulk of small-molecule and antibiotic APIs", "1302 / 3003.90 — Ayurvedic and herbal extracts, often classified outside the standard medicament headings", "2106.90 — Food preparations, which is usually the correct heading for nutraceuticals and food supplements, not Chapter 30", "9018 / 9021 / 9022 — Medical instruments, orthopaedic appliances and diagnostic imaging apparatus"] },
+      { "heading": "Why this changes your regulatory burden, not just your duty rate", "paragraphs": ["A product's HS heading often signals which regulatory regime governs it. Nutraceuticals classified under 2106.90 face a food-supplement pathway rather than drug registration; dental materials under 3006.40 are regulated as devices rather than medicines in most markets. Confirming the correct heading early avoids assuming the wrong regulatory pathway for a product."] }
+    ],
+    "relatedGlossary": ["hs-code", "dgft", "api"],
+    "seoTitle": "HS Codes for Pharmaceutical Exports from India — Explained",
+    "seoDescription": "How HS/customs classification works for Indian pharmaceutical exports across formulations, APIs, devices and nutraceuticals, and why it changes your regulatory pathway."
+  },
+  {
+    "id": "pharma-export-licence-stack",
+    "title": "The Pharmaceutical Export Licence Stack: IEC to Destination Registration",
+    "category": "Documentation",
+    "excerpt": "The credentials a compliant Indian pharmaceutical exporter operates under, in the order they're actually obtained.",
+    "publishedDate": "2026-09-14",
+    "body": [
+      { "paragraphs": ["The licences behind a legitimate pharmaceutical export business are sequential — several later steps require an earlier certificate number as an input. Understanding this stack helps buyers evaluate whether a supplier is operating on a genuine compliance foundation."] },
+      { "heading": "The sequence", "list": ["Company incorporation, PAN and current account — a private limited company is materially more credible to foreign buyers and banks than a proprietorship", "Importer-Exporter Code (IEC) from DGFT — the ten-digit code without which no consignment can leave India", "Wholesale drug licence, Form 20B and 21B, from the State Drug Licensing Authority — 20B covers general medicines, 21B covers Schedule C/C(1) biologicals and injectables", "RCMC from Pharmexcil — mandatory for all pharmaceutical exporters, and the gateway to export incentives and market intelligence", "AD Code registration with the exporter's bank, plus ICEGATE customs filing access", "COPP and WHO-GMP certification — held by the manufacturing partner for a merchant exporter, issued against their plant", "Export NOC from CDSCO — required only for new, unapproved, banned or NDPS-scheduled drugs, filed through the SUGAM portal", "Narcotics export authorisation — only relevant for NDPS-controlled molecules, which fall outside our standard catalogue", "Destination-country product registration — the step foreign regulators, not Indian ones, control, and the one that most determines actual timeline to first shipment"] },
+      { "heading": "What travels with every consignment", "list": ["Commercial invoice with HS code, Incoterm and country of origin", "Batch-wise packing list", "Shipping bill generated on ICEGATE", "Bill of lading or airway bill", "Certificate of Origin", "Certificate of Analysis, batch-specific", "Certificate of Pharmaceutical Product (COPP), WHO format", "Free Sale Certificate", "GMP certificate of the manufacturing plant", "Manufacturing and wholesale licence copies", "Import permit or licence of the buyer, kept on file"] }
+    ],
+    "relatedGlossary": ["iec", "rcmc", "ad-code", "copp", "export-noc"],
+    "seoTitle": "The Pharmaceutical Export Licence Stack Explained",
+    "seoDescription": "The sequential licences and documentation behind a compliant Indian pharmaceutical export business, from IEC to destination-country product registration."
+  },
+  {
+    "id": "why-b2b-not-consumer-checkout",
+    "title": "Why Direct-to-Consumer Prescription Medicine Export Is Illegal — and What Actually Works",
+    "category": "Export Compliance",
+    "excerpt": "The single fact that shapes every legitimate pharmaceutical export business, and why this platform is built as a B2B quotation system rather than a checkout.",
+    "publishedDate": "2026-09-14",
+    "body": [
+      { "paragraphs": ["An Indian website that takes an order from an individual consumer abroad and ships them prescription medicine is not operating in a grey area — it is drug importation without approval at the destination, and in the US it has produced criminal convictions of India-based web pharmacy operators. Personal-importation enforcement discretion, sometimes cited as a loophole, exists to protect individual patients in narrow circumstances and explicitly excludes any commercialised storefront. Controlled substances have no personal-use exception at all."] },
+      { "heading": "What this changes — and what it doesn't", "paragraphs": ["None of this stops legitimate export from India. It changes who a compliant exporter sells to. The legal, large route is B2B: selling to licensed importers, wholesalers, hospital groups, government tenders and registered pharmacy chains abroad, each of whom holds the import authorisation in their own country and carries the onward compliance obligation. This is why India Pharma Export operates as a quotation and sourcing platform — 'Request a Quote', not 'Buy Now' — and why we ask buyers to confirm their licence status rather than accepting anonymous consumer orders."] },
+      { "heading": "The exception: categories with no drug-registration requirement", "paragraphs": ["Nutraceuticals, vitamins and AYUSH herbal products are regulated as food supplements rather than medicines in most destinations, which means genuine direct-to-consumer trade is legal in that specific category worldwide. Even there, we keep the same B2B-style quotation and bulk-supply model across the platform, rather than mixing a consumer checkout into a site built for institutional buyers."] }
+    ],
+    "relatedGlossary": ["b2b", "schedule-h", "ndps"],
+    "seoTitle": "Why Pharma Export Is B2B, Not Direct-to-Consumer",
+    "seoDescription": "Why direct-to-consumer prescription medicine export from India is illegal into most markets, and why the legal, scalable model is B2B supply to licensed buyers."
+  },
+  {
+    "id": "who-prequalification-explained",
+    "title": "WHO Prequalification: The Key to Donor-Funded Tender Procurement",
+    "category": "Market Intelligence",
+    "excerpt": "For ARVs, antimalarials, anti-TB medicines and vaccines, WHO Prequalification status is close to a prerequisite for reaching the largest institutional buyers.",
+    "publishedDate": "2026-09-14",
+    "body": [
+      { "paragraphs": ["WHO Prequalification (WHO PQ) is a rigorous World Health Organization assessment confirming that a specific product from a specific manufacturing site meets international quality, safety and efficacy standards. It is manufacturer- and product-specific — a company can hold WHO PQ for one product line and not another."] },
+      { "heading": "Why it matters commercially", "paragraphs": ["Global Fund, PEPFAR, UNICEF and Gavi — the dominant buyers of ARVs, antimalarials, anti-TB medicines and vaccines for low- and middle-income countries — effectively require WHO PQ status to participate in their procurement. For categories like antiretrovirals, where India supplies the majority of medicines used in these countries, PQ status plus a competitive per-patient-year price is close to the entire basis of competition."] },
+      { "heading": "What buyers should ask", "list": ["Which specific product and manufacturing site holds current WHO PQ status", "Whether that status covers the exact strength and presentation being quoted", "Expected reorder cadence and tender cycle for the relevant procurement programme"] }
+    ],
+    "relatedGlossary": ["who-pq", "who-gmp"],
+    "relatedProducts": ["artemether-lumefantrine-tablets", "dolutegravir-tablets", "hrze-fixed-dose-combination"],
+    "seoTitle": "WHO Prequalification for Pharma Export — Why It Matters",
+    "seoDescription": "What WHO Prequalification means for donor-funded tender procurement of ARVs, antimalarials, anti-TB medicines and vaccines from India."
+  },
+  {
+    "id": "export-market-tiers-explained",
+    "title": "Export Market Tiers Explained: Where a New Exporter Can Realistically Compete",
+    "category": "Market Intelligence",
+    "excerpt": "Not every destination market is equally reachable. Tiering by registration burden shows where new supply relationships actually start.",
+    "publishedDate": "2026-09-14",
+    "body": [
+      { "paragraphs": ["Destination regulators, not Indian ones, set the real timeline for market entry. Grouping markets by registration burden — rather than treating 'export to the world' as one undifferentiated goal — is the most useful way to plan a realistic supply strategy."] },
+      { "heading": "Tier 1 — Highly regulated", "paragraphs": ["The United States, EU, UK, Japan, Canada, Australia and Switzerland require a USFDA- or EU-GMP-inspected facility and a multi-year, high-cost dossier process (ANDA in the US, MAA/decentralised procedure in the EU) for finished formulations. WHO-GMP alone does not qualify a product for these markets. The realistic route in is API supply backed by a US DMF or EU CEP, or a distribution relationship with an already-approved manufacturer — not direct finished-dose registration as a new exporter."] },
+      { "heading": "Tier 2 — Semi-regulated", "paragraphs": ["Brazil, Mexico, Russia, Turkey, South Africa, Saudi Arabia, the UAE and South Korea generally accept a WHO-GMP and COPP dossier, though several conduct their own plant inspection, and a local agent or legal representative is typically mandatory. Timelines run 12–36 months per product — a realistic year-two or year-three market once documentation processes are established."] },
+      { "heading": "Tier 3 — Emerging markets", "paragraphs": ["Nigeria, Kenya, Tanzania, Ghana, Uganda, Ethiopia, the Philippines, Vietnam, Myanmar, Cambodia, Sri Lanka, Nepal and several Central American and Andean markets accept a lighter CTD-lite dossier alongside a COPP and free-sale certificate, typically in 4–18 months. WHO Prequalification unlocks donor-funded tender procurement on top of standard registration. This is the recommended starting tier for a new exporter, buying the categories India is strongest in — ARVs, antimalarials, anti-TB medicines, antibiotics and essential-medicine generics."] },
+      { "heading": "Tier 0 — No drug registration at all", "paragraphs": ["Nutraceuticals, AYUSH, cosmetics and Class A medical devices require a food-supplement or device notification rather than drug approval in most markets, generally resolved in weeks rather than months. This is the one category where genuine direct-to-consumer e-commerce is legal — Amazon, Shopify and similar channels are viable — though we run it through the same B2B-style bulk-supply model as the rest of the catalogue."] }
+    ],
+    "relatedMarkets": ["africa", "united-states", "europe-uk"],
+    "relatedGlossary": ["who-gmp", "anda", "who-pq"],
+    "seoTitle": "Pharma Export Market Tiers: Tier 1, 2, 3 and 0 Explained",
+    "seoDescription": "How destination-market registration burden shapes a realistic pharmaceutical export strategy from India, from highly-regulated Tier 1 to no-registration Tier 0."
+  }
+]

@@ -1,0 +1,36 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: 'md' | 'lg';
+  icon?: string;
+  class?: string;
+  type?: 'button' | 'submit';
+  id?: string;
+}
+const { href, variant = 'primary', size = 'md', icon = 'arrow-right', class: className = '', type, id } = Astro.props;
+
+const base = 'inline-flex items-center justify-center gap-2 font-semibold rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2';
+const sizes = { md: 'px-5 py-2.5 text-sm', lg: 'px-7 py-3.5 text-base' };
+const variants = {
+  primary: 'bg-[color:var(--color-accent)] text-white hover:bg-[#d9700f]',
+  secondary: 'bg-[color:var(--color-navy)] text-white hover:bg-[color:var(--color-navy-deep)]',
+  outline: 'border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] hover:bg-[color:var(--color-navy)] hover:text-white',
+  ghost: 'text-[color:var(--color-navy)] hover:bg-[color:var(--color-blue-light)]',
+};
+const classes = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
+
+import Icon from './Icon.astro';
+---
+
+{href ? (
+  <a href={href} class={classes} id={id}>
+    <slot />
+    {icon && <Icon name={icon} class="w-4 h-4" />}
+  </a>
+) : (
+  <button type={type ?? 'button'} class={classes} id={id}>
+    <slot />
+    {icon && <Icon name={icon} class="w-4 h-4" />}
+  </button>
+)}

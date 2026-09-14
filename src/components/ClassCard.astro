@@ -1,0 +1,28 @@
+---
+import Badge from './Badge.astro';
+import Icon from './Icon.astro';
+import { exportStatusMeta } from '../data/taxonomy';
+
+interface Props {
+  id: string;
+  name: string;
+  summary: string;
+  hsCode: string;
+  exportStatus: keyof typeof exportStatusMeta;
+  listedCount: number;
+}
+const { id, name, summary, hsCode, exportStatus, listedCount } = Astro.props;
+const es = exportStatusMeta[exportStatus];
+---
+
+<a href={`/products/therapeutic-class/${id}/`} class="group flex flex-col gap-3 p-5 bg-white border border-slate-200 rounded-2xl hover:border-[color:var(--color-blue)]/40 hover:shadow-md transition-all">
+  <div class="flex items-start justify-between gap-3">
+    <h3 class="font-display text-base text-[color:var(--color-navy)] leading-snug group-hover:text-[color:var(--color-blue)]">{name}</h3>
+    <Badge label={es.shortLabel} className={`${es.className} shrink-0`} />
+  </div>
+  <p class="text-sm text-slate-600 leading-relaxed">{summary}</p>
+  <div class="mt-auto flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-100">
+    <span>HS {hsCode}</span>
+    <span>{listedCount} molecules tracked</span>
+  </div>
+</a>

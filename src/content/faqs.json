@@ -1,0 +1,86 @@
+[
+  {
+    "id": "bulk-request",
+    "question": "Can I request bulk pharmaceutical products from India?",
+    "answer": "Yes. India Pharma Export operates as a B2B sourcing and export platform for licensed importers, distributors, wholesalers, hospital groups and government procurement bodies. Submit your requirement through our bulk requirement form or request a quote on any product page, and our team will confirm suitable products, supply options and regulatory considerations for your target market.",
+    "category": "Ordering"
+  },
+  {
+    "id": "which-countries",
+    "question": "Which countries do you export to?",
+    "answer": "We work primarily across Africa, South-East Asia, the Middle East, Latin America and CIS markets, where WHO-GMP and COPP documentation from our manufacturing partners is generally sufficient for registration. Europe, the UK and the United States are highly regulated (Tier 1) markets we support mainly through API supply and manufacturing-partner distribution arrangements rather than direct finished-formulation registration — see our Markets pages for the honest picture per region.",
+    "category": "Markets"
+  },
+  {
+    "id": "how-to-quote",
+    "question": "How do I request a quotation?",
+    "answer": "Use the 'Get a Quote' button on any product page to add it to your inquiry list, or go directly to Request a Quote to submit your requirement — product, dosage form, strength, estimated quantity, target market and delivery timeline. Our team reviews regulatory and market-fit considerations before responding with a formal quotation.",
+    "category": "Ordering"
+  },
+  {
+    "id": "supply-apis",
+    "question": "Do you supply APIs?",
+    "answer": "Yes. We support Active Pharmaceutical Ingredient sourcing for formulators and manufacturers, with Certificate of Analysis documentation and dossier support (CEP/DMF status confirmed per manufacturing partner) for destination registration.",
+    "category": "Products"
+  },
+  {
+    "id": "supply-formulations",
+    "question": "Do you supply finished formulations?",
+    "answer": "Yes, across tablets, capsules, injectables and other finished dosage forms sourced from WHO-GMP certified manufacturing partners, for B2B supply to licensed importers, wholesalers and institutional buyers. We do not sell prescription medicines directly to individual consumers.",
+    "category": "Products"
+  },
+  {
+    "id": "destination-registration",
+    "question": "Can you support destination-country registration?",
+    "answer": "We can support the documentation your local regulatory consultant or agent will need — COPP, GMP certificate, Certificate of Analysis, free-sale certificate and dossier materials from our manufacturing partners. Destination-country product registration is a country-specific, often multi-month to multi-year process handled with a local regulatory consultant; we are not a substitute for one.",
+    "category": "Compliance"
+  },
+  {
+    "id": "documents-required",
+    "question": "What documents are required for pharma exports?",
+    "answer": "A standard consignment travels with a commercial invoice, packing list, shipping bill, bill of lading/airway bill, certificate of origin, certificate of analysis, Certificate of Pharmaceutical Product (COPP), free sale certificate, GMP certificate and manufacturing/wholesale licence copies. Additional documents — Export NOC, narcotics authorisation, stability data, cold-chain logs — apply depending on the product category. See our Compliance page for the full picture.",
+    "category": "Compliance"
+  },
+  {
+    "id": "moq-question",
+    "question": "What is the MOQ?",
+    "answer": "MOQ varies by product, packaging format and manufacturing partner, so we do not publish a fixed figure on product listings. Request a quote and we'll confirm minimum order quantity alongside pricing and lead time for your specific requirement.",
+    "category": "Ordering"
+  },
+  {
+    "id": "custom-list",
+    "question": "Can I request a custom product list?",
+    "answer": "Yes. Add multiple products to your inquiry list as you browse the catalogue, or upload an existing RFQ/product list on the bulk requirement form, and our team will respond against your full list rather than one product at a time.",
+    "category": "Ordering"
+  },
+  {
+    "id": "export-timeline",
+    "question": "How long does export processing take?",
+    "answer": "This depends heavily on the product category and destination. Once a quotation is agreed, standard documentation and shipment processing typically takes a few weeks. Destination-country product registration — where required — is the real timeline driver and can range from a few months in emerging markets to several years in highly regulated markets like the US or EU. We give you a realistic estimate for your specific product and market at quotation stage.",
+    "category": "Compliance"
+  },
+  {
+    "id": "hospitals-tenders",
+    "question": "Do you supply hospitals and government tenders?",
+    "answer": "Yes. Essential medicines, vaccines, emergency and critical-care products, and antimalarial/antiretroviral/anti-TB categories are commonly supplied through hospital and government-tender channels, including donor-funded procurement programmes where our manufacturing partners hold WHO Prequalification.",
+    "category": "Markets"
+  },
+  {
+    "id": "prescription-vs-otc",
+    "question": "How do I know if a product needs a prescription to be sold in my market?",
+    "answer": "We show each product's Indian prescription schedule (non-scheduled/OTC, Schedule H, H1 or X) as a starting reference, but destination classification can differ — the same molecule can be pharmacy-only in India and general-sale elsewhere, or the reverse. We always recommend verifying current classification with your own country's drug authority before finalising an order.",
+    "category": "Compliance"
+  },
+  {
+    "id": "consumer-orders",
+    "question": "Can individual consumers order prescription medicine through this website?",
+    "answer": "No. This is a B2B platform for licensed importers, distributors, wholesalers, hospitals and government buyers. We do not process consumer orders or ship prescription medicines to individuals, which is illegal in almost every market and something we take seriously.",
+    "category": "General"
+  },
+  {
+    "id": "nutraceuticals-different",
+    "question": "Are nutraceuticals and AYUSH products handled differently from pharmaceuticals?",
+    "answer": "Yes — nutraceuticals and AYUSH products are typically regulated as food supplements rather than medicines, governed by an FSSAI licence rather than a drug licence, with a materially lighter registration path in most destination markets. We still handle these as B2B quotations rather than a consumer checkout.",
+    "category": "Products"
+  }
+]

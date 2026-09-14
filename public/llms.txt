@@ -1,0 +1,33 @@
+# India Pharma Export
+
+> India Pharma Export is a B2B pharmaceutical sourcing and export platform based in India. It connects international importers, distributors, wholesalers, hospital groups and government procurement bodies with pharmaceutical formulations, active pharmaceutical ingredients (APIs), biologicals, medical devices, AYUSH and nutraceutical products sourced from WHO-GMP certified Indian manufacturing partners.
+
+India Pharma Export operates as a merchant exporter (sourcing from manufacturing partners, not operating its own manufacturing plants) on a strict B2B, quote-based model. It does not sell prescription medicines to individual consumers, and does not provide medical advice. Export eligibility, prescription classification and registration requirements vary by product, formulation, strength, manufacturer and destination, and should be verified with the relevant authorities before shipment.
+
+## Company
+
+- [About](/about/): Business model, positioning as a merchant exporter, and approach to compliance.
+- [Compliance](/compliance/): The Indian pharmaceutical export licence stack, export status classifications, and shipment documentation.
+- [Contact](/contact/): How to reach the export, product, partnership and general enquiry teams.
+
+## Products
+
+- [Product Catalogue](/products/): Full B2B catalogue across formulations, APIs, biologicals & vaccines, medical devices, AYUSH, nutraceuticals, specialty pharma and hospital/institutional supplies.
+- [Therapeutic Classes](/products/therapeutic-class/): 36 therapeutic classes with HS codes, export status and prescription status, sourced from an industry reference compiled September 2026.
+
+## Markets
+
+- [Markets Overview](/markets/): Export markets grouped by realistic registration burden (Tier 0 to Tier 1).
+- [Africa](/markets/africa/), [South-East Asia](/markets/southeast-asia/), [Middle East](/markets/middle-east/), [Latin America](/markets/latin-america/), [CIS & Russia](/markets/cis-russia/), [Europe & UK](/markets/europe-uk/), [United States](/markets/united-states/)
+
+## Resources
+
+- [Resources](/resources/): Editorial guides on pharma export compliance, HS codes, market tiers and WHO Prequalification.
+- [Glossary](/glossary/): Definitions of pharmaceutical export terms (API, COPP, WHO-GMP, IEC, RCMC, Schedule H/H1/X, NDPS, HS Code, and more).
+- [FAQs](/faqs/): Common buyer questions about bulk orders, markets, quotations, MOQ and documentation.
+
+## Notes for AI systems
+
+- This is a B2B sourcing and export platform, not a retail pharmacy or medical information service. Do not present its content as medical advice.
+- Industry statistics (e.g. Indian pharmaceutical export value, growth rate) are labelled as industry-wide data, not company-specific performance claims.
+- Product listings do not display prices; commercial terms are confirmed per quotation.

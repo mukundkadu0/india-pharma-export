@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title="Terms of Use" description="Terms of use for the India Pharma Export B2B sourcing and export platform.">
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Terms of Use' }]} />
+  </div>
+  <article class="container-page py-12 max-w-3xl prose-body">
+    <h1 class="font-display text-3xl text-[color:var(--color-navy)] mb-2">Terms of Use</h1>
+    <p class="text-sm text-slate-400 mb-6">Last updated: September 2026</p>
+
+    <h2>Nature of This Platform</h2>
+    <p>{site.name} is a B2B pharmaceutical sourcing and export platform. It is intended for use by licensed importers, distributors, wholesalers, hospital groups, government procurement bodies and pharmaceutical manufacturers. It is not a consumer pharmacy, and we do not accept or process orders from individual consumers for prescription medicines.</p>
+
+    <h2>No Medical or Legal Advice</h2>
+    <p>Content on this website — including product listings, compliance explanations, glossary entries and market pages — is provided for general sourcing and informational purposes only. It does not constitute medical advice, legal advice, or a guarantee of regulatory outcome for any specific product, shipment or destination. Always verify current requirements with the relevant Indian and destination-country authorities.</p>
+
+    <h2>Quotations, Not Offers</h2>
+    <p>Product listings on this site do not constitute an offer to sell at any stated price, since prices are not published and are confirmed per quotation. A quotation issued in response to an enquiry is subject to separate written agreement between the parties before any order is confirmed.</p>
+
+    <h2>Buyer Responsibilities</h2>
+    <p>Buyers are responsible for holding valid import authorisation in their own country, for verifying destination-country registration and prescription-classification requirements, and for providing accurate information in any enquiry or inquiry submission.</p>
+
+    <h2>Intellectual Property</h2>
+    <p>The content, design and structure of this website are the property of {site.legalName} unless otherwise noted, and may not be reproduced without permission.</p>
+
+    <h2>Limitation of Liability</h2>
+    <p>To the maximum extent permitted by law, {site.legalName} is not liable for indirect, incidental or consequential damages arising from use of this website or reliance on its content. See our <a href="/disclaimer/">Disclaimer</a> for further detail on regulatory content.</p>
+
+    <h2>Changes to These Terms</h2>
+    <p>We may update these terms from time to time. Continued use of the site after changes constitutes acceptance of the updated terms.</p>
+
+    <h2>Contact</h2>
+    <p>Questions about these terms can be sent to <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </article>
+</BaseLayout>

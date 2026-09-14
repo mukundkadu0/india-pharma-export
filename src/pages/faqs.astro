@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Accordion from '../components/Accordion.astro';
+import CTASection from '../components/CTASection.astro';
+
+const faqs = await getCollection('faqs');
+const categories = [...new Set(faqs.map((f) => f.data.category))];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.data.question,
+    acceptedAnswer: { '@type': 'Answer', text: f.data.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title="FAQs — Pharmaceutical Export from India"
+  description="Answers to common questions about sourcing pharmaceutical products from India: bulk orders, export markets, quotations, MOQ, documentation and compliance."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'FAQs' }]} />
+  </div>
+  <section class="container-page pt-6 pb-10">
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">FAQ</p>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Frequently Asked Questions</h1>
+  </section>
+
+  <section class="container-page pb-20 max-w-3xl">
+    {categories.map((cat) => (
+      <div class="mb-10">
+        <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-2">{cat}</h2>
+        <Accordion
+          items={faqs.filter((f) => f.data.category === cat).map((f) => ({ question: f.data.question, answer: f.data.answer }))}
+          idPrefix={`faq-${cat.toLowerCase().replace(/\s+/g, '-')}`}
+        />
+      </div>
+    ))}
+  </section>
+
+  <CTASection heading="Didn't Find Your Answer?" primaryLabel="Contact Us" primaryHref="/contact/" />
+</BaseLayout>

@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import MarketCard from '../../components/MarketCard.astro';
+import MarketNetworkMap from '../../components/MarketNetworkMap.astro';
+import CTASection from '../../components/CTASection.astro';
+
+const markets = await getCollection('markets');
+---
+
+<BaseLayout
+  title="Export Markets — Where India Pharma Export Sources & Ships"
+  description="Explore pharmaceutical export markets from India: Africa, South-East Asia, the Middle East, Latin America, CIS & Russia, Europe & UK, and the United States, each with its own registration pathway and realistic timeline."
+>
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Markets' }]} />
+  </div>
+  <section class="container-page pt-6 pb-10">
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Global Markets</p>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Pharmaceutical Export Markets from India</h1>
+    <p class="mt-3 text-slate-600 max-w-2xl">
+      Not every product can be sold in every country. We group markets by realistic registration burden — from emerging markets a new exporter can enter within months, to highly regulated markets that require a multi-year, manufacturer-backed dossier. Requirements vary by product and destination.
+    </p>
+  </section>
+
+  <section class="container-page pb-14">
+    <MarketNetworkMap />
+  </section>
+
+  <section class="container-page pb-20">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {markets.map((m) => <MarketCard {...m.data} />)}
+    </div>
+  </section>
+
+  <CTASection
+    heading="Not Sure Which Market Fits Your Product?"
+    body="Tell us your product and target country — we'll confirm the realistic registration pathway and timeline."
+    primaryLabel="Request a Quote"
+    primaryHref="/request-quote/"
+  />
+</BaseLayout>
