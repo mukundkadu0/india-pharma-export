@@ -64,9 +64,34 @@ import { categoryGroups } from '../data/taxonomy';
   </div>
 
   <div class="border-t border-white/10">
+    <div class="container-page py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <h3 class="text-sm font-semibold text-white">Subscribe to Updates</h3>
+        <p class="text-xs text-slate-400 mt-1 max-w-xs">Get the latest insights on pharma exports, regulatory updates and market opportunities.</p>
+      </div>
+      <form id="newsletter-form" data-fallback-email={site.email} class="flex w-full sm:w-auto gap-2">
+        <input type="email" name="email" required placeholder="Enter your email" class="flex-1 sm:w-64 rounded-full px-4 py-2.5 text-sm bg-white text-[color:var(--color-ink)] outline-none" />
+        <button type="submit" class="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[color:var(--color-accent)] text-white text-sm font-semibold px-5 py-2.5">
+          Subscribe <Icon name="arrow-right" class="w-3.5 h-3.5" />
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="border-t border-white/10">
     <div class="container-page py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
       <p>&copy; {new Date().getFullYear()} {site.legalName}. All rights reserved.</p>
       <p class="flex items-center gap-2">Made in India · For a Healthier World</p>
     </div>
   </div>
 </footer>
+
+<script>
+  document.getElementById('newsletter-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const form = e.currentTarget as HTMLFormElement;
+    const email = (form.elements.namedItem('email') as HTMLInputElement)?.value;
+    const fallback = form.dataset.fallbackEmail;
+    window.location.href = `mailto:${fallback}?subject=${encodeURIComponent('Newsletter signup')}&body=${encodeURIComponent(`Please add ${email} to the pharma export updates list.`)}`;
+  });
+</script>

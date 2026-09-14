@@ -5,6 +5,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import MarketCard from '../../components/MarketCard.astro';
 import MarketNetworkMap from '../../components/MarketNetworkMap.astro';
 import CTASection from '../../components/CTASection.astro';
+import { marketSkyline } from '../../data/taxonomy';
 
 const markets = await getCollection('markets');
 ---
@@ -30,7 +31,7 @@ const markets = await getCollection('markets');
 
   <section class="container-page pb-20">
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {markets.map((m) => <MarketCard {...m.data} />)}
+      {markets.map((m) => <MarketCard {...m.data} skylineVariant={marketSkyline[m.data.id]} />)}
     </div>
   </section>
 

@@ -115,6 +115,16 @@ export const prescriptionStatusMeta = {
   },
 } as const;
 
+export const marketSkyline: Record<string, 'us' | 'eu' | 'africa' | 'latam' | 'cis' | 'middle-east' | 'sea'> = {
+  'united-states': 'us',
+  'europe-uk': 'eu',
+  africa: 'africa',
+  'latin-america': 'latam',
+  'cis-russia': 'cis',
+  'middle-east': 'middle-east',
+  'southeast-asia': 'sea',
+};
+
 export const marketMeta: Record<string, { flagLabel: string }> = {
   'united-states': { flagLabel: 'US' },
   'europe-uk': { flagLabel: 'EU/UK' },

@@ -1,0 +1,64 @@
+---
+interface Props {
+  variant?: 'us' | 'eu' | 'africa' | 'latam' | 'cis' | 'middle-east' | 'sea';
+}
+const { variant = 'us' } = Astro.props;
+
+const skies: Record<string, [string, string]> = {
+  us: ['#EAF4FB', '#CFE6F5'],
+  eu: ['#EEF2F7', '#D9E3EE'],
+  africa: ['#FBF0DE', '#F4DDA9'],
+  latam: ['#FCEEE3', '#F6D2B4'],
+  cis: ['#E9EEF6', '#CBD7E8'],
+  'middle-east': ['#FCEFE0', '#F7D8AE'],
+  sea: ['#E7F3EE', '#C7E6D7'],
+};
+const [skyTop, skyBottom] = skies[variant] ?? skies.us;
+
+const buildings: Record<string, { x: number; w: number; h: number }[]> = {
+  us: [
+    { x: 10, w: 18, h: 60 }, { x: 32, w: 14, h: 90 }, { x: 50, w: 20, h: 70 },
+    { x: 74, w: 12, h: 110 }, { x: 90, w: 16, h: 55 }, { x: 110, w: 22, h: 80 },
+  ],
+  eu: [
+    { x: 10, w: 16, h: 50 }, { x: 30, w: 10, h: 85 }, { x: 44, w: 8, h: 100 },
+    { x: 56, w: 18, h: 45 }, { x: 78, w: 14, h: 65 }, { x: 96, w: 20, h: 40 }, { x: 118, w: 10, h: 70 },
+  ],
+  africa: [
+    { x: 20, w: 4, h: 34 }, { x: 40, w: 24, h: 40 }, { x: 70, w: 6, h: 50 },
+    { x: 90, w: 20, h: 30 }, { x: 116, w: 5, h: 45 },
+  ],
+  latam: [
+    { x: 12, w: 20, h: 55 }, { x: 36, w: 14, h: 75 }, { x: 54, w: 24, h: 40 },
+    { x: 82, w: 12, h: 90 }, { x: 98, w: 18, h: 60 },
+  ],
+  cis: [
+    { x: 14, w: 22, h: 45 }, { x: 40, w: 10, h: 30 }, { x: 54, w: 16, h: 65 },
+    { x: 74, w: 14, h: 40 }, { x: 92, w: 24, h: 55 }, { x: 120, w: 10, h: 35 },
+  ],
+  'middle-east': [
+    { x: 14, w: 10, h: 100 }, { x: 28, w: 14, h: 60 }, { x: 48, w: 8, h: 120 },
+    { x: 62, w: 18, h: 50 }, { x: 86, w: 10, h: 85 }, { x: 102, w: 16, h: 55 },
+  ],
+  sea: [
+    { x: 12, w: 16, h: 65 }, { x: 32, w: 10, h: 95 }, { x: 46, w: 20, h: 45 },
+    { x: 70, w: 8, h: 105 }, { x: 84, w: 18, h: 60 }, { x: 108, w: 12, h: 40 },
+  ],
+};
+const skyline = buildings[variant] ?? buildings.us;
+const baseY = 130;
+---
+
+<svg viewBox="0 0 140 130" class="w-full h-full" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+  <defs>
+    <linearGradient id={`sky-${variant}`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color={skyTop} />
+      <stop offset="100%" stop-color={skyBottom} />
+    </linearGradient>
+  </defs>
+  <rect width="140" height="130" fill={`url(#sky-${variant})`} />
+  {skyline.map((b) => (
+    <rect x={b.x} y={baseY - b.h} width={b.w} height={b.h} fill="#0B2A4A" opacity="0.82" rx="1.5" />
+  ))}
+  <rect x="0" y={baseY} width="140" height="4" fill="#0B2A4A" opacity="0.9" />
+</svg>
