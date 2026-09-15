@@ -328,9 +328,12 @@ const complianceBadges = [
         </p>
         <div class="mt-8 grid grid-cols-3 sm:grid-cols-5 gap-3">
           {complianceBadges.map((b) => (
-            <div class="flex flex-col items-center gap-2 bg-white rounded-xl px-2 py-4 text-center">
-              <Icon name={b.icon} class="w-6 h-6 text-[color:var(--color-navy)]" />
-              <span class="text-[11px] sm:text-xs font-bold text-[color:var(--color-navy)] leading-tight">{b.label}</span>
+            <div class="flex flex-col items-center gap-2 bg-white rounded-xl px-2 py-5 text-center shadow-sm">
+              <span class="relative grid place-items-center w-14 h-14 rounded-full bg-gradient-to-br from-[color:var(--color-blue-light)] to-white ring-2 ring-[color:var(--color-navy)]/15">
+                <span class="absolute inset-0 rounded-full border-2 border-dashed border-[color:var(--color-accent)]/40"></span>
+                <Icon name={b.icon} class="w-6 h-6 text-[color:var(--color-navy)]" />
+              </span>
+              <span class="text-[11px] sm:text-xs font-bold text-[color:var(--color-navy)] leading-tight tracking-wide">{b.label}</span>
               <span class="text-[9px] sm:text-[10px] text-slate-500 leading-tight">{b.sub}</span>
             </div>
           ))}
