@@ -17,14 +17,16 @@ const synonyms: Record<string, string[]> = {
 };
 
 export const GET: APIRoute = async () => {
-  const [products, classes, markets, glossary, faqs, resources] = await Promise.all([
+  const [products, classes, markets, glossary, faqs, resources, molecules] = await Promise.all([
     getCollection('products'),
     getCollection('classes'),
     getCollection('markets'),
     getCollection('glossary'),
     getCollection('faqs'),
     getCollection('resources'),
+    getCollection('molecules'),
   ]);
+  const classNameById = Object.fromEntries(classes.map((c) => [c.data.id, c.data.name]));
 
   const items = [
     ...products.map((p) => ({
@@ -67,6 +69,13 @@ export const GET: APIRoute = async () => {
       title: r.data.title,
       subtitle: r.data.category,
       url: `/resources/${r.data.id}/`,
+      keywords: [],
+    })),
+    ...molecules.map((m) => ({
+      type: m.data.buyDirect ? 'molecule-buy' : 'molecule',
+      title: m.data.name,
+      subtitle: classNameById[m.data.classId] ?? m.data.classId,
+      url: `/products/therapeutic-class/${m.data.classId}/#mol-${m.data.id}`,
       keywords: [],
     })),
   ];

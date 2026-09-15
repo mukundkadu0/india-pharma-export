@@ -1,0 +1,138 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Icon from '../../../components/Icon.astro';
+import { categoryGroups } from '../../../data/taxonomy';
+
+const molecules = (await getCollection('molecules')).map((m) => m.data);
+const classes = (await getCollection('classes')).map((c) => c.data);
+const classById = Object.fromEntries(classes.map((c) => [c.id, c]));
+
+const sorted = [...molecules].sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<BaseLayout
+  title="Molecule Index — Full Catalogue of 2,400+ Exportable Molecules"
+  description="Search and filter India Pharma Export's full molecule catalogue across formulations, APIs, biologicals, AYUSH and nutraceuticals, sourced from the India Pharma Export Handbook."
+>
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Products', href: '/products/' }, { label: 'Molecule Index' }]} />
+  </div>
+
+  <section class="container-page pt-6 pb-10">
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Molecule Index</p>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Search the Full Molecule Catalogue</h1>
+    <p class="mt-3 text-slate-600 max-w-2xl">
+      {sorted.length.toLocaleString()} molecules across 36 therapeutic classes. Narcotics, psychotropics and other Schedule X / NDPS-controlled molecules are excluded from this list — enquire directly if you have a specific case-by-case requirement.
+    </p>
+  </section>
+
+  <section class="container-page pb-20">
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 mb-6 sticky top-[4.5rem] z-10">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <Icon name="search" class="w-4.5 h-4.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input
+            id="mi-search"
+            type="text"
+            placeholder="Search molecule name…"
+            class="w-full rounded-lg border border-slate-300 pl-10 pr-3 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]"
+          />
+        </div>
+        <select id="mi-category" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white sm:w-56">
+          <option value="">All Categories</option>
+          {categoryGroups.map((c) => <option value={c.id}>{c.name}</option>)}
+        </select>
+        <select id="mi-class" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white sm:w-64">
+          <option value="">All Therapeutic Classes</option>
+          {classes.map((c) => <option value={c.id}>{c.name}</option>)}
+        </select>
+      </div>
+      <p id="mi-count" class="text-xs text-slate-500 mt-3"></p>
+    </div>
+
+    <div class="border border-slate-200 rounded-2xl overflow-hidden">
+      <div id="mi-list" class="divide-y divide-slate-100">
+        {sorted.map((m) => {
+          const cls = classById[m.classId];
+          return (
+            <div
+              class="mi-row flex items-center justify-between gap-3 px-4 py-3"
+              data-search={m.name.toLowerCase()}
+              data-category={m.categoryGroup}
+              data-class={m.classId}
+            >
+              <div class="min-w-0">
+                <p class="text-sm font-medium text-[color:var(--color-ink)] truncate">{m.name}</p>
+                <a href={`/products/therapeutic-class/${m.classId}/#mol-${m.id}`} class="text-xs text-slate-500 hover:text-[color:var(--color-blue)] hover:underline">
+                  {cls?.name ?? m.classId}
+                </a>
+                {m.flag && <p class="text-xs text-amber-700 mt-0.5">{m.flag}</p>}
+              </div>
+              {m.buyDirect ? (
+                <button
+                  type="button"
+                  class="add-to-cart shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[color:var(--color-accent)] hover:bg-[#d9700f] rounded-full px-3 py-1.5"
+                  data-id={m.id}
+                  data-name={m.name}
+                  data-meta={cls?.name ?? ''}
+                >
+                  <Icon name="cart" class="w-3.5 h-3.5" /> Buy Direct
+                </button>
+              ) : (
+                <a
+                  href={`/request-quote/?product=${encodeURIComponent(m.name)}`}
+                  class="shrink-0 text-xs font-semibold text-[color:var(--color-blue)] hover:underline"
+                >
+                  Get Quote
+                </a>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+    <p id="mi-empty" class="hidden text-center text-slate-500 py-16">
+      No molecules match your filters. Try clearing a filter, or <a href="/request-quote/" class="text-[color:var(--color-blue)] underline">send us your requirement directly</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<script>
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('.mi-row'));
+  const searchInput = document.getElementById('mi-search') as HTMLInputElement | null;
+  const categorySelect = document.getElementById('mi-category') as HTMLSelectElement | null;
+  const classSelect = document.getElementById('mi-class') as HTMLSelectElement | null;
+  const countEl = document.getElementById('mi-count');
+  const listEl = document.getElementById('mi-list');
+  const emptyEl = document.getElementById('mi-empty');
+
+  function applyFilters() {
+    const q = (searchInput?.value ?? '').trim().toLowerCase();
+    const category = categorySelect?.value ?? '';
+    const cls = classSelect?.value ?? '';
+
+    let visible = 0;
+    rows.forEach((row) => {
+      const matchesQ = !q || (row.dataset.search ?? '').includes(q);
+      const matchesCategory = !category || row.dataset.category === category;
+      const matchesClass = !cls || row.dataset.class === cls;
+      const show = matchesQ && matchesCategory && matchesClass;
+      row.style.display = show ? '' : 'none';
+      if (show) visible += 1;
+    });
+
+    if (countEl) countEl.textContent = `${visible.toLocaleString()} of ${rows.length.toLocaleString()} molecules shown`;
+    emptyEl?.classList.toggle('hidden', visible !== 0);
+    listEl?.classList.toggle('hidden', visible === 0);
+  }
+
+  [searchInput, categorySelect, classSelect].forEach((el) => el?.addEventListener('input', applyFilters));
+
+  const params = new URLSearchParams(window.location.search);
+  const initialQ = params.get('q');
+  if (initialQ && searchInput) searchInput.value = initialQ;
+
+  applyFilters();
+</script>

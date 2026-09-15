@@ -6,6 +6,7 @@ const navItems = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about/' },
   { label: 'Products', href: '/products/' },
+  { label: 'Shop OTC & AYUSH', href: '/shop/' },
   { label: 'Markets', href: '/markets/' },
   { label: 'Compliance', href: '/compliance/' },
   { label: 'Resources', href: '/resources/' },
@@ -59,6 +60,11 @@ function isActive(href: string) {
       <a href="/inquiry/" aria-label="View inquiry list" class="relative hidden sm:grid place-items-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100">
         <Icon name="clipboard" class="w-5 h-5" />
         <span id="inquiry-badge" hidden class="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-[color:var(--color-accent)] text-white text-[10px] font-bold">0</span>
+      </a>
+
+      <a href="/shop/cart/" aria-label="View direct-order cart" class="relative hidden sm:grid place-items-center w-10 h-10 rounded-full text-slate-600 hover:bg-slate-100">
+        <Icon name="cart" class="w-5 h-5" />
+        <span id="cart-badge" hidden class="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-[color:var(--color-navy)] text-white text-[10px] font-bold">0</span>
       </a>
 
       <div class="relative hidden sm:block">
@@ -212,6 +218,8 @@ function isActive(href: string) {
     glossary: 'Glossary',
     faq: 'FAQ',
     resource: 'Resource',
+    molecule: 'Molecule',
+    'molecule-buy': 'Buy Direct',
   };
 
   const resultsEl = document.getElementById('search-results');

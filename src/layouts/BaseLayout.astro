@@ -77,6 +77,7 @@ const websiteJsonLd = {
 
     <script>
       const STORAGE_KEY = 'ipe-inquiry-list';
+      const CART_STORAGE_KEY = 'ipe-direct-cart';
 
       type InquiryItem = { id: string; name: string; meta?: string };
 
@@ -98,15 +99,44 @@ const websiteJsonLd = {
         updateBadge();
       }
 
+      function readCart(): InquiryItem[] {
+        try {
+          const raw = localStorage.getItem(CART_STORAGE_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function writeCart(list: InquiryItem[]) {
+        try {
+          localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(list));
+        } catch {
+          /* storage unavailable — direct-order cart simply won't persist */
+        }
+        updateBadge();
+      }
+
       function updateBadge() {
         const badge = document.getElementById('inquiry-badge');
-        if (!badge) return;
-        const count = readList().length;
-        if (count > 0) {
-          badge.textContent = String(count);
-          badge.removeAttribute('hidden');
-        } else {
-          badge.setAttribute('hidden', '');
+        if (badge) {
+          const count = readList().length;
+          if (count > 0) {
+            badge.textContent = String(count);
+            badge.removeAttribute('hidden');
+          } else {
+            badge.setAttribute('hidden', '');
+          }
+        }
+        const cartBadge = document.getElementById('cart-badge');
+        if (cartBadge) {
+          const count = readCart().length;
+          if (count > 0) {
+            cartBadge.textContent = String(count);
+            cartBadge.removeAttribute('hidden');
+          } else {
+            cartBadge.setAttribute('hidden', '');
+          }
         }
       }
 
@@ -122,20 +152,38 @@ const websiteJsonLd = {
       }
 
       document.addEventListener('click', (e) => {
-        const target = (e.target as HTMLElement)?.closest('.add-to-inquiry') as HTMLElement | null;
-        if (!target) return;
-        e.preventDefault();
-        const id = target.dataset.id;
-        const name = target.dataset.name ?? id;
-        if (!id) return;
-        const list = readList();
-        if (list.some((item) => item.id === id)) {
-          showToast(`${name} is already on your inquiry list.`);
+        const inquiryTarget = (e.target as HTMLElement)?.closest('.add-to-inquiry') as HTMLElement | null;
+        if (inquiryTarget) {
+          e.preventDefault();
+          const id = inquiryTarget.dataset.id;
+          const name = inquiryTarget.dataset.name ?? id;
+          if (!id) return;
+          const list = readList();
+          if (list.some((item) => item.id === id)) {
+            showToast(`${name} is already on your inquiry list.`);
+            return;
+          }
+          list.push({ id, name: name!, meta: inquiryTarget.dataset.meta });
+          writeList(list);
+          showToast(`Added ${name} to your inquiry list.`);
           return;
         }
-        list.push({ id, name: name!, meta: target.dataset.meta });
-        writeList(list);
-        showToast(`Added ${name} to your inquiry list.`);
+
+        const cartTarget = (e.target as HTMLElement)?.closest('.add-to-cart') as HTMLElement | null;
+        if (cartTarget) {
+          e.preventDefault();
+          const id = cartTarget.dataset.id;
+          const name = cartTarget.dataset.name ?? id;
+          if (!id) return;
+          const cart = readCart();
+          if (cart.some((item) => item.id === id)) {
+            showToast(`${name} is already in your direct-order cart.`);
+            return;
+          }
+          cart.push({ id, name: name!, meta: cartTarget.dataset.meta });
+          writeCart(cart);
+          showToast(`Added ${name} to your direct-order cart.`);
+        }
       });
 
       updateBadge();

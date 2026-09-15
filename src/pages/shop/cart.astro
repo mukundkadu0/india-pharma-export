@@ -1,0 +1,209 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { site } from '../../data/site';
+---
+
+<BaseLayout
+  title="Your Direct-Order Cart — India Pharma Export"
+  description="Review the OTC nutraceuticals and AYUSH products in your cart and submit a direct order request."
+  noindex
+>
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Shop OTC & AYUSH', href: '/shop/' }, { label: 'Your Cart' }]} />
+  </div>
+
+  <section class="container-page pt-6 pb-10">
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Direct Order</p>
+    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Your Cart</h1>
+    <p class="mt-3 text-slate-600 max-w-2xl">
+      This is a direct order request for OTC nutraceuticals and AYUSH products — not a B2B bulk enquiry. We'll confirm pricing, quantity and payment (invoice or bank transfer) with you directly; no online payment is collected here.
+    </p>
+  </section>
+
+  <section class="container-page pb-20 grid lg:grid-cols-5 gap-10">
+    <div class="lg:col-span-2">
+      <h2 class="font-semibold text-[color:var(--color-navy)] mb-4">Cart Items</h2>
+      <div id="cart-items" class="space-y-3"></div>
+      <p id="cart-empty" class="hidden text-sm text-slate-500 rounded-xl border border-dashed border-slate-300 p-6 text-center">
+        Your cart is empty. Browse the <a href="/shop/" class="text-[color:var(--color-blue)] underline">direct-order shop</a> and select "Add" on any product.
+      </p>
+      <button id="clear-cart" type="button" class="hidden mt-3 text-xs text-slate-400 hover:text-[color:var(--color-error)]">Clear all</button>
+    </div>
+
+    <div class="lg:col-span-3">
+      <form id="cart-form" data-endpoint={site.formEndpoint} data-fallback-email={site.email} class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8" novalidate>
+        <input type="hidden" name="orderType" value="Direct Order Request (OTC / AYUSH)" />
+        <div class="grid sm:grid-cols-2 gap-5">
+          <div>
+            <label for="co-name" class="block text-sm font-medium text-slate-700 mb-1.5">Full Name *</label>
+            <input id="co-name" name="fullName" type="text" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+          </div>
+          <div>
+            <label for="co-email" class="block text-sm font-medium text-slate-700 mb-1.5">Email *</label>
+            <input id="co-email" name="email" type="email" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+          </div>
+          <div>
+            <label for="co-phone" class="block text-sm font-medium text-slate-700 mb-1.5">Phone / WhatsApp *</label>
+            <input id="co-phone" name="phone" type="tel" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+          </div>
+          <div>
+            <label for="co-country" class="block text-sm font-medium text-slate-700 mb-1.5">Country *</label>
+            <input id="co-country" name="country" type="text" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+          </div>
+          <div class="sm:col-span-2">
+            <label for="co-address" class="block text-sm font-medium text-slate-700 mb-1.5">Shipping Address *</label>
+            <textarea id="co-address" name="shippingAddress" rows="3" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]"></textarea>
+          </div>
+          <div class="sm:col-span-2">
+            <label for="co-message" class="block text-sm font-medium text-slate-700 mb-1.5">Notes (quantities, preferred packaging, delivery timing)</label>
+            <textarea id="co-message" name="message" rows="3" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]"></textarea>
+          </div>
+          <div class="hidden" aria-hidden="true">
+            <label for="co-hp">Leave blank</label>
+            <input id="co-hp" name="companyWebsite" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+        </div>
+        <p id="co-status" class="mt-4 text-sm hidden" role="status"></p>
+        <div class="mt-6 flex items-center justify-between flex-wrap gap-3">
+          <p class="text-xs text-slate-400 max-w-sm">No payment is collected on this site. Our team will confirm pricing and payment method (invoice or bank transfer) after reviewing your request.</p>
+          <Button type="submit" size="lg" icon="cart">Submit Order Request</Button>
+        </div>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const CART_STORAGE_KEY = 'ipe-direct-cart';
+  type CartItem = { id: string; name: string; meta?: string };
+
+  function readCart(): CartItem[] {
+    try {
+      const raw = localStorage.getItem(CART_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  }
+  function writeCart(list: CartItem[]) {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(list));
+    } catch {}
+    render();
+    window.dispatchEvent(new Event('storage'));
+  }
+
+  const itemsEl = document.getElementById('cart-items');
+  const emptyEl = document.getElementById('cart-empty');
+  const clearBtn = document.getElementById('clear-cart');
+
+  function render() {
+    const list = readCart();
+    if (!itemsEl || !emptyEl || !clearBtn) return;
+    if (list.length === 0) {
+      itemsEl.innerHTML = '';
+      emptyEl.classList.remove('hidden');
+      clearBtn.classList.add('hidden');
+      return;
+    }
+    emptyEl.classList.add('hidden');
+    clearBtn.classList.remove('hidden');
+    itemsEl.innerHTML = list
+      .map(
+        (item, i) => `
+      <div class="flex items-center justify-between gap-3 rounded-xl border border-slate-200 p-4">
+        <div class="min-w-0">
+          <p class="text-sm font-medium text-[color:var(--color-ink)] truncate">${item.name}</p>
+          ${item.meta ? `<p class="text-xs text-slate-400 truncate">${item.meta}</p>` : ''}
+          <label class="text-xs text-slate-400" for="qty-${i}">Quantity</label>
+          <input id="qty-${i}" data-idx="${i}" class="qty-input mt-1 block w-32 rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" placeholder="e.g. 2 boxes" />
+        </div>
+        <button type="button" data-remove="${item.id}" aria-label="Remove ${item.name}" class="shrink-0 text-slate-400 hover:text-[color:var(--color-error)]">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="w-5 h-5"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+        </button>
+      </div>`
+      )
+      .join('');
+
+    itemsEl.querySelectorAll('[data-remove]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = (btn as HTMLElement).dataset.remove;
+        writeCart(readCart().filter((item) => item.id !== id));
+      });
+    });
+  }
+
+  clearBtn?.addEventListener('click', () => writeCart([]));
+  render();
+
+  const form = document.getElementById('cart-form') as HTMLFormElement | null;
+  const status = document.getElementById('co-status');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const honeypot = (form.elements.namedItem('companyWebsite') as HTMLInputElement)?.value;
+    if (honeypot) return;
+
+    const list = readCart();
+    if (list.length === 0) {
+      if (status) {
+        status.textContent = 'Add at least one product to your cart before submitting.';
+        status.className = 'mt-4 text-sm text-[color:var(--color-error)]';
+      }
+      return;
+    }
+
+    const qtyInputs = Array.from(document.querySelectorAll<HTMLInputElement>('.qty-input'));
+    const productLines = list.map((item, i) => `${item.name}${qtyInputs[i]?.value ? ` — ${qtyInputs[i].value}` : ''}`);
+
+    const data = new FormData(form);
+    const endpoint = form.dataset.endpoint;
+    const fallbackEmail = form.dataset.fallbackEmail;
+
+    if (endpoint) {
+      data.append('products', productLines.join('; '));
+      try {
+        const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error('failed');
+        if (status) {
+          status.textContent = 'Thank you — your order request has been received. Our team will confirm pricing and payment within 1–2 business days.';
+          status.className = 'mt-4 text-sm text-[color:var(--color-success)]';
+        }
+        writeCart([]);
+        form.reset();
+      } catch {
+        if (status) {
+          status.textContent = `Something went wrong sending this automatically. Please email us directly at ${fallbackEmail}.`;
+          status.className = 'mt-4 text-sm text-[color:var(--color-error)]';
+        }
+      }
+      return;
+    }
+
+    const lines = [
+      `Order Type: ${data.get('orderType') ?? ''}`,
+      `Full Name: ${data.get('fullName') ?? ''}`,
+      `Email: ${data.get('email') ?? ''}`,
+      `Phone/WhatsApp: ${data.get('phone') ?? ''}`,
+      `Country: ${data.get('country') ?? ''}`,
+      `Shipping Address: ${data.get('shippingAddress') ?? ''}`,
+      `Notes: ${data.get('message') ?? ''}`,
+      '',
+      'Products:',
+      ...productLines.map((l) => `- ${l}`),
+    ];
+    const subject = encodeURIComponent(`Direct Order Request — ${data.get('fullName') ?? 'New Order'}`);
+    const body = encodeURIComponent(lines.join('\n'));
+    window.location.href = `mailto:${fallbackEmail}?subject=${subject}&body=${body}`;
+    if (status) {
+      status.textContent = 'Opening your email client with this order pre-filled — please send it to complete your request.';
+      status.className = 'mt-4 text-sm text-slate-600';
+    }
+  });
+</script>

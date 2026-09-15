@@ -139,4 +139,26 @@ const faqs = defineCollection({
   }),
 });
 
-export const collections = { classes, products, markets, glossary, resources, faqs };
+const molecules = defineCollection({
+  loader: file('src/content/molecules.json'),
+  schema: z.object({
+    id: z.string(),
+    name: z.string(),
+    classId: z.string(),
+    categoryGroup: z.enum([
+      'formulations',
+      'apis',
+      'biologicals',
+      'devices',
+      'ayush',
+      'nutraceuticals',
+      'specialty',
+      'hospital',
+    ]),
+    buyDirect: z.boolean(),
+    flag: z.string().optional(),
+    flagDetail: z.string().optional(),
+  }),
+});
+
+export const collections = { classes, products, markets, glossary, resources, faqs, molecules };

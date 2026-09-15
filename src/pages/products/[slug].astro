@@ -229,6 +229,21 @@ const allClasses = (await getCollection('classes')).map((c) => c.data);
 
         <div class="lg:col-span-2">
           <div class="sticky top-24 space-y-4">
+            {(product.category === 'nutraceuticals' || product.category === 'ayush') && product.prescriptionStatus === 'otc' && (
+              <div class="rounded-2xl border border-[color:var(--color-accent)]/30 bg-[color:var(--color-accent)]/5 p-6">
+                <h2 class="font-semibold text-[color:var(--color-navy)]">Buy Direct</h2>
+                <p class="mt-1.5 text-sm text-slate-600">OTC — no B2B minimum order. Add to your cart and submit an order request.</p>
+                <button
+                  type="button"
+                  class="add-to-cart mt-4 w-full inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-accent)] hover:bg-[#d9700f] text-white py-3 text-sm font-semibold"
+                  data-id={product.id}
+                  data-name={product.name}
+                  data-meta={category?.name ?? ''}
+                >
+                  <Icon name="cart" class="w-4 h-4" /> Add to Cart
+                </button>
+              </div>
+            )}
             <div class="rounded-2xl border border-slate-200 bg-[color:var(--color-blue-light)] p-6">
               <h2 class="font-semibold text-[color:var(--color-navy)]">Request a Quote</h2>
               <p class="mt-1.5 text-sm text-slate-600">Get pricing, MOQ and export details for {product.name}.</p>
