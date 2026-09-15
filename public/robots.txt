@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.indiapharmaexport.com/sitemap-index.xml
+Sitemap: https://www.pharmaxports.com/sitemap-index.xml

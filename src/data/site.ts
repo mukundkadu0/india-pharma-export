@@ -6,8 +6,9 @@ export const site = {
   name: 'India Pharma Export',
   legalName: 'India Pharma Export', // CONFIGURE: registered legal entity name
   tagline: 'Trusted Medicines. Healthier Tomorrow.',
-  domain: 'indiapharmaexport.com', // CONFIGURE: confirm once the domain is live
-  url: 'https://www.indiapharmaexport.com', // CONFIGURE
+  domain: 'pharmaxports.com',
+  // www is canonical — the apex 308-redirects to it on Vercel.
+  url: 'https://www.pharmaxports.com',
   email: 'export@indiapharmaexport.com', // CONFIGURE: replace with a real monitored inbox
   partnershipEmail: 'partnerships@indiapharmaexport.com', // CONFIGURE
   phone: '+91 00000 00000', // CONFIGURE
