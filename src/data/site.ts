@@ -13,10 +13,10 @@ export const site = {
   phone: '+91 00000 00000', // CONFIGURE
   whatsapp: '+91 00000 00000', // CONFIGURE
   address: 'India', // CONFIGURE: registered business address
-  // CONFIGURE: point this at a real form backend (Formspree, a serverless
-  // function, etc.) before launch — forms render and validate without it,
-  // but nothing is delivered until this is set.
-  formEndpoint: '',
+  // Web3Forms (https://web3forms.com) — delivers form submissions to
+  // mukundkadu48@gmail.com (the account owner). No backend required.
+  formEndpoint: 'https://api.web3forms.com/submit',
+  formAccessKey: '0c8adcc9-f5ab-4a3e-a0bd-4ce039412480',
   social: {
     // CONFIGURE: add only real, live profile URLs. Leave empty to hide the icon.
     linkedin: '',
