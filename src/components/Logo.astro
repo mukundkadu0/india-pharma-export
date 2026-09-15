@@ -1,0 +1,24 @@
+---
+interface Props {
+  class?: string;
+  gap?: string;
+}
+const { class: className = 'w-10 h-10', gap = '#ffffff' } = Astro.props;
+
+// Four petals fanned around (24, 26): green and orange standing upright,
+// two blue leaves spreading below. Each is an ellipse rotated about its own centre.
+const petals = [
+  { cx: 16.39, cy: 33.09, rx: 6.8, ry: 10.4, angle: -133, fill: '#155D95' },
+  { cx: 31.61, cy: 33.09, rx: 6.8, ry: 10.4, angle: 133, fill: '#155D95' },
+  { cx: 17.83, cy: 18.65, rx: 5.6, ry: 9.6, angle: -40, fill: '#3EA07A' },
+  { cx: 25.74, cy: 16.15, rx: 5.6, ry: 10.0, angle: 10, fill: '#EF731E' },
+];
+---
+
+<svg viewBox="4 4 40 40" class={className} xmlns="http://www.w3.org/2000/svg" role="img" aria-label="India Pharma Export">
+  <g stroke={gap} stroke-width="1.8">
+    {petals.map((p) => (
+      <ellipse cx={p.cx} cy={p.cy} rx={p.rx} ry={p.ry} fill={p.fill} transform={`rotate(${p.angle} ${p.cx} ${p.cy})`} />
+    ))}
+  </g>
+</svg>

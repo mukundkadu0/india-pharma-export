@@ -20,7 +20,10 @@ const featuredProducts = (featured.length >= 4 ? featured : allProducts.slice(0,
 const homeCategoryIds = ['formulations', 'apis', 'biologicals', 'devices', 'ayush', 'nutraceuticals'];
 const homeCategories = homeCategoryIds.map((id) => categoryGroups.find((c) => c.id === id)!);
 
-const markets = await getCollection('markets');
+const marketOrder = ['united-states', 'europe-uk', 'africa', 'latin-america', 'cis-russia', 'middle-east', 'southeast-asia'];
+const markets = (await getCollection('markets')).sort(
+  (a, b) => marketOrder.indexOf(a.data.id) - marketOrder.indexOf(b.data.id)
+);
 const resources = await getCollection('resources');
 const featuredResources = resources.filter((r) => r.data.featured).concat(resources).slice(0, 3);
 const faqs = await getCollection('faqs');
@@ -82,16 +85,16 @@ const complianceBadges = [
   </section>
 
   <!-- INDUSTRY STATS -->
-  <section class="bg-white border-y border-slate-100">
+  <section class="bg-white">
     <div class="container-page py-8">
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-4">
+      <div class="grid grid-cols-2 sm:grid-cols-4 rounded-2xl border border-slate-200 bg-white shadow-sm sm:divide-x divide-slate-100">
         {[
           { icon: 'bar-chart', value: '$30.4Bn', label: 'Pharma exports (FY 2024–25)' },
           { icon: 'trending-up', value: '+9.4%', label: 'Year-on-year growth' },
           { icon: 'capsule', value: '75.7%', label: 'From formulations & biologicals' },
           { icon: 'globe', value: '200+', label: 'Destination countries' },
         ].map((s) => (
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-3 px-5 py-6">
             <span class="hidden sm:grid place-items-center w-10 h-10 rounded-full bg-[color:var(--color-blue-light)] text-[color:var(--color-navy)] shrink-0">
               <Icon name={s.icon} class="w-5 h-5" />
             </span>
