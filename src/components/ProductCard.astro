@@ -7,6 +7,7 @@ interface Props {
   id: string;
   name: string;
   genericName: string;
+  category?: string;
   dosageForm: string;
   strength: string;
   hsCode: string;
@@ -17,9 +18,10 @@ interface Props {
   compact?: boolean;
 }
 
-const { id, name, genericName, dosageForm, strength, hsCode, exportStatus, prescriptionStatus, marketRegions, moq, compact = false } = Astro.props;
+const { id, name, genericName, category, dosageForm, strength, hsCode, exportStatus, prescriptionStatus, marketRegions, moq, compact = false } = Astro.props;
 const es = exportStatusMeta[exportStatus];
 const ps = prescriptionStatusMeta[prescriptionStatus];
+const buyNowEligible = prescriptionStatus === 'otc' && (category === 'nutraceuticals' || category === 'ayush');
 ---
 
 <article class="group flex flex-col h-full bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg hover:border-[color:var(--color-blue)]/30 transition-all">
@@ -47,19 +49,42 @@ const ps = prescriptionStatusMeta[prescriptionStatus];
     )}
   </a>
 
-  <div class="px-5 pb-5 pt-1 mt-auto flex items-center gap-2">
-    <a href={`/products/${id}/`} class="flex-1 inline-flex items-center justify-center gap-1.5 rounded-full bg-[color:var(--color-navy)] text-white text-sm font-semibold py-2.5 hover:bg-[color:var(--color-navy-deep)]">
-      Request Quote <Icon name="arrow-right" class="w-3.5 h-3.5" />
-    </a>
-    <button
-      type="button"
-      class="add-to-inquiry shrink-0 grid place-items-center w-10 h-10 rounded-full border border-slate-200 text-slate-500 hover:border-[color:var(--color-navy)] hover:text-[color:var(--color-navy)]"
-      data-id={id}
-      data-name={name}
-      aria-label={`Add ${name} to inquiry list`}
-      title="Add to inquiry list"
-    >
-      <Icon name="clipboard" class="w-4 h-4" />
-    </button>
+  <div class="px-5 pb-5 pt-1 mt-auto space-y-2">
+    {buyNowEligible && (
+      <button
+        type="button"
+        class="add-to-cart w-full inline-flex items-center justify-center gap-1.5 rounded-full bg-[color:var(--color-accent)] text-white text-sm font-semibold py-2.5 hover:bg-[#d9700f]"
+        data-id={id}
+        data-name={name}
+        data-meta={strength}
+      >
+        <Icon name="cart" class="w-4 h-4" /> Buy Now
+      </button>
+    )}
+    <div class="flex items-center gap-2">
+      <a
+        href={`/request-quote/?product=${encodeURIComponent(name)}`}
+        class={`flex-1 inline-flex items-center justify-center gap-1.5 rounded-full text-sm font-semibold py-2.5 ${
+          buyNowEligible
+            ? 'border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] hover:bg-[color:var(--color-blue-light)]'
+            : 'bg-[color:var(--color-navy)] text-white hover:bg-[color:var(--color-navy-deep)]'
+        }`}
+      >
+        Bulk Order <Icon name="arrow-right" class="w-3.5 h-3.5" />
+      </a>
+      <button
+        type="button"
+        class="add-to-inquiry shrink-0 grid place-items-center w-10 h-10 rounded-full border border-slate-200 text-slate-500 hover:border-[color:var(--color-navy)] hover:text-[color:var(--color-navy)]"
+        data-id={id}
+        data-name={name}
+        aria-label={`Add ${name} to inquiry list`}
+        title="Add to bulk inquiry list"
+      >
+        <Icon name="clipboard" class="w-4 h-4" />
+      </button>
+    </div>
+    {!buyNowEligible && (
+      <p class="text-[10px] text-slate-400 text-center">Prescription product — B2B bulk order only</p>
+    )}
   </div>
 </article>
