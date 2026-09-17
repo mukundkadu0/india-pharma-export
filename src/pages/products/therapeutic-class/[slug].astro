@@ -58,7 +58,7 @@ const buyDirectClass = classMolecules.length > 0 && classMolecules[0].buyDirect;
   </section>
 
   <section class="container-page pb-14 grid lg:grid-cols-3 gap-10">
-    <div class="lg:col-span-2 prose-body">
+    <div class="lg:col-span-2 prose-body min-w-0">
       <h2>What This Class Covers</h2>
       <p>{classData.description}</p>
       {classData.exportNote && (
@@ -94,7 +94,7 @@ const buyDirectClass = classMolecules.length > 0 && classMolecules[0].buyDirect;
               {classMolecules.map((m) => (
                 <div id={`mol-${m.id}`} class="mol-row flex items-center justify-between gap-3 px-4 py-2.5" data-search={m.name.toLowerCase()}>
                   <div class="min-w-0">
-                    <p class="text-sm text-[color:var(--color-ink)] truncate">{m.name}</p>
+                    <p class="text-sm text-[color:var(--color-ink)] sm:truncate">{m.name}</p>
                     {m.flag && (
                       <p class="inline-flex items-center text-[11px] font-medium text-[color:var(--color-warning)] bg-[color:var(--color-warning)]/10 border border-[color:var(--color-warning)]/30 rounded-full px-2 py-0.5 mt-1">
                         {m.flag}{m.flagDetail ? ` — ${m.flagDetail}` : ''}

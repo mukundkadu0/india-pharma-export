@@ -23,7 +23,7 @@ import { site } from '../../data/site';
   </section>
 
   <section class="container-page pb-20 grid lg:grid-cols-5 gap-10">
-    <div class="lg:col-span-2">
+    <div class="lg:col-span-2 min-w-0">
       <h2 class="font-semibold text-[color:var(--color-navy)] mb-4">Cart Items</h2>
       <div id="cart-items" class="space-y-3"></div>
       <p id="cart-empty" class="hidden text-sm text-slate-500 rounded-xl border border-dashed border-slate-300 p-6 text-center">
@@ -32,7 +32,7 @@ import { site } from '../../data/site';
       <button id="clear-cart" type="button" class="hidden mt-3 text-xs text-slate-400 hover:text-[color:var(--color-error)]">Clear all</button>
     </div>
 
-    <div class="lg:col-span-3">
+    <div class="lg:col-span-3 min-w-0">
       <form id="cart-form" data-endpoint={site.formEndpoint} data-fallback-email={site.email} class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8" novalidate>
         <input type="hidden" name="orderType" value="Direct Order Request" />
         <div class="grid sm:grid-cols-2 gap-5">

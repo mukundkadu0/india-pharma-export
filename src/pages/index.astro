@@ -327,7 +327,7 @@ const complianceBadges = [
         <p class="mt-3 text-white/70 max-w-lg">
           We work with WHO-GMP certified manufacturing partners and follow Indian export regulation to keep every shipment compliant. These are the standards our manufacturing partners operate under — not certifications held by this platform itself.
         </p>
-        <div class="mt-8 grid grid-cols-3 sm:grid-cols-5 gap-4 justify-items-center">
+        <div class="mt-8 flex flex-wrap justify-center gap-4 sm:grid sm:grid-cols-5 sm:justify-items-center">
           {complianceBadges.map((b) => (
             <CertSeal
               label={b.label}

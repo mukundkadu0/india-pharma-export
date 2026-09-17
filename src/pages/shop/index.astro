@@ -37,7 +37,7 @@ const categoryTabs = [
   </section>
 
   <section class="container-page pb-20">
-    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 mb-6 sticky top-[4.5rem] z-10">
+    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 mb-6 sm:sticky sm:top-[4.5rem] z-10">
       <div class="flex flex-col sm:flex-row gap-3">
         <div class="relative flex-1">
           <Icon name="search" class="w-4.5 h-4.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -65,8 +65,8 @@ const categoryTabs = [
         return (
           <div class="shop-item flex items-center justify-between gap-3 rounded-2xl border border-slate-200 p-4" data-search={m.name.toLowerCase()} data-category={m.categoryGroup}>
             <div class="min-w-0">
-              <p class="text-sm font-medium text-[color:var(--color-ink)] truncate">{m.name}</p>
-              <p class="text-xs text-slate-500 truncate">{cls?.name ?? m.classId}</p>
+              <p class="text-sm font-medium text-[color:var(--color-ink)] sm:truncate">{m.name}</p>
+              <p class="text-xs text-slate-500 sm:truncate">{cls?.name ?? m.classId}</p>
             </div>
             <div class="shrink-0 flex items-center gap-1.5">
               <button
