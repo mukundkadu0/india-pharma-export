@@ -1,5 +1,6 @@
 ---
-import { getCollection } from 'astro:content';
+import CertSeal from '../components/CertSeal.astro';
+import{ getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import Icon from '../components/Icon.astro';
@@ -36,11 +37,11 @@ const homeFaqs = homeFaqIds
 const searchExamples = ['Paracetamol', 'Amoxicillin', 'Omeprazole', 'Metformin', 'Azithromycin', 'Dolutegravir', 'Artemether + Lumefantrine'];
 
 const complianceBadges = [
-  { icon: 'shield-check', label: 'WHO-GMP', sub: 'Partner standard' },
-  { icon: 'shield', label: 'EU-GMP', sub: 'Aligned facilities' },
-  { icon: 'document', label: 'EDQM CEP', sub: 'API certification' },
-  { icon: 'check-circle', label: 'ISO 9001', sub: 'Quality management' },
-  { icon: 'scale', label: 'CDSCO', sub: 'India framework' },
+  { label: 'WHO-GMP', top: 'Partner Standard', bottom: 'Good Manufacturing' },
+  { label: 'EU-GMP', top: 'Aligned Facilities', bottom: 'Quality Assured' },
+  { label: 'EDQM CEP', top: 'API Certification', bottom: 'Pharmacopoeia' },
+  { label: 'ISO 9001', top: 'Quality Management', bottom: 'Systems Standard' },
+  { label: 'CDSCO', top: 'India Framework', bottom: 'Export Regulation' },
 ];
 ---
 
@@ -326,16 +327,14 @@ const complianceBadges = [
         <p class="mt-3 text-white/70 max-w-lg">
           We work with WHO-GMP certified manufacturing partners and follow Indian export regulation to keep every shipment compliant. These are the standards our manufacturing partners operate under — not certifications held by this platform itself.
         </p>
-        <div class="mt-8 grid grid-cols-3 sm:grid-cols-5 gap-3">
+        <div class="mt-8 grid grid-cols-3 sm:grid-cols-5 gap-4 justify-items-center">
           {complianceBadges.map((b) => (
-            <div class="flex flex-col items-center gap-2 bg-white rounded-xl px-2 py-5 text-center shadow-sm">
-              <span class="relative grid place-items-center w-14 h-14 rounded-full bg-gradient-to-br from-[color:var(--color-blue-light)] to-white ring-2 ring-[color:var(--color-navy)]/15">
-                <span class="absolute inset-0 rounded-full border-2 border-dashed border-[color:var(--color-accent)]/40"></span>
-                <Icon name={b.icon} class="w-6 h-6 text-[color:var(--color-navy)]" />
-              </span>
-              <span class="text-[11px] sm:text-xs font-bold text-[color:var(--color-navy)] leading-tight tracking-wide">{b.label}</span>
-              <span class="text-[9px] sm:text-[10px] text-slate-500 leading-tight">{b.sub}</span>
-            </div>
+            <CertSeal
+              label={b.label}
+              top={b.top}
+              bottom={b.bottom}
+              class="w-24 h-24 sm:w-28 sm:h-28 drop-shadow-[0_6px_14px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:scale-105 hover:-rotate-3"
+            />
           ))}
         </div>
       </div>

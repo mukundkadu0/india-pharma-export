@@ -1,0 +1,57 @@
+---
+interface Props {
+  label: string;
+  top: string;
+  bottom: string;
+  class?: string;
+}
+const { label, top, bottom, class: className = 'w-24 h-24' } = Astro.props;
+
+const uid = `seal-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
+const points = 36;
+const rim = Array.from({ length: points * 2 }, (_, i) => {
+  const angle = (i * Math.PI) / points - Math.PI / 2;
+  const r = i % 2 === 0 ? 59 : 55.5;
+  return `${(60 + r * Math.cos(angle)).toFixed(2)},${(60 + r * Math.sin(angle)).toFixed(2)}`;
+}).join(' ');
+
+const labelSize = Math.min(12, 48 / (label.length * 0.7));
+---
+
+<svg viewBox="0 0 120 120" class={className} role="img" aria-label={`${label} — ${top}`}>
+  <defs>
+    <linearGradient id={`${uid}-gold`} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8c572" />
+      <stop offset="45%" stop-color="#c98a18" />
+      <stop offset="100%" stop-color="#9a6a12" />
+    </linearGradient>
+    <radialGradient id={`${uid}-face`} cx="40%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#eef3f8" />
+    </radialGradient>
+    <path id={`${uid}-top`} d="M 20 60 A 40 40 0 0 1 100 60" />
+    <path id={`${uid}-bottom`} d="M 13.5 60 A 46.5 46.5 0 0 0 106.5 60" />
+  </defs>
+
+  <polygon points={rim} fill={`url(#${uid}-gold)`} />
+  <circle cx="60" cy="60" r="53" fill={`url(#${uid}-face)`} />
+  <circle cx="60" cy="60" r="50.5" fill="none" stroke="#0b2a4a" stroke-width="1.6" />
+  <circle cx="60" cy="60" r="48.6" fill="none" stroke={`url(#${uid}-gold)`} stroke-width="0.7" />
+  <circle cx="60" cy="60" r="34.5" fill="none" stroke="#0b2a4a" stroke-width="1" />
+  <circle cx="60" cy="60" r="32.8" fill="none" stroke={`url(#${uid}-gold)`} stroke-width="0.6" />
+
+  <text fill="#0b2a4a" font-size="7" font-weight="700" letter-spacing="1.1">
+    <textPath href={`#${uid}-top`} startOffset="50%" text-anchor="middle">{top.toUpperCase()}</textPath>
+  </text>
+  <text fill="#0b2a4a" font-size="6.2" font-weight="600" letter-spacing="1.1">
+    <textPath href={`#${uid}-bottom`} startOffset="50%" text-anchor="middle">{bottom.toUpperCase()}</textPath>
+  </text>
+
+  <text x="15.5" y="62.4" fill="#c98a18" font-size="7" text-anchor="middle">★</text>
+  <text x="104.5" y="62.4" fill="#c98a18" font-size="7" text-anchor="middle">★</text>
+
+  <text x="60" y="50" fill="#c98a18" font-size="5.5" text-anchor="middle" letter-spacing="1.5">★ ★ ★</text>
+  <text x="60" y={60 + labelSize * 0.36} fill="#0b2a4a" font-size={labelSize} font-weight="800" text-anchor="middle" letter-spacing="0.3">{label}</text>
+  <line x1="44" y1="71" x2="76" y2="71" stroke={`url(#${uid}-gold)`} stroke-width="0.9" />
+</svg>
