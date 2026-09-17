@@ -95,7 +95,11 @@ const buyDirectClass = classMolecules.length > 0 && classMolecules[0].buyDirect;
                 <div id={`mol-${m.id}`} class="mol-row flex items-center justify-between gap-3 px-4 py-2.5" data-search={m.name.toLowerCase()}>
                   <div class="min-w-0">
                     <p class="text-sm text-[color:var(--color-ink)] truncate">{m.name}</p>
-                    {m.flag && <p class="text-xs text-amber-700 mt-0.5">{m.flag} — {m.flagDetail}</p>}
+                    {m.flag && (
+                      <p class="inline-flex items-center text-[11px] font-medium text-[color:var(--color-warning)] bg-[color:var(--color-warning)]/10 border border-[color:var(--color-warning)]/30 rounded-full px-2 py-0.5 mt-1">
+                        {m.flag}{m.flagDetail ? ` — ${m.flagDetail}` : ''}
+                      </p>
+                    )}
                   </div>
                   {m.buyDirect ? (
                     <button

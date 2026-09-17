@@ -8,6 +8,7 @@ import { categoryGroups } from '../../../data/taxonomy';
 const molecules = (await getCollection('molecules')).map((m) => m.data);
 const classes = (await getCollection('classes')).map((c) => c.data);
 const classById = Object.fromEntries(classes.map((c) => [c.id, c]));
+const categoryById = Object.fromEntries(categoryGroups.map((c) => [c.id, c]));
 
 const sorted = [...molecules].sort((a, b) => a.name.localeCompare(b.name));
 ---
@@ -40,15 +41,39 @@ const sorted = [...molecules].sort((a, b) => a.name.localeCompare(b.name));
             class="w-full rounded-lg border border-slate-300 pl-10 pr-3 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]"
           />
         </div>
-        <select id="mi-category" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white sm:w-56">
-          <option value="">All Categories</option>
-          {categoryGroups.map((c) => <option value={c.id}>{c.name}</option>)}
-        </select>
-        <select id="mi-class" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white sm:w-64">
-          <option value="">All Therapeutic Classes</option>
-          {classes.map((c) => <option value={c.id}>{c.name}</option>)}
-        </select>
+        <div class="relative sm:w-64">
+          <select
+            id="mi-class"
+            class="w-full appearance-none rounded-lg border border-slate-300 bg-white pl-3 pr-9 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]"
+          >
+            <option value="">All Therapeutic Classes</option>
+            {classes.map((c) => <option value={c.id}>{c.name}</option>)}
+          </select>
+          <Icon name="chevron-down" class="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+        </div>
       </div>
+
+      <div class="flex flex-wrap gap-2 mt-4">
+        <button
+          type="button"
+          class="mi-tab inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium border-slate-300 text-slate-600 data-[active=true]:bg-[color:var(--color-navy)] data-[active=true]:text-white data-[active=true]:border-[color:var(--color-navy)]"
+          data-category=""
+          data-active="true"
+        >
+          All Categories
+        </button>
+        {categoryGroups.map((c) => (
+          <button
+            type="button"
+            class="mi-tab inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium border-slate-300 text-slate-600 data-[active=true]:bg-[color:var(--color-navy)] data-[active=true]:text-white data-[active=true]:border-[color:var(--color-navy)]"
+            data-category={c.id}
+            data-active="false"
+          >
+            <Icon name={c.icon} class="w-3.5 h-3.5" /> {c.name}
+          </button>
+        ))}
+      </div>
+
       <p id="mi-count" class="text-xs text-slate-500 mt-3"></p>
     </div>
 
@@ -56,19 +81,31 @@ const sorted = [...molecules].sort((a, b) => a.name.localeCompare(b.name));
       <div id="mi-list" class="divide-y divide-slate-100">
         {sorted.map((m) => {
           const cls = classById[m.classId];
+          const cat = categoryById[m.categoryGroup];
           return (
             <div
-              class="mi-row flex items-center justify-between gap-3 px-4 py-3"
+              class="mi-row flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors"
               data-search={m.name.toLowerCase()}
               data-category={m.categoryGroup}
               data-class={m.classId}
             >
-              <div class="min-w-0">
+              <span class="hidden sm:grid shrink-0 place-items-center w-8 h-8 rounded-lg bg-[color:var(--color-blue-light)] text-[color:var(--color-navy)]">
+                <Icon name={cat?.icon ?? 'capsule'} class="w-4 h-4" />
+              </span>
+              <div class="min-w-0 flex-1">
                 <p class="text-sm font-medium text-[color:var(--color-ink)] truncate">{m.name}</p>
-                <a href={`/products/therapeutic-class/${m.classId}/#mol-${m.id}`} class="text-xs text-slate-500 hover:text-[color:var(--color-blue)] hover:underline">
-                  {cls?.name ?? m.classId}
-                </a>
-                {m.flag && <p class="text-xs text-amber-700 mt-0.5">{m.flag}</p>}
+                <div class="flex flex-wrap items-center gap-x-1.5">
+                  <a href={`/products/therapeutic-class/${m.classId}/#mol-${m.id}`} class="text-xs text-slate-500 hover:text-[color:var(--color-blue)] hover:underline truncate">
+                    {cls?.name ?? m.classId}
+                  </a>
+                  {cat && <span class="text-xs text-slate-300">·</span>}
+                  {cat && <span class="text-xs text-slate-400 truncate">{cat.name}</span>}
+                </div>
+                {m.flag && (
+                  <p class="inline-flex items-center text-[11px] font-medium text-[color:var(--color-warning)] bg-[color:var(--color-warning)]/10 border border-[color:var(--color-warning)]/30 rounded-full px-2 py-0.5 mt-1.5">
+                    {m.flag}
+                  </p>
+                )}
               </div>
               {m.buyDirect ? (
                 <button
@@ -102,21 +139,22 @@ const sorted = [...molecules].sort((a, b) => a.name.localeCompare(b.name));
 <script>
   const rows = Array.from(document.querySelectorAll<HTMLElement>('.mi-row'));
   const searchInput = document.getElementById('mi-search') as HTMLInputElement | null;
-  const categorySelect = document.getElementById('mi-category') as HTMLSelectElement | null;
   const classSelect = document.getElementById('mi-class') as HTMLSelectElement | null;
+  const tabs = Array.from(document.querySelectorAll<HTMLElement>('.mi-tab'));
   const countEl = document.getElementById('mi-count');
   const listEl = document.getElementById('mi-list');
   const emptyEl = document.getElementById('mi-empty');
 
+  let activeCategory = '';
+
   function applyFilters() {
     const q = (searchInput?.value ?? '').trim().toLowerCase();
-    const category = categorySelect?.value ?? '';
     const cls = classSelect?.value ?? '';
 
     let visible = 0;
     rows.forEach((row) => {
       const matchesQ = !q || (row.dataset.search ?? '').includes(q);
-      const matchesCategory = !category || row.dataset.category === category;
+      const matchesCategory = !activeCategory || row.dataset.category === activeCategory;
       const matchesClass = !cls || row.dataset.class === cls;
       const show = matchesQ && matchesCategory && matchesClass;
       row.style.display = show ? '' : 'none';
@@ -128,7 +166,15 @@ const sorted = [...molecules].sort((a, b) => a.name.localeCompare(b.name));
     listEl?.classList.toggle('hidden', visible === 0);
   }
 
-  [searchInput, categorySelect, classSelect].forEach((el) => el?.addEventListener('input', applyFilters));
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      activeCategory = tab.dataset.category ?? '';
+      tabs.forEach((t) => t.setAttribute('data-active', String(t === tab)));
+      applyFilters();
+    });
+  });
+
+  [searchInput, classSelect].forEach((el) => el?.addEventListener('input', applyFilters));
 
   const params = new URLSearchParams(window.location.search);
   const initialQ = params.get('q');
