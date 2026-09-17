@@ -79,7 +79,7 @@ const websiteJsonLd = {
       const STORAGE_KEY = 'ipe-inquiry-list';
       const CART_STORAGE_KEY = 'ipe-direct-cart';
 
-      type InquiryItem = { id: string; name: string; meta?: string };
+      type InquiryItem = { id: string; name: string; meta?: string; rx?: boolean };
 
       function readList(): InquiryItem[] {
         try {
@@ -180,7 +180,7 @@ const websiteJsonLd = {
             showToast(`${name} is already in your direct-order cart.`);
             return;
           }
-          cart.push({ id, name: name!, meta: cartTarget.dataset.meta });
+          cart.push({ id, name: name!, meta: cartTarget.dataset.meta, rx: cartTarget.dataset.rx === 'true' });
           writeCart(cart);
           showToast(`Added ${name} to your direct-order cart.`);
         }
