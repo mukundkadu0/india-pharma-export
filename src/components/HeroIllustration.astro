@@ -1,142 +1,45 @@
 ---
-import Icon from './Icon.astro';
-
-const routes = [
-  { label: 'US', top: '22%', left: '5%' },
-  { label: 'EU', top: '9%', left: '52%' },
-  { label: 'CIS · Asia', top: '15%', left: '88%' },
-  { label: 'Africa', top: '38%', left: '74%' },
-  { label: 'LatAm', top: '42%', left: '11%' },
-];
-
-const stagger = 70; // ms between each route's line-draw + marker pop
-const lineDuration = 700;
 ---
 
-<div class="hero-illustration relative w-full aspect-[6/5] sm:aspect-[4/3] lg:aspect-[5/4] rounded-3xl overflow-hidden bg-gradient-to-br from-[color:var(--color-blue-light)] via-[#eef4fa] to-white border border-slate-200/70">
-  <!-- dotted world-map texture, confined to the map zone above the photography.
-       Both SVGs stay full-size so their percentage coordinates match the
-       absolutely-positioned marker divs below 1:1. -->
-  <svg class="absolute inset-0 w-full h-full opacity-40" aria-hidden="true">
-    <defs>
-      <pattern id="hero-dot-grid" width="14" height="14" patternUnits="userSpaceOnUse">
-        <circle cx="1.2" cy="1.2" r="1.1" fill="#0B2A4A" opacity="0.16" />
-      </pattern>
-    </defs>
-    <rect width="100%" height="52%" fill="url(#hero-dot-grid)" />
-  </svg>
+<div class="hero-illustration relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[2/1] rounded-3xl overflow-hidden bg-gradient-to-br from-[color:var(--color-blue-light)] via-[#eef4fa] to-white border border-slate-200/70">
+  <img
+    src="/images/hero-composite.png"
+    alt="Container ship, cargo plane and pharmaceutical products moving from India to global markets on a world map"
+    class="hero-photo w-full h-full object-contain"
+    width="1800"
+    height="874"
+  />
 
-  <!-- route lines from India hub, drawn on mount -->
-  <svg class="absolute inset-0 w-full h-full" aria-hidden="true">
-    {routes.map((r, i) => (
-      <line
-        class="hero-route-line"
-        x1="46%" y1="28%" x2={r.left} y2={r.top}
-        pathLength="100"
-        stroke="#1261A0" stroke-width="1.3" stroke-linecap="round" opacity="0.45"
-        style={`animation-delay: ${i * stagger}ms`}
-      />
-    ))}
-  </svg>
-
-  <!-- India hub -->
-  <div class="absolute flex flex-col items-center gap-1 -translate-x-1/2 -translate-y-1/2" style="top:28%; left:46%;">
-    <span class="relative grid place-items-center w-3.5 h-3.5">
-      <span class="hero-hub-ping absolute inset-0 rounded-full bg-[color:var(--color-accent)]"></span>
-      <span class="relative w-3.5 h-3.5 rounded-full bg-[color:var(--color-accent)] ring-4 ring-[color:var(--color-accent)]/25"></span>
-    </span>
-  </div>
-
-  {routes.map((r, i) => (
-    <div class="absolute -translate-x-1/2 -translate-y-1/2" style={`top:${r.top}; left:${r.left};`}>
-      <div class="hero-marker-pop flex items-center gap-1.5" style={`animation-delay: ${i * stagger + lineDuration - 150}ms`}>
-        <span class="w-1.5 h-1.5 rounded-full bg-[color:var(--color-navy)]"></span>
-        <span class="text-[10px] sm:text-xs font-semibold text-[color:var(--color-navy)] bg-white/80 backdrop-blur px-1.5 py-0.5 rounded whitespace-nowrap">{r.label}</span>
-      </div>
-    </div>
-  ))}
-
-  <!-- caption -->
-  <div class="hero-fade-up absolute left-[6%] top-[6%] max-w-[40%]" style="animation-delay: 250ms">
-    <p class="font-serif italic text-[color:var(--color-navy)] text-sm sm:text-base leading-snug">Made in India<br />for a Healthier World</p>
-    <span class="block w-8 h-0.5 bg-[color:var(--color-accent)] mt-2"></span>
-  </div>
-
-  <!-- trust card -->
-  <div class="hero-fade-up absolute right-[5%] top-[8%] bg-white rounded-xl shadow-lg px-4 py-3 max-w-[42%]" style="animation-delay: 320ms">
+  <!-- trust card, placed over the open water in the bottom-left — the one
+       calm area of the photo with nothing else in it -->
+  <div class="hero-fade-up absolute left-[3%] bottom-[6%] bg-white rounded-xl shadow-lg px-4 py-3 max-w-[34%]">
     <p class="text-[11px] sm:text-xs font-semibold text-[color:var(--color-navy)] leading-tight">Better Medicines</p>
     <p class="text-[11px] sm:text-xs font-semibold text-[color:var(--color-accent)] leading-tight">Brighter Lives</p>
-  </div>
-
-  <!-- cargo ship (real photo) — the dominant visual, not an accent -->
-  <div class="hero-float absolute left-[3%] bottom-[4%] w-[72%] h-[46%] rounded-2xl overflow-hidden shadow-xl ring-1 ring-black/5">
-    <img src="/images/hero-ship.png" alt="" loading="lazy" class="w-full h-full object-cover" style="object-position: 50% 30%;" />
-  </div>
-
-  <!-- pharma cluster (real photos), layered over the ship's right edge like the reference -->
-  <div class="absolute right-[3%] bottom-[7%] flex items-end gap-2.5 z-10">
-    <div class="hero-float hero-float-delay w-16 h-24 sm:w-20 sm:h-28 rounded-xl overflow-hidden shadow-xl ring-2 ring-white">
-      <img src="/images/cat-biologicals.png" alt="" loading="lazy" class="w-full h-full object-cover" />
-    </div>
-    <div class="hero-float w-24 h-20 sm:w-28 sm:h-24 rounded-xl overflow-hidden shadow-xl ring-2 ring-white">
-      <img src="/images/cat-formulations.png" alt="" loading="lazy" class="w-full h-full object-cover" />
-    </div>
   </div>
 </div>
 
 <style>
-  /* Route lines draw outward from the India hub on mount. pathLength="100"
-     normalizes stroke-dasharray/-offset so every line — regardless of its
-     actual on-screen length — draws over the same duration. */
-  .hero-route-line {
-    stroke-dasharray: 100;
-    stroke-dashoffset: 100;
-    animation: hero-draw 700ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  /* Photo: a slow, barely-there zoom-in on mount -- purpose is delight on a
+     once-per-session marketing hero, not a frequent UI element. Scale only
+     (never opacity 0 -> the image should be visible immediately), so there
+     is no flash of blank space while it "arrives". */
+  .hero-photo {
+    animation: hero-photo-in 1400ms cubic-bezier(0.23, 1, 0.32, 1) both;
   }
 
-  @keyframes hero-draw {
-    to {
-      stroke-dashoffset: 0;
+  @keyframes hero-photo-in {
+    from {
+      transform: scale(1.04);
     }
-  }
-
-  /* Destination marker pops in as its line finishes drawing. */
-  .hero-marker-pop {
-    opacity: 0;
-    transform: scale(0.6);
-    animation: hero-pop 250ms cubic-bezier(0.23, 1, 0.32, 1) both;
-  }
-
-  @keyframes hero-pop {
     to {
-      opacity: 1;
       transform: scale(1);
     }
   }
 
-  /* India hub: a slow, continuous breathing ring -- this is a marketing
-     illustration viewed once per session, not a frequent UI element, so a
-     gentle "live network" loop earns its place. */
-  .hero-hub-ping {
-    animation: hero-hub-ping 2600ms cubic-bezier(0.77, 0, 0.175, 1) infinite;
-  }
-
-  @keyframes hero-hub-ping {
-    0% {
-      transform: scale(1);
-      opacity: 0.55;
-    }
-    100% {
-      transform: scale(2.2);
-      opacity: 0;
-    }
-  }
-
-  /* Caption + trust card: simple entrance, arriving after the network. */
   .hero-fade-up {
     opacity: 0;
     transform: translateY(8px);
-    animation: hero-fade-up 500ms cubic-bezier(0.23, 1, 0.32, 1) both;
+    animation: hero-fade-up 500ms cubic-bezier(0.23, 1, 0.32, 1) 400ms both;
   }
 
   @keyframes hero-fade-up {
@@ -146,43 +49,13 @@ const lineDuration = 700;
     }
   }
 
-  /* Ship + pharma photos: a barely-there float, desynced so they don't
-     move as one block. */
-  .hero-float {
-    animation: hero-float 5200ms ease-in-out infinite;
-  }
-  .hero-float-delay {
-    animation-delay: -2600ms;
-  }
-
-  @keyframes hero-float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-5px);
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .hero-route-line {
-      animation: none;
-      stroke-dashoffset: 0;
-    }
-    .hero-marker-pop {
-      animation: hero-fade-up 400ms ease both;
-      transform: none;
-    }
-    .hero-hub-ping {
-      animation: none;
-      display: none;
-    }
-    .hero-float {
+    .hero-photo {
       animation: none;
     }
     .hero-fade-up {
       animation-duration: 400ms;
+      animation-delay: 0ms;
     }
   }
 </style>
