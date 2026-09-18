@@ -3,6 +3,62 @@ import { file } from 'astro/loaders';
 
 const faqSchema = z.object({ q: z.string(), a: z.string() });
 
+export const COUNTRIES = ['US', 'CA', 'UK', 'EU', 'AE', 'AU', 'SG', 'OTHER'] as const;
+
+// Every commerce field is optional with a deliberately restrictive default: a
+// product is never purchasable until someone supplies real data for it.
+const eligibilityStatus = z.enum(['AVAILABLE', 'BULK_ONLY', 'RESTRICTED', 'NOT_AVAILABLE', 'REVIEW_REQUIRED']);
+
+const commerceFields = {
+  commerceStatus: z.enum(['DTC_AND_BULK', 'BULK_ONLY', 'NOT_AVAILABLE', 'REQUEST_REVIEW']).default('BULK_ONLY'),
+  sku: z.string().optional(),
+  brand: z.string().optional(),
+  manufacturer: z.string().optional(),
+  consumerCategory: z
+    .enum(['vitamins', 'minerals', 'herbal', 'ayurveda', 'nutraceuticals', 'sports', 'protein', 'wellness', 'digestive', 'beauty'])
+    .optional(),
+  servingSize: z.string().optional(),
+  servings: z.number().optional(),
+  packSize: z.string().optional(),
+  netWeight: z.string().optional(),
+  ingredients: z.array(z.string()).optional(),
+  directions: z.string().optional(),
+  warnings: z.array(z.string()).optional(),
+  countryOfOrigin: z.string().default('India'),
+  images: z.array(z.object({ src: z.string(), alt: z.string() })).optional(),
+  coaAvailable: z.boolean().optional(),
+  approvedClaims: z.array(z.string()).optional(),
+  disclaimer: z.string().optional(),
+  pricing: z
+    .object({
+      indiaCost: z.number().optional(),
+      packagingCost: z.number().optional(),
+      exportHandlingCost: z.number().optional(),
+      shippingCostEstimate: z.number().optional(),
+      paymentFeePercent: z.number().optional(),
+      paymentFixedFee: z.number().optional(),
+      targetMarginPercent: z.number().optional(),
+      usComparablePrice: z.number().optional(),
+      usComparableUrl: z.string().optional(),
+      targetDiscountPercent: z.number().optional(),
+      retailPriceUsd: z.number().optional(),
+      comparePriceUsd: z.number().optional(),
+    })
+    .optional(),
+  bulk: z
+    .object({
+      enabled: z.boolean().default(true),
+      moq: z.string().optional(),
+      tiers: z.array(z.object({ minQty: z.number(), unitPrice: z.number() })).optional(),
+    })
+    .optional(),
+  stockStatus: z.enum(['in_stock', 'made_to_order', 'out_of_stock']).optional(),
+  // Keyed by CountryCode, but typed loosely: an enum-keyed z.record demands every
+  // country be present, and these maps are deliberately partial — anything unlisted
+  // resolves to REVIEW_REQUIRED at runtime.
+  countryEligibility: z.record(z.string(), eligibilityStatus).optional(),
+};
+
 const classes = defineCollection({
   loader: file('src/content/classes.json'),
   schema: z.object({
@@ -69,6 +125,7 @@ const products = defineCollection({
     faqs: z.array(faqSchema).optional(),
     relatedProducts: z.array(z.string()).optional(),
     featured: z.boolean().optional(),
+    ...commerceFields,
   }),
 });
 

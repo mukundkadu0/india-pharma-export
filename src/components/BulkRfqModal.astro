@@ -1,0 +1,195 @@
+---
+import Icon from './Icon.astro';
+import { countries } from '../lib/commerce';
+import { site } from '../data/site';
+---
+
+<div id="bulk-rfq" hidden class="fixed inset-0 z-[60]">
+  <div class="absolute inset-0 bg-[color:var(--color-navy-deep)]/60" data-close-bulk></div>
+
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="bulk-rfq-title"
+    class="absolute inset-x-0 bottom-0 sm:inset-0 sm:m-auto sm:h-fit sm:max-w-lg bg-white rounded-t-2xl sm:rounded-2xl shadow-xl max-h-[92vh] overflow-y-auto"
+  >
+    <div class="flex items-start justify-between gap-4 p-5 sm:p-6 border-b border-slate-100">
+      <div>
+        <h2 id="bulk-rfq-title" class="font-display text-xl text-[color:var(--color-navy)]">Request a Bulk Quote</h2>
+        <p class="mt-1 text-sm text-slate-600">Tell us what you need and we'll come back with pricing and terms.</p>
+      </div>
+      <button type="button" data-close-bulk aria-label="Close" class="shrink-0 grid place-items-center w-9 h-9 rounded-full text-slate-400 hover:bg-slate-100">
+        <Icon name="close" class="w-5 h-5" />
+      </button>
+    </div>
+
+    <form id="bulk-rfq-form" class="p-5 sm:p-6 space-y-4" novalidate>
+      <div>
+        <label for="bq-product" class="block text-sm font-medium text-slate-700 mb-1.5">Product *</label>
+        <input id="bq-product" name="product" type="text" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label for="bq-name" class="block text-sm font-medium text-slate-700 mb-1.5">Full Name *</label>
+          <input id="bq-name" name="fullName" type="text" required autocomplete="name" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+        </div>
+        <div>
+          <label for="bq-email" class="block text-sm font-medium text-slate-700 mb-1.5">Email *</label>
+          <input id="bq-email" name="email" type="email" required autocomplete="email" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+        </div>
+        <div>
+          <label for="bq-country" class="block text-sm font-medium text-slate-700 mb-1.5">Country *</label>
+          <select id="bq-country" name="country" required class="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]">
+            {countries.map((c) => <option value={c.name}>{c.name}</option>)}
+          </select>
+        </div>
+        <div>
+          <label for="bq-qty" class="block text-sm font-medium text-slate-700 mb-1.5">Quantity *</label>
+          <input id="bq-qty" name="quantity" type="text" required placeholder="e.g. 5,000 packs" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+        </div>
+      </div>
+
+      <details class="group">
+        <summary class="cursor-pointer text-sm font-medium text-[color:var(--color-blue)] hover:underline list-none">Add company, phone or target price (optional)</summary>
+        <div class="grid sm:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label for="bq-company" class="block text-sm font-medium text-slate-700 mb-1.5">Company</label>
+            <input id="bq-company" name="company" type="text" autocomplete="organization" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+          </div>
+          <div>
+            <label for="bq-phone" class="block text-sm font-medium text-slate-700 mb-1.5">Phone / WhatsApp</label>
+            <input id="bq-phone" name="phone" type="tel" autocomplete="tel" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+          </div>
+          <div>
+            <label for="bq-target" class="block text-sm font-medium text-slate-700 mb-1.5">Target Price</label>
+            <input id="bq-target" name="targetPrice" type="text" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+          </div>
+          <div>
+            <label for="bq-frequency" class="block text-sm font-medium text-slate-700 mb-1.5">Buying Frequency</label>
+            <input id="bq-frequency" name="frequency" type="text" placeholder="e.g. monthly" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+          </div>
+          <div class="sm:col-span-2">
+            <label for="bq-message" class="block text-sm font-medium text-slate-700 mb-1.5">Message</label>
+            <textarea id="bq-message" name="message" rows="3" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]"></textarea>
+          </div>
+        </div>
+      </details>
+
+      <div class="hidden" aria-hidden="true">
+        <label for="bq-hp">Leave blank</label>
+        <input id="bq-hp" name="companyWebsite" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <input type="hidden" name="access_key" value={site.formAccessKey} />
+      <input type="hidden" name="subject" value="New Bulk Quote Request — PharmaXports" />
+      <input type="hidden" name="source" id="bq-source" />
+
+      <p id="bq-status" class="text-sm hidden" role="status"></p>
+
+      <button type="submit" class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-navy)] text-white py-3 text-sm font-semibold hover:bg-[color:var(--color-navy-deep)]">
+        Request Bulk Quote
+      </button>
+      <p class="text-[11px] text-slate-400 text-center">We'll review your requirement and get back to you. Pricing and availability are confirmed by our team before any commitment.</p>
+    </form>
+
+    <div id="bulk-rfq-success" hidden class="p-8 text-center">
+      <span class="grid place-items-center w-14 h-14 mx-auto rounded-full bg-[color:var(--color-success)]/10 text-[color:var(--color-success)]">
+        <Icon name="check-circle" class="w-7 h-7" />
+      </span>
+      <h3 class="mt-4 font-display text-xl text-[color:var(--color-navy)]">Your bulk request has been received.</h3>
+      <p class="mt-2 text-sm text-slate-600">Reference: <span id="bq-ref" class="font-semibold text-[color:var(--color-ink)]"></span></p>
+      <p class="mt-1 text-sm text-slate-600">We'll review your requirement and contact you.</p>
+      <button type="button" data-close-bulk class="mt-6 inline-flex items-center justify-center rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] px-6 py-2.5 text-sm font-semibold hover:bg-[color:var(--color-blue-light)]">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('bulk-rfq');
+  const form = document.getElementById('bulk-rfq-form') as HTMLFormElement | null;
+  const success = document.getElementById('bulk-rfq-success');
+  const statusEl = document.getElementById('bq-status');
+  let lastFocused: HTMLElement | null = null;
+
+  function openModal(product: string) {
+    if (!modal || !form) return;
+    lastFocused = document.activeElement as HTMLElement;
+    (form.elements.namedItem('product') as HTMLInputElement).value = product || '';
+    const sourceEl = document.getElementById('bq-source') as HTMLInputElement | null;
+    if (sourceEl) sourceEl.value = window.location.pathname + window.location.search;
+    form.hidden = false;
+    if (success) success.hidden = true;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    (document.getElementById('bq-name') as HTMLInputElement | null)?.focus();
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.hidden = true;
+    document.body.style.overflow = '';
+    lastFocused?.focus();
+  }
+
+  document.addEventListener('click', (e) => {
+    const opener = (e.target as HTMLElement)?.closest('.open-bulk-rfq') as HTMLElement | null;
+    if (opener) {
+      e.preventDefault();
+      openModal(opener.dataset.product || '');
+      return;
+    }
+    if ((e.target as HTMLElement)?.closest('[data-close-bulk]')) closeModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && !modal.hidden) closeModal();
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    if ((form.elements.namedItem('companyWebsite') as HTMLInputElement)?.value) return;
+
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+    if (submitBtn) submitBtn.disabled = true;
+
+    const data = new FormData(form);
+    let leadId = '';
+    try {
+      const res = await fetch('/api/bulk-lead', { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+      const json = await res.json().catch(() => ({}) as any);
+      if (!res.ok) throw new Error('failed');
+      leadId = json.leadId || '';
+    } catch {
+      // API not configured yet — fall back to the existing form service so no lead is ever lost.
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error('failed');
+      } catch {
+        if (statusEl) {
+          statusEl.textContent = 'Something went wrong sending this. Please email us instead.';
+          statusEl.className = 'text-sm text-[color:var(--color-error)]';
+          statusEl.hidden = false;
+        }
+        if (submitBtn) submitBtn.disabled = false;
+        return;
+      }
+    }
+
+    (window as any).dataLayer = (window as any).dataLayer || [];
+    (window as any).dataLayer.push({ event: 'bulk_order_submit', item_name: String(data.get('product') || ''), country: String(data.get('country') || '') });
+
+    const refEl = document.getElementById('bq-ref');
+    if (refEl) refEl.textContent = leadId || 'sent by email';
+    form.hidden = true;
+    if (success) success.hidden = false;
+    if (submitBtn) submitBtn.disabled = false;
+    form.reset();
+  });
+</script>

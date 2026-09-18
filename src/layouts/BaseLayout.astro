@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import BulkRfqModal from '../components/BulkRfqModal.astro';
 import Seo from '../components/Seo.astro';
 import Icon from '../components/Icon.astro';
 import '../styles/global.css';
@@ -72,6 +73,8 @@ const websiteJsonLd = {
         </a>
       </div>
     )}
+
+    <BulkRfqModal />
 
     <div id="toast-root" class="fixed bottom-24 lg:bottom-6 inset-x-0 z-50 flex flex-col items-center gap-2 pointer-events-none px-4"></div>
 
@@ -188,6 +191,71 @@ const websiteJsonLd = {
 
       updateBadge();
       window.addEventListener('storage', updateBadge);
+
+      // ---- Country-aware commerce CTAs -------------------------------------
+      const COUNTRY_KEY = 'px-country';
+
+      function readCountry(): string {
+        try {
+          return localStorage.getItem(COUNTRY_KEY) || 'US';
+        } catch {
+          return 'US';
+        }
+      }
+
+      function track(event: string, payload: Record<string, unknown> = {}) {
+        (window as any).dataLayer = (window as any).dataLayer || [];
+        (window as any).dataLayer.push({ event, ...payload });
+      }
+
+      const REASON_FALLBACK = 'Available for bulk sourcing.';
+
+      function applyCountry(country: string) {
+        document.querySelectorAll<HTMLElement>('.commerce-ctas').forEach((root) => {
+          let map: Record<string, { ctas: string[]; reason: string | null }> = {};
+          try {
+            map = JSON.parse(root.dataset.commerce || '{}');
+          } catch {
+            /* malformed data — fall through to the safe default below */
+          }
+          const state = map[country] ?? map.OTHER ?? { ctas: ['BUY_IN_BULK'], reason: REASON_FALLBACK };
+          root.querySelectorAll<HTMLElement>('[data-cta]').forEach((el) => {
+            el.hidden = !state.ctas.includes(el.dataset.cta || '');
+          });
+          const reasonEl = root.querySelector<HTMLElement>('.cta-reason');
+          if (reasonEl) {
+            reasonEl.textContent = state.reason ?? '';
+            reasonEl.hidden = !state.reason;
+          }
+        });
+      }
+
+      const countrySelect = document.getElementById('country-select') as HTMLSelectElement | null;
+      const initialCountry = readCountry();
+      if (countrySelect) {
+        countrySelect.value = initialCountry;
+        countrySelect.addEventListener('change', () => {
+          const next = countrySelect.value;
+          try {
+            localStorage.setItem(COUNTRY_KEY, next);
+          } catch {
+            /* selection just won't persist */
+          }
+          applyCountry(next);
+          track('country_selected', { country: next });
+        });
+      }
+      applyCountry(initialCountry);
+
+      document.addEventListener('click', (e) => {
+        const buy = (e.target as HTMLElement)?.closest('.buy-now') as HTMLElement | null;
+        if (buy) {
+          const root = buy.closest('.commerce-ctas') as HTMLElement | null;
+          track('begin_checkout', { item_id: root?.dataset.productId, item_name: root?.dataset.productName, country: readCountry() });
+        }
+        const bulk = (e.target as HTMLElement)?.closest('.open-bulk-rfq') as HTMLElement | null;
+        if (bulk) track('bulk_order_open', { item_name: bulk.dataset.product, country: readCountry() });
+      });
     </script>
   </body>
 </html>

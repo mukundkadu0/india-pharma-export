@@ -9,6 +9,7 @@ import ClassCard from '../../components/ClassCard.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import CTASection from '../../components/CTASection.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
+import CommerceCtas from '../../components/CommerceCtas.astro';
 import { categoryGroups, getCategoryGroup, exportStatusMeta, prescriptionStatusMeta, marketMeta } from '../../data/taxonomy';
 
 export async function getStaticPaths() {
@@ -229,39 +230,25 @@ const allClasses = (await getCollection('classes')).map((c) => c.data);
 
         <div class="lg:col-span-2">
           <div class="sticky top-24 space-y-4">
-            {(() => {
-              const isRx = product.prescriptionStatus !== 'otc';
-              return (
-                <div class="rounded-2xl border border-slate-200 bg-[color:var(--color-blue-light)] p-6">
-                  <h2 class="font-semibold text-[color:var(--color-navy)]">Order {product.name}</h2>
-                  <p class="mt-1.5 text-sm text-slate-600">Buy now for a direct order, or request bulk pricing and MOQ for larger quantities.</p>
-                  <div class="mt-4 flex flex-col gap-2.5">
-                    <button
-                      type="button"
-                      class="add-to-cart inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-accent)] text-white py-3 text-sm font-semibold hover:bg-[#d9700f]"
-                      data-id={product.id}
-                      data-name={product.name}
-                      data-meta={product.strength}
-                      data-rx={isRx ? 'true' : undefined}
-                    >
-                      <Icon name="cart" class="w-4 h-4" /> Buy Now
-                    </button>
-                    <Button href={`/request-quote/?product=${encodeURIComponent(product.name)}`} variant="outline" size="lg">Bulk Order</Button>
-                    <button
-                      type="button"
-                      class="add-to-inquiry inline-flex items-center justify-center gap-2 text-sm font-medium text-[color:var(--color-navy)] hover:underline py-1"
-                      data-id={product.id}
-                      data-name={product.name}
-                    >
-                      <Icon name="clipboard" class="w-4 h-4" /> Add to Inquiry List
-                    </button>
-                  </div>
-                  {isRx && (
-                    <p class="mt-3 text-xs text-slate-500">Prescription product — we verify your drug / import licence before dispatch.</p>
-                  )}
-                </div>
-              );
-            })()}
+            <div class="rounded-2xl border border-slate-200 bg-[color:var(--color-blue-light)] p-6">
+              <h2 class="font-semibold text-[color:var(--color-navy)]">Order {product.name}</h2>
+              {product.pricing?.retailPriceUsd ? (
+                <p class="mt-2 text-2xl font-bold text-[color:var(--color-navy)]">${product.pricing.retailPriceUsd.toFixed(2)}</p>
+              ) : (
+                <p class="mt-1.5 text-sm text-slate-600">Pricing is quoted per requirement, destination and quantity.</p>
+              )}
+              <div class="mt-4">
+                <CommerceCtas product={product} layout="detail" />
+              </div>
+              <button
+                type="button"
+                class="add-to-inquiry mt-3 inline-flex items-center justify-center gap-2 w-full text-sm font-medium text-[color:var(--color-navy)] hover:underline py-1"
+                data-id={product.id}
+                data-name={product.name}
+              >
+                <Icon name="clipboard" class="w-4 h-4" /> Add to Inquiry List
+              </button>
+            </div>
             <div class="rounded-2xl border border-slate-200 p-5 text-sm text-slate-600">
               <p class="font-medium text-[color:var(--color-ink)] mb-2">Need documentation first?</p>
               <p>Our team can share a product brochure and manufacturing-partner regulatory summary on request — just mention it in your enquiry.</p>
