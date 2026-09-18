@@ -11,16 +11,16 @@ interface Props {
 const { id, name, shortDescription, icon, count } = Astro.props;
 ---
 
-<a href={`/products/${id}/`} class="card-in card-lift group flex flex-col gap-4 p-6 bg-white ring-1 ring-slate-900/5 rounded-2xl">
-  <span class="grid place-items-center w-12 h-12 rounded-xl bg-[color:var(--color-blue-light)] text-[color:var(--color-navy)] group-hover:bg-[color:var(--color-navy)] group-hover:text-white transition-colors">
-    <Icon name={icon} class="w-6 h-6" />
+<a href={`/products/${id}/`} class="card-in card-lift group flex flex-col gap-3.5 p-5 bg-white ring-1 ring-slate-900/5 rounded-xl">
+  <span class="grid place-items-center w-11 h-11 rounded-lg bg-[color:var(--color-blue-light)] text-[color:var(--color-navy)] group-hover:bg-[color:var(--color-navy)] group-hover:text-white transition-colors">
+    <Icon name={icon} class="w-5 h-5" />
   </span>
   <div>
-    <h3 class="font-display text-lg text-[color:var(--color-navy)]">{name}</h3>
+    <h3 class="font-display text-base text-[color:var(--color-navy)]">{name}</h3>
     <p class="mt-1.5 text-sm text-slate-600 leading-relaxed">{shortDescription}</p>
-    {count !== undefined && <p class="mt-2 text-xs font-medium text-slate-400">{count} classes tracked</p>}
+    {count !== undefined && <p class="mt-2 text-xs text-slate-400">{count} {count === 1 ? 'class' : 'classes'} tracked</p>}
   </div>
   <span class="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-[color:var(--color-blue)]">
-    View Products <Icon name="arrow-right" class="w-3.5 h-3.5" />
+    View Products <Icon name="arrow-right" class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
   </span>
 </a>
