@@ -11,7 +11,7 @@ interface Props {
 const { id, name, shortDescription, icon, count } = Astro.props;
 ---
 
-<a href={`/products/${id}/`} class="group flex flex-col gap-4 p-6 bg-white border border-slate-200 rounded-2xl hover:border-[color:var(--color-blue)]/40 hover:shadow-lg transition-all">
+<a href={`/products/${id}/`} class="card-in card-lift group flex flex-col gap-4 p-6 bg-white ring-1 ring-slate-900/5 rounded-2xl">
   <span class="grid place-items-center w-12 h-12 rounded-xl bg-[color:var(--color-blue-light)] text-[color:var(--color-navy)] group-hover:bg-[color:var(--color-navy)] group-hover:text-white transition-colors">
     <Icon name={icon} class="w-6 h-6" />
   </span>
