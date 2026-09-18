@@ -102,3 +102,55 @@ select:focus-visible,
 .skip-link:focus {
   left: 0;
 }
+
+/* Product tile texture — used in place of a flat placeholder square until real
+   product photography exists. Radial highlight + dot grid, tinted to brand navy. */
+.tile-pattern {
+  background-color: var(--color-blue-light);
+  background-image:
+    radial-gradient(circle at 25% 18%, rgba(255, 255, 255, 0.85), transparent 52%),
+    radial-gradient(circle at 88% 92%, rgba(11, 42, 74, 0.07), transparent 46%);
+}
+
+.tile-dots {
+  background-image: radial-gradient(rgba(11, 42, 74, 0.16) 1px, transparent 1.4px);
+  background-size: 15px 15px;
+}
+
+/* Card elevation on hover — tinted shadow instead of generic flat black. */
+.card-lift {
+  transition:
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 24px 48px -20px rgba(11, 42, 74, 0.28),
+    0 8px 16px -8px rgba(11, 42, 74, 0.14);
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.card-in {
+  animation: card-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-lift,
+  .card-in {
+    animation: none;
+    transition: none;
+  }
+  .card-lift:hover {
+    transform: none;
+  }
+}

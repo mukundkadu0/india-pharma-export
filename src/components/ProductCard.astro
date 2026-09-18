@@ -28,14 +28,19 @@ const catGroup = category ? getCategoryGroup(category) : undefined;
 const photo = images?.[0];
 ---
 
-<article class="group flex flex-col h-full bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg hover:border-[color:var(--color-blue)]/30 transition-all">
+<article class="card-in card-lift group flex flex-col h-full bg-white ring-1 ring-slate-900/5 rounded-2xl overflow-hidden">
   <a href={`/products/${id}/`} class="flex flex-col flex-1">
-    <div class="relative aspect-[4/3] bg-[color:var(--color-blue-light)] overflow-hidden">
+    <div class="relative aspect-[4/3] overflow-hidden">
       {photo ? (
-        <img src={photo.src} alt={photo.alt} loading="lazy" class="w-full h-full object-cover" />
+        <img src={photo.src} alt={photo.alt} loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
       ) : (
-        <div class="w-full h-full grid place-items-center text-[color:var(--color-navy)]/20">
-          <Icon name={catGroup?.icon ?? 'capsule'} class="w-14 h-14" />
+        <div class="tile-pattern relative w-full h-full">
+          <div class="tile-dots absolute inset-0 opacity-70"></div>
+          <div class="relative w-full h-full grid place-items-center">
+            <span class="grid place-items-center w-16 h-16 rounded-2xl bg-white/80 backdrop-blur-sm shadow-[0_10px_24px_-8px_rgba(11,42,74,0.28)] transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-2">
+              <Icon name={catGroup?.icon ?? 'capsule'} class="w-8 h-8 text-[color:var(--color-navy)]/70" />
+            </span>
+          </div>
         </div>
       )}
       <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
@@ -45,7 +50,7 @@ const photo = images?.[0];
     </div>
 
     <div class="p-5 flex-1 flex flex-col">
-      <h3 class="font-display text-lg text-[color:var(--color-navy)] leading-snug group-hover:text-[color:var(--color-blue)]">{name}</h3>
+      <h3 class="font-display text-lg text-[color:var(--color-navy)] leading-snug group-hover:text-[color:var(--color-blue)] transition-colors">{name}</h3>
       <p class="text-sm text-slate-500 mt-0.5">{genericName}</p>
 
       {pricing?.retailPriceUsd ? (
@@ -66,7 +71,7 @@ const photo = images?.[0];
     <CommerceCtas product={Astro.props} />
     <button
       type="button"
-      class="add-to-inquiry w-full inline-flex items-center justify-center gap-1.5 text-xs font-medium text-slate-500 hover:text-[color:var(--color-navy)] py-1"
+      class="add-to-inquiry w-full inline-flex items-center justify-center gap-1.5 text-xs font-medium text-slate-500 hover:text-[color:var(--color-navy)] transition-colors py-1"
       data-id={id}
       data-name={name}
       aria-label={`Add ${name} to inquiry list`}

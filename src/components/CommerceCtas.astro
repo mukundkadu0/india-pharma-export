@@ -20,6 +20,8 @@ const quoteHref = `/request-quote/?product=${encodeURIComponent(name)}`;
 const price = product.pricing?.retailPriceUsd;
 const big = layout === 'detail';
 const pill = big ? 'py-3 text-sm' : 'py-2.5 text-sm';
+const filledMotion = 'transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] active:shadow-none';
+const outlineMotion = 'transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]';
 ---
 
 <div class="commerce-ctas space-y-2" data-commerce={JSON.stringify(byCountry)} data-product-id={product.id} data-product-name={name}>
@@ -27,7 +29,7 @@ const pill = big ? 'py-3 text-sm' : 'py-2.5 text-sm';
     type="button"
     data-cta="BUY_NOW"
     hidden
-    class={`buy-now w-full inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-accent)] text-white font-semibold hover:bg-[#d9700f] ${pill}`}
+    class={`buy-now w-full inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-accent)] text-white font-semibold hover:bg-[#d9700f] shadow-[0_6px_16px_-6px_rgba(245,130,32,0.55)] ${filledMotion} ${pill}`}
     data-price={price}
   >
     <Icon name="cart" class="w-4 h-4" /> Buy Now{price ? ` — $${price.toFixed(2)}` : ''}
@@ -37,7 +39,7 @@ const pill = big ? 'py-3 text-sm' : 'py-2.5 text-sm';
     type="button"
     data-cta="ADD_TO_CART"
     hidden
-    class={`add-to-cart w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${pill}`}
+    class={`add-to-cart w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${outlineMotion} ${pill}`}
     data-id={product.id}
     data-name={name}
     data-meta={product.strength}
@@ -49,7 +51,7 @@ const pill = big ? 'py-3 text-sm' : 'py-2.5 text-sm';
     type="button"
     data-cta="BUY_IN_BULK"
     hidden
-    class={`open-bulk-rfq w-full inline-flex items-center justify-center gap-2 rounded-full font-semibold ${pill} bg-[color:var(--color-navy)] text-white hover:bg-[color:var(--color-navy-deep)]`}
+    class={`open-bulk-rfq w-full inline-flex items-center justify-center gap-2 rounded-full font-semibold shadow-[0_6px_16px_-6px_rgba(11,42,74,0.45)] ${filledMotion} ${pill} bg-[color:var(--color-navy)] text-white hover:bg-[color:var(--color-navy-deep)]`}
     data-product={name}
   >
     Buy in Bulk <Icon name="arrow-right" class="w-3.5 h-3.5" />
@@ -59,7 +61,7 @@ const pill = big ? 'py-3 text-sm' : 'py-2.5 text-sm';
     href={quoteHref}
     data-cta="CHECK_AVAILABILITY"
     hidden
-    class={`w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${pill}`}
+    class={`w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${outlineMotion} ${pill}`}
   >
     Check Availability
   </a>
@@ -68,7 +70,7 @@ const pill = big ? 'py-3 text-sm' : 'py-2.5 text-sm';
     href="/contact/"
     data-cta="CONTACT_US"
     hidden
-    class={`w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${pill}`}
+    class={`w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${outlineMotion} ${pill}`}
   >
     Contact Us
   </a>
