@@ -3,8 +3,8 @@
 // bottom of this file for what must change pre-launch.
 
 export const site = {
-  name: 'India Pharma Export',
-  legalName: 'India Pharma Export', // CONFIGURE: registered legal entity name
+  name: 'PharmaXports',
+  legalName: 'PharmaXports', // CONFIGURE: registered legal entity name
   tagline: 'Trusted Medicines. Healthier Tomorrow.',
   domain: 'pharmaxports.com',
   // www is canonical — the apex 308-redirects to it on Vercel.

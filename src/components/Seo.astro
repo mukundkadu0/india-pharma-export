@@ -11,7 +11,7 @@ interface Props {
 const { title, description, noindex = false, ogType = 'website', image } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const fullTitle = title.includes('India Pharma Export') ? title : `${title} | India Pharma Export`;
+const fullTitle = title.includes('PharmaXports') ? title : `${title} | PharmaXports`;
 const ogImage = image ?? '/og-default.png';
 ---
 

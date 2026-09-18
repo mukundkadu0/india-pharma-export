@@ -1,8 +1,8 @@
-# India Pharma Export
+# PharmaXports
 
-> India Pharma Export is a B2B pharmaceutical sourcing and export platform based in India. It connects international importers, distributors, wholesalers, hospital groups and government procurement bodies with pharmaceutical formulations, active pharmaceutical ingredients (APIs), biologicals, medical devices, AYUSH and nutraceutical products sourced from WHO-GMP certified Indian manufacturing partners.
+> PharmaXports is a B2B pharmaceutical sourcing and export platform based in India. It connects international importers, distributors, wholesalers, hospital groups and government procurement bodies with pharmaceutical formulations, active pharmaceutical ingredients (APIs), biologicals, medical devices, AYUSH and nutraceutical products sourced from WHO-GMP certified Indian manufacturing partners.
 
-India Pharma Export operates as a merchant exporter (sourcing from manufacturing partners, not operating its own manufacturing plants) on a strict B2B, quote-based model. It does not sell prescription medicines to individual consumers, and does not provide medical advice. Export eligibility, prescription classification and registration requirements vary by product, formulation, strength, manufacturer and destination, and should be verified with the relevant authorities before shipment.
+PharmaXports operates as a merchant exporter (sourcing from manufacturing partners, not operating its own manufacturing plants) on a strict B2B, quote-based model. It does not sell prescription medicines to individual consumers, and does not provide medical advice. Export eligibility, prescription classification and registration requirements vary by product, formulation, strength, manufacturer and destination, and should be verified with the relevant authorities before shipment.
 
 ## Company
 

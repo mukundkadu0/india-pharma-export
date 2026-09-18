@@ -228,7 +228,7 @@
     "term": "Merchant Exporter",
     "shortDef": "An exporter who trades and ships pharmaceutical products sourced from manufacturing partners, rather than manufacturing in-house.",
     "definition": "A merchant exporter sources finished products, APIs or devices from licensed manufacturing partners and handles the export transaction, documentation and buyer relationship, without operating its own manufacturing facility. Compliance credentials like COPP and WHO-GMP are obtained through the manufacturing partner, issued against their plant.",
-    "whyItMatters": "This is the model India Pharma Export operates under — we are transparent that we source from WHO-GMP certified manufacturing partners rather than claiming in-house manufacturing capability.",
+    "whyItMatters": "This is the model PharmaXports operates under — we are transparent that we source from WHO-GMP certified manufacturing partners rather than claiming in-house manufacturing capability.",
     "relatedTerms": ["copp", "who-gmp", "b2b"]
   }
 ]
