@@ -10,7 +10,8 @@ export default defineConfig({
   // Pages stay static; only routes marked `prerender = false` (the lead API)
   // run as functions. Swap this adapter for @astrojs/cloudflare to move hosts.
   adapter: vercel(),
-  integrations: [sitemap()],
+  // Pages that send `noindex` must not be listed in the sitemap (Search Console flags the conflict).
+  integrations: [sitemap({ filter: (page) => !page.includes('/shop/cart/') })],
   vite: {
     plugins: [tailwindcss()],
   },

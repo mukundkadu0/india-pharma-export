@@ -15,6 +15,9 @@ import { checkFileBasics } from './rfq-files';
 export type EnquiryKind = 'buyer' | 'partnership' | 'general';
 export type SubmitResult = { ok: true; reference: string; channel: 'server' | 'web3forms' } | { ok: false; error: string };
 
+// Hostnames where the Web3Forms backup channel may send real email. Keep in sync with site.domain.
+const FALLBACK_HOSTS = new Set(['www.pharmaxports.com', 'pharmaxports.com']);
+
 const ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'landing_page', 'referrer', 'first_seen'];
 
 function newReference(): string {
@@ -93,7 +96,12 @@ export async function submitEnquiry(form: HTMLFormElement, kind: EnquiryKind, en
     // 5xx (including 503 "not configured") falls through to the backup channel below.
   }
 
-  // 2) Form-service fallback. It cannot carry attachments, so never pretend it did.
+  // 2) Form-service fallback. It delivers a REAL email to the business inbox, so it only runs on the
+  //    production hostnames. Previews, localhost and test deployments never create a live enquiry.
+  if (!FALLBACK_HOSTS.has(location.hostname)) {
+    return { ok: false, error: 'Enquiry delivery is switched off on this test site, so nothing was sent. On the live site this form delivers normally.' };
+  }
+  // It cannot carry attachments, so never pretend it did.
   if (hasFile) return { ok: false, error: 'We could not send your enquiry with its attachment right now. Remove the attachment and try again, or email the file to us.' };
   try {
     fd.set('subject', `New ${kind} enquiry ${reference} - PharmaXports`);
