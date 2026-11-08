@@ -3,9 +3,13 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BulkRfqModal from '../components/BulkRfqModal.astro';
 import Seo from '../components/Seo.astro';
+import Analytics from '../components/Analytics.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
 import Icon from '../components/Icon.astro';
 import '../styles/global.css';
+import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import { site } from '../data/site';
+import { locales, localeFromPath } from '../i18n/config';
 
 interface Props {
   title: string;
@@ -16,6 +20,8 @@ interface Props {
   hideMobileCta?: boolean;
 }
 const { title, description, noindex, ogType, image, hideMobileCta = false } = Astro.props;
+
+const pageLocale = localeFromPath(Astro.url.pathname);
 
 const orgJsonLd = {
   '@context': 'https://schema.org',
@@ -43,16 +49,17 @@ const websiteJsonLd = {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locales[pageLocale].hreflang} dir={locales[pageLocale].dir}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0B2A4A" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <meta name="theme-color" content="#123451" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={interFont} />
     <Seo title={title} description={description} noindex={noindex} ogType={ogType} image={image} />
+    <Analytics />
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
   </head>
@@ -65,7 +72,7 @@ const websiteJsonLd = {
 
     {!hideMobileCta && (
       <div class="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-white border-t border-slate-200 p-3 flex gap-2" style="padding-bottom: max(0.75rem, env(safe-area-inset-bottom));">
-        <a href="/request-quote/" class="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-accent)] text-white font-semibold py-3 text-sm">
+        <a href="/request-quote/" class="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-teal-dark)] text-white font-semibold py-3 text-sm">
           <Icon name="quote" class="w-4 h-4" /> Get a Quote
         </a>
         <a href="/products/" aria-label="Browse products" class="grid place-items-center w-12 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)]">
@@ -74,7 +81,25 @@ const websiteJsonLd = {
       </div>
     )}
 
+    {site.whatsapp && (
+      <a
+        href={`https://wa.me/${site.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent('Hello PharmaXports, I would like to enquire about a pharmaceutical export requirement.')}`}
+        target="_blank"
+        rel="noopener"
+        aria-label="Chat with PharmaXports on WhatsApp"
+        class:list={[
+          'wa-float fixed right-4 z-40 grid place-items-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_-6px_rgba(0,0,0,0.35)] hover:scale-105 transition-transform lg:bottom-6 lg:right-6',
+          hideMobileCta ? 'bottom-4' : 'bottom-24',
+        ]}
+      >
+        <svg viewBox="0 0 32 32" class="w-8 h-8" fill="currentColor" aria-hidden="true">
+          <path d="M16.04 3C8.84 3 3 8.8 3 15.95c0 2.28.6 4.5 1.74 6.46L3 29l6.76-1.7a13.1 13.1 0 0 0 6.28 1.6C23.24 28.9 29 23.1 29 15.95 29 8.8 23.24 3 16.04 3Zm0 23.7c-1.96 0-3.88-.52-5.56-1.5l-.4-.24-4.01 1.01 1.07-3.9-.26-.4a10.5 10.5 0 0 1-1.62-5.62c0-5.8 4.76-10.52 10.6-10.52 5.85 0 10.6 4.72 10.6 10.52 0 5.8-4.75 10.65-10.42 10.65Zm5.8-7.9c-.32-.16-1.88-.92-2.17-1.03-.29-.1-.5-.16-.72.16-.21.31-.82 1.03-1 1.24-.19.21-.37.24-.69.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.76-2.19-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.19.21-.32.32-.53.1-.21.05-.4-.03-.55-.08-.16-.72-1.72-.98-2.35-.26-.62-.52-.53-.72-.54h-.61c-.21 0-.55.08-.84.4-.29.31-1.1 1.07-1.1 2.6s1.13 3.02 1.28 3.23c.16.21 2.2 3.35 5.33 4.7.74.32 1.32.51 1.78.66.75.24 1.43.2 1.97.12.6-.09 1.88-.77 2.14-1.51.27-.74.27-1.37.19-1.5-.08-.13-.29-.21-.61-.37Z" />
+        </svg>
+      </a>
+    )}
+
     <BulkRfqModal />
+    <ConsentBanner />
 
     <div id="toast-root" class="fixed bottom-24 lg:bottom-6 inset-x-0 z-50 flex flex-col items-center gap-2 pointer-events-none px-4"></div>
 
@@ -168,6 +193,7 @@ const websiteJsonLd = {
           }
           list.push({ id, name: name!, meta: inquiryTarget.dataset.meta });
           writeList(list);
+          (window as any).pxTrack?.('add_to_inquiry', { item_id: id, item_name: name });
           showToast(`Added ${name} to your inquiry list.`);
           return;
         }
@@ -180,12 +206,12 @@ const websiteJsonLd = {
           if (!id) return;
           const cart = readCart();
           if (cart.some((item) => item.id === id)) {
-            showToast(`${name} is already in your direct-order cart.`);
+            showToast(`${name} is already in your order request.`);
             return;
           }
           cart.push({ id, name: name!, meta: cartTarget.dataset.meta, rx: cartTarget.dataset.rx === 'true' });
           writeCart(cart);
-          showToast(`Added ${name} to your direct-order cart.`);
+          showToast(`Added ${name} to your order request.`);
         }
       });
 
@@ -204,8 +230,7 @@ const websiteJsonLd = {
       }
 
       function track(event: string, payload: Record<string, unknown> = {}) {
-        (window as any).dataLayer = (window as any).dataLayer || [];
-        (window as any).dataLayer.push({ event, ...payload });
+        (window as any).pxTrack?.(event, payload);
       }
 
       const REASON_FALLBACK = 'Available for bulk sourcing.';

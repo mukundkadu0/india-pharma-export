@@ -1,184 +1,226 @@
 ---
 import Icon from './Icon.astro';
-import Button from './Button.astro';
-import Logo from './Logo.astro';
 import { countries } from '../lib/commerce';
-
-const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '/about/' },
-  { label: 'Products', href: '/products/' },
-  { label: 'Shop OTC', href: '/shop/' },
-  { label: 'Markets', href: '/markets/' },
-  { label: 'Compliance', href: '/compliance/' },
-  { label: 'Resources', href: '/resources/' },
-  { label: 'Contact', href: '/contact/' },
-];
+import { categoryGroups } from '../data/taxonomy';
+import { buyerSegments } from '../data/buyers';
+import { site } from '../data/site';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 
 const path = Astro.url.pathname;
-function isActive(href: string) {
-  if (href === '/') return path === '/';
-  return path.startsWith(href);
-}
+const starts = (p: string) => path.startsWith(p);
+
+// Primary B2B journey. The OTC / AYUSH direct-order shop is deliberately NOT here:
+// it lives in the top bar so it never reads as part of the export-sourcing journey.
+const simpleNav = [
+  { label: 'Markets', href: '/markets/', active: starts('/markets') },
+  { label: 'Quality & Compliance', href: '/compliance/', active: starts('/compliance') },
+  { label: 'Resources', href: '/resources/', active: starts('/resources') || starts('/glossary') || starts('/faqs') },
+  { label: 'About', href: '/about/', active: starts('/about') },
+];
+const productsActive = starts('/products');
+const buyersActive = starts('/buyers');
+const navLink = (active: boolean) =>
+  `px-3 py-2 text-sm font-semibold rounded-md whitespace-nowrap transition-colors ${active ? 'text-[color:var(--color-navy)] bg-[color:var(--color-blue-light)]' : 'text-slate-700 hover:text-[color:var(--color-navy)] hover:bg-slate-100'}`;
 ---
 
 <a href="#main" class="skip-link">Skip to main content</a>
-<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
-  <div class="container-page flex items-center justify-between h-18 py-3">
-    <a href="/" class="flex items-center gap-2.5 shrink-0">
-      <Logo class="w-10 h-10 shrink-0" />
-      <span class="leading-tight">
-        <span class="block font-display text-lg text-[color:var(--color-navy)]">PharmaXports</span>
-        <span class="block text-[11px] text-slate-500">Trusted Medicines. Healthier Tomorrow.</span>
+
+<!-- Slim top bar: contact + the separate OTC/AYUSH shop + export destination -->
+<div class="bg-[color:var(--color-navy)] text-white text-xs">
+  <div class="container-page flex items-center justify-between gap-2 sm:gap-3 h-9">
+    <p class="hidden md:flex items-center gap-4 text-white/85">
+      <span>B2B pharmaceutical sourcing from India</span>
+      <a href={`mailto:${site.email}`} class="inline-flex items-center gap-1.5 hover:text-white"><Icon name="mail" class="w-3.5 h-3.5" />{site.email}</a>
+      <a href={`tel:${site.phone.replace(/\s/g, '')}`} class="hidden lg:inline-flex items-center gap-1.5 hover:text-white"><Icon name="phone" class="w-3.5 h-3.5" />{site.phone}</a>
+    </p>
+    <div class="flex items-center gap-3 ml-auto">
+      <label for="country-select" class="sr-only">Shipping destination</label>
+      <span class="relative inline-flex items-center">
+        <Icon name="globe" class="w-3.5 h-3.5 absolute left-2 pointer-events-none text-white/80" />
+        <select id="country-select" aria-label="Shipping destination" class="appearance-none bg-white/10 text-white rounded pl-7 pr-6 py-1 text-xs cursor-pointer hover:bg-white/20 min-h-0 max-w-[8.5rem] sm:max-w-none truncate">
+          {countries.map((c) => <option value={c.code} class="text-slate-900">{c.code === 'OTHER' ? 'Other destination' : c.name}</option>)}
+        </select>
+        <Icon name="chevron-down" class="w-3 h-3 absolute right-1.5 pointer-events-none text-white/80" />
       </span>
+      <span class="h-4 w-px bg-white/25" aria-hidden="true"></span>
+      <a href="/shop/" class="inline-flex items-center gap-1.5 text-white/90 hover:text-white" title="Direct-order shop for OTC and AYUSH products (separate from B2B export sourcing)">
+        <span class="sm:hidden">OTC shop</span><span class="hidden sm:inline">OTC &amp; AYUSH shop</span>
+      </a>
+      <a href="/shop/cart/" aria-label="View OTC order request" class="relative inline-grid place-items-center w-7 h-7 text-white/90 hover:text-white">
+        <Icon name="cart" class="w-4 h-4" />
+        <span id="cart-badge" hidden class="absolute -top-0.5 -right-1 min-w-[16px] h-4 px-1 grid place-items-center rounded-full bg-[color:var(--color-gold)] text-[color:var(--color-navy)] text-[10px] font-bold">0</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<header class="sticky top-0 z-50 bg-white border-b border-slate-200">
+  <div class="container-page flex items-center gap-4 h-16">
+    <a href="/" class="flex items-center shrink-0" aria-label="PharmaXports home">
+      <img src="/logo-header.jpg" alt="PharmaXports - Global Pharmaceutical Sourcing" width="480" height="131" class="h-9 min-[400px]:h-11 w-auto mix-blend-multiply" />
     </a>
 
-    <nav aria-label="Primary" class="hidden xl:flex items-center gap-0.5">
-      {navItems.map((item) => (
-        <a
-          href={item.href}
-          class={`relative px-2.5 py-2 text-sm font-medium rounded-full whitespace-nowrap transition-colors ${
-            isActive(item.href) ? 'text-[color:var(--color-navy)] bg-[color:var(--color-blue-light)]' : 'text-slate-600 hover:text-[color:var(--color-navy)] hover:bg-slate-50'
-          }`}
-          aria-current={isActive(item.href) ? 'page' : undefined}
-        >
-          {item.label}
-        </a>
-      ))}
-    </nav>
-
-    <div class="flex items-center gap-2">
-      <button
-        type="button"
-        id="search-trigger"
-        aria-label="Search products, markets and resources"
-        class="hidden sm:grid place-items-center w-9 h-9 rounded-full text-slate-600 hover:bg-slate-100"
-      >
-        <Icon name="search" class="w-5 h-5" />
-      </button>
-
-      <a href="/inquiry/" aria-label="View inquiry list" class="relative hidden sm:grid place-items-center w-9 h-9 rounded-full text-slate-600 hover:bg-slate-100">
-        <Icon name="clipboard" class="w-5 h-5" />
-        <span id="inquiry-badge" hidden class="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-[color:var(--color-accent)] text-white text-[10px] font-bold">0</span>
-      </a>
-
-      <a href="/shop/cart/" aria-label="View direct-order cart" class="relative hidden sm:grid place-items-center w-9 h-9 rounded-full text-slate-600 hover:bg-slate-100">
-        <Icon name="cart" class="w-5 h-5" />
-        <span id="cart-badge" hidden class="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-[color:var(--color-navy)] text-white text-[10px] font-bold">0</span>
-      </a>
-
-      <div class="relative hidden sm:block">
-        <label for="country-select" class="sr-only">Shipping destination</label>
-        <select
-          id="country-select"
-          class="appearance-none bg-transparent pl-2.5 pr-6 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-full cursor-pointer outline-none focus:ring-2 focus:ring-[color:var(--color-blue)]/40"
-          aria-label="Shipping destination"
-        >
-          {countries.map((c) => <option value={c.code}>{c.code === 'OTHER' ? 'Other' : c.code}</option>)}
-        </select>
-        <Icon name="chevron-down" class="w-3.5 h-3.5 absolute right-1.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-      </div>
-
-      <div class="relative hidden sm:block">
-        <button
-          type="button"
-          id="lang-trigger"
-          aria-haspopup="true"
-          aria-expanded="false"
-          class="flex items-center gap-1 px-2.5 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-full"
-        >
-          <Icon name="globe" class="w-4 h-4" /> EN
+    <nav aria-label="Primary" class="hidden xl:flex items-center gap-0.5 ml-4 flex-1" id="primary-nav">
+      <!-- Products mega menu -->
+      <div class="relative" data-menu>
+        <button type="button" class={`${navLink(productsActive)} inline-flex items-center gap-1`} aria-expanded="false" aria-controls="menu-products" data-menu-btn>
+          Products <Icon name="chevron-down" class="w-3.5 h-3.5" />
         </button>
-        <div id="lang-menu" hidden class="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-lg p-3 text-sm text-slate-600">
-          <p class="font-semibold text-[color:var(--color-ink)] mb-1">English</p>
-          <p>Additional languages for international buyers are planned. Contact us if you need correspondence in another language.</p>
+        <div id="menu-products" hidden class="absolute left-0 top-full mt-2 w-[46rem] max-w-[90vw] bg-white border border-slate-200 rounded-xl shadow-xl p-5">
+          <div class="grid grid-cols-2 gap-x-6 gap-y-1">
+            {categoryGroups.map((c) => (
+              <a href={`/products/${c.id}/`} class="group flex gap-3 p-2.5 rounded-lg hover:bg-[color:var(--color-bg)]">
+                <span class="grid place-items-center w-9 h-9 rounded-lg bg-[color:var(--color-blue-light)] text-[color:var(--color-teal-dark)] shrink-0"><Icon name={c.icon} class="w-5 h-5" /></span>
+                <span>
+                  <span class="block text-sm font-semibold text-[color:var(--color-navy)] group-hover:text-[color:var(--color-teal-dark)]">{c.name}</span>
+                  <span class="block text-xs text-slate-500 leading-snug mt-0.5">{c.shortDescription}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+            <a href="/products/" class="font-semibold text-[color:var(--color-teal-dark)] hover:underline inline-flex items-center gap-1">Full catalogue <Icon name="arrow-right" class="w-3.5 h-3.5" /></a>
+            <a href="/products/molecules/" class="text-slate-600 hover:text-[color:var(--color-navy)]">Molecule index</a>
+            <a href="/inquiry/" class="text-slate-600 hover:text-[color:var(--color-navy)]">My RFQ list</a>
+          </div>
         </div>
       </div>
 
-      <div class="hidden sm:block">
-        <Button href="/request-quote/" variant="secondary" size="md">Get a Quote</Button>
+      <!-- Buyer solutions dropdown -->
+      <div class="relative" data-menu>
+        <button type="button" class={`${navLink(buyersActive)} inline-flex items-center gap-1`} aria-expanded="false" aria-controls="menu-buyers" data-menu-btn>
+          Buyer Solutions <Icon name="chevron-down" class="w-3.5 h-3.5" />
+        </button>
+        <div id="menu-buyers" hidden class="absolute left-0 top-full mt-2 w-80 bg-white border border-slate-200 rounded-xl shadow-xl p-2">
+          {buyerSegments.map((b) => (
+            <a href={`/buyers/${b.slug}/`} class="block px-3 py-2 rounded-lg hover:bg-[color:var(--color-bg)]">
+              <span class="block text-sm font-semibold text-[color:var(--color-navy)]">{b.navLabel}</span>
+              <span class="block text-xs text-slate-500 leading-snug">{b.summary}</span>
+            </a>
+          ))}
+        </div>
       </div>
 
-      <button
-        type="button"
-        id="mobile-menu-trigger"
-        aria-label="Open menu"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-        class="xl:hidden grid place-items-center w-9 h-9 rounded-full text-slate-600 hover:bg-slate-100"
-      >
+      {simpleNav.map((item) => (
+        <a href={item.href} class={navLink(item.active)} aria-current={item.active ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-0.5 min-[400px]:gap-1.5 ml-auto xl:ml-0">
+      <button type="button" id="search-trigger" aria-label="Search products, markets and resources" class="grid place-items-center w-11 h-11 rounded-lg text-slate-700 hover:bg-slate-100">
+        <Icon name="search" class="w-5 h-5" />
+      </button>
+      <a href="/inquiry/" aria-label="View RFQ list" class="relative grid place-items-center w-11 h-11 rounded-lg text-slate-700 hover:bg-slate-100">
+        <Icon name="clipboard" class="w-5 h-5" />
+        <span id="inquiry-badge" hidden class="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-[color:var(--color-teal-dark)] text-white text-[10px] font-bold">0</span>
+      </a>
+      <LanguageSwitcher />
+      <a href="/request-quote/" class="btn btn-primary btn-sm hidden sm:inline-flex">Request a Quote</a>
+      <button type="button" id="mobile-menu-trigger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" class="xl:hidden grid place-items-center w-11 h-11 rounded-lg text-slate-700 hover:bg-slate-100">
         <Icon name="menu" class="w-6 h-6" />
       </button>
     </div>
   </div>
-
-  <div id="mobile-menu" hidden class="xl:hidden border-t border-slate-200 bg-white">
-    <nav aria-label="Mobile" class="container-page py-3 flex flex-col">
-      {navItems.map((item) => (
-        <a href={item.href} class="py-2.5 text-base font-medium text-slate-700 border-b border-slate-100 last:border-0">
-          {item.label}
-        </a>
-      ))}
-      <div class="flex gap-3 pt-4">
-        <Button href="/request-quote/" variant="secondary" size="md" class="flex-1 justify-center">Get a Quote</Button>
-        <button type="button" id="mobile-search-trigger" class="flex-1 inline-flex items-center justify-center gap-2 border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] rounded-full py-2.5 text-sm font-semibold">
-          <Icon name="search" class="w-4 h-4" /> Search
-        </button>
-      </div>
-    </nav>
-  </div>
 </header>
 
-<div id="search-overlay" hidden class="fixed inset-0 z-[60] bg-[color:var(--color-navy-deep)]/60 backdrop-blur-sm">
-  <div class="container-page pt-20 sm:pt-28">
-    <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+<!-- Mobile drawer -->
+<div id="mobile-menu" hidden class="xl:hidden fixed inset-0 z-[55]">
+  <div class="absolute inset-0 bg-[color:var(--color-navy-deep)]/50" data-drawer-close></div>
+  <div role="dialog" aria-modal="true" aria-label="Menu" class="absolute right-0 top-0 h-full w-[88%] max-w-sm bg-white shadow-2xl overflow-y-auto">
+    <div class="flex items-center justify-between px-4 h-16 border-b border-slate-200">
+      <span class="font-bold text-[color:var(--color-navy)]">Menu</span>
+      <button type="button" aria-label="Close menu" data-drawer-close class="grid place-items-center w-11 h-11 rounded-lg hover:bg-slate-100"><Icon name="close" class="w-5 h-5" /></button>
+    </div>
+    <div class="p-4 space-y-1">
+      <button type="button" id="mobile-search-trigger" class="w-full flex items-center gap-2 border border-slate-300 rounded-lg px-3 min-h-[48px] text-slate-500 text-sm">
+        <Icon name="search" class="w-4 h-4" /> Search products, molecules, HS code
+      </button>
+
+      <details class="group border-b border-slate-100" open={productsActive}>
+        <summary class="flex items-center justify-between min-h-[48px] font-semibold text-[color:var(--color-navy)] cursor-pointer list-none">
+          Products <Icon name="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180" />
+        </summary>
+        <ul class="pb-3 pl-2">
+          {categoryGroups.map((c) => <li><a href={`/products/${c.id}/`} class="block py-2.5 text-sm text-slate-700">{c.name}</a></li>)}
+          <li><a href="/products/" class="block py-2.5 text-sm font-semibold text-[color:var(--color-teal-dark)]">Full catalogue</a></li>
+          <li><a href="/products/molecules/" class="block py-2.5 text-sm text-slate-700">Molecule index</a></li>
+        </ul>
+      </details>
+      <details class="group border-b border-slate-100" open={buyersActive}>
+        <summary class="flex items-center justify-between min-h-[48px] font-semibold text-[color:var(--color-navy)] cursor-pointer list-none">
+          Buyer Solutions <Icon name="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180" />
+        </summary>
+        <ul class="pb-3 pl-2">
+          {buyerSegments.map((b) => <li><a href={`/buyers/${b.slug}/`} class="block py-2.5 text-sm text-slate-700">{b.navLabel}</a></li>)}
+        </ul>
+      </details>
+      {simpleNav.map((item) => (
+        <a href={item.href} class="flex items-center min-h-[48px] font-semibold text-[color:var(--color-navy)] border-b border-slate-100" aria-current={item.active ? 'page' : undefined}>{item.label}</a>
+      ))}
+      <a href="/contact/" class="flex items-center min-h-[48px] font-semibold text-[color:var(--color-navy)] border-b border-slate-100">Contact</a>
+      <a href="/inquiry/" class="flex items-center min-h-[48px] text-sm text-slate-700">My RFQ list</a>
+      <a href="/shop/" class="flex items-center min-h-[48px] text-sm text-slate-500">OTC &amp; AYUSH direct-order shop</a>
+      <a href="/request-quote/" class="btn btn-primary w-full mt-3">Request a Quote</a>
+    </div>
+  </div>
+</div>
+
+<div id="search-overlay" hidden class="fixed inset-0 z-[60] bg-[color:var(--color-navy-deep)]/60">
+  <div class="container-page pt-16 sm:pt-28">
+    <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden" role="dialog" aria-modal="true" aria-label="Search">
       <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100">
-        <Icon name="search" class="w-5 h-5 text-slate-400 shrink-0" />
-        <input
-          id="search-input"
-          type="text"
-          placeholder="Search molecule, formulation, API, market or HS code…"
-          class="w-full outline-none text-base placeholder:text-slate-400"
-          autocomplete="off"
-        />
-        <button type="button" id="search-close" aria-label="Close search" class="shrink-0 text-slate-400 hover:text-slate-600">
-          <Icon name="close" class="w-5 h-5" />
-        </button>
+        <Icon name="search" class="w-5 h-5 text-slate-500 shrink-0" />
+        <input id="search-input" type="text" placeholder="Search product, molecule, HS code, market…" aria-label="Search" class="w-full outline-none text-base placeholder:text-slate-500" autocomplete="off" />
+        <button type="button" id="search-close" aria-label="Close search" class="shrink-0 text-slate-500 hover:text-slate-700 w-11 h-11 grid place-items-center"><Icon name="close" class="w-5 h-5" /></button>
       </div>
       <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2"></div>
-      <p class="px-5 py-3 text-xs text-slate-400 border-t border-slate-100">Try: Paracetamol, Amoxicillin, Dolutegravir, HS code, Africa, RCMC</p>
+      <p class="px-5 py-3 text-xs text-slate-500 border-t border-slate-100">Try: Paracetamol, Amoxicillin, HS code, Africa, RCMC</p>
     </div>
   </div>
 </div>
 
 <script>
-  const mobileTrigger = document.getElementById('mobile-menu-trigger');
-  const mobileMenu = document.getElementById('mobile-menu');
-  mobileTrigger?.addEventListener('click', () => {
-    const isHidden = mobileMenu?.hasAttribute('hidden');
-    if (isHidden) mobileMenu?.removeAttribute('hidden');
-    else mobileMenu?.setAttribute('hidden', '');
-    mobileTrigger.setAttribute('aria-expanded', String(!!isHidden));
+  // ---- desktop menus (mega menu + dropdown): click or keyboard, Esc closes, outside click closes
+  const menus = Array.from(document.querySelectorAll<HTMLElement>('[data-menu]'));
+  function closeMenus(except?: HTMLElement) {
+    menus.forEach((m) => {
+      if (m === except) return;
+      m.querySelector('[data-menu-btn]')?.setAttribute('aria-expanded', 'false');
+      m.querySelector<HTMLElement>('[id^="menu-"]')?.setAttribute('hidden', '');
+    });
+  }
+  menus.forEach((m) => {
+    const btn = m.querySelector<HTMLElement>('[data-menu-btn]')!;
+    const panel = m.querySelector<HTMLElement>('[id^="menu-"]')!;
+    const open = () => { closeMenus(m); panel.removeAttribute('hidden'); btn.setAttribute('aria-expanded', 'true'); };
+    const close = () => { panel.setAttribute('hidden', ''); btn.setAttribute('aria-expanded', 'false'); };
+    btn.addEventListener('click', () => (panel.hasAttribute('hidden') ? open() : close()));
+    m.addEventListener('mouseenter', () => { if (matchMedia('(hover:hover)').matches) open(); });
+    m.addEventListener('mouseleave', () => { if (matchMedia('(hover:hover)').matches) close(); });
+    m.addEventListener('focusout', (e) => { if (!m.contains((e as FocusEvent).relatedTarget as Node)) close(); });
   });
+  document.addEventListener('click', (e) => { if (!(e.target as HTMLElement).closest('[data-menu]')) closeMenus(); });
 
-  const langTrigger = document.getElementById('lang-trigger');
-  const langMenu = document.getElementById('lang-menu');
-  langTrigger?.addEventListener('click', () => {
-    const isHidden = langMenu?.hasAttribute('hidden');
-    if (isHidden) langMenu?.removeAttribute('hidden');
-    else langMenu?.setAttribute('hidden', '');
-    langTrigger.setAttribute('aria-expanded', String(!!isHidden));
-  });
-  document.addEventListener('click', (e) => {
-    if (!langMenu || !langTrigger) return;
-    if (!langMenu.contains(e.target as Node) && !langTrigger.contains(e.target as Node)) {
-      langMenu.setAttribute('hidden', '');
-    }
-  });
+  // ---- mobile drawer
+  const drawer = document.getElementById('mobile-menu');
+  const drawerBtn = document.getElementById('mobile-menu-trigger');
+  function setDrawer(openIt: boolean) {
+    if (!drawer || !drawerBtn) return;
+    if (openIt) drawer.removeAttribute('hidden'); else drawer.setAttribute('hidden', '');
+    drawerBtn.setAttribute('aria-expanded', String(openIt));
+    document.body.style.overflow = openIt ? 'hidden' : '';
+    if (openIt) drawer.querySelector<HTMLElement>('[aria-label="Close menu"]')?.focus(); else drawerBtn.focus();
+  }
+  drawerBtn?.addEventListener('click', () => setDrawer(true));
+  drawer?.querySelectorAll('[data-drawer-close]').forEach((el) => el.addEventListener('click', () => setDrawer(false)));
 
+  // ---- search overlay
   const overlay = document.getElementById('search-overlay');
   const input = document.getElementById('search-input') as HTMLInputElement | null;
+  let lastFocus: HTMLElement | null = null;
   function openSearch() {
+    lastFocus = document.activeElement as HTMLElement;
+    if (drawer && !drawer.hasAttribute('hidden')) { drawer.setAttribute('hidden', ''); drawerBtn?.setAttribute('aria-expanded', 'false'); }
     overlay?.removeAttribute('hidden');
     setTimeout(() => input?.focus(), 50);
     document.body.style.overflow = 'hidden';
@@ -186,17 +228,20 @@ function isActive(href: string) {
   function closeSearch() {
     overlay?.setAttribute('hidden', '');
     document.body.style.overflow = '';
+    lastFocus?.focus();
   }
   document.getElementById('search-trigger')?.addEventListener('click', openSearch);
   document.getElementById('mobile-search-trigger')?.addEventListener('click', openSearch);
   document.getElementById('search-close')?.addEventListener('click', closeSearch);
   overlay?.addEventListener('click', (e) => { if (e.target === overlay) closeSearch(); });
   document.addEventListener('keydown', (e) => {
-    if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
-      e.preventDefault();
-      openSearch();
+    const tag = document.activeElement?.tagName;
+    if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA' && tag !== 'SELECT') { e.preventDefault(); openSearch(); }
+    if (e.key === 'Escape') {
+      if (overlay && !overlay.hasAttribute('hidden')) closeSearch();
+      else if (drawer && !drawer.hasAttribute('hidden')) setDrawer(false);
+      closeMenus();
     }
-    if (e.key === 'Escape') closeSearch();
   });
 </script>
 
@@ -231,47 +276,48 @@ function isActive(href: string) {
     faq: 'FAQ',
     resource: 'Resource',
     molecule: 'Molecule',
-    'molecule-buy': 'Buy Now',
+    'molecule-buy': 'Molecule',
   };
 
   const resultsEl = document.getElementById('search-results');
   const inputEl = document.getElementById('search-input') as HTMLInputElement | null;
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
   function render(list: SearchItem[]) {
     if (!resultsEl) return;
     if (list.length === 0) {
-      resultsEl.innerHTML = '<p class="px-4 py-6 text-sm text-slate-400 text-center">No matches yet — try a molecule name, market or HS code.</p>';
+      resultsEl.innerHTML = '<p class="px-4 py-6 text-sm text-slate-500 text-center">No matches. Try a molecule name, market or HS code, or <a class="underline" href="/request-quote/">send us your requirement</a>.</p>';
       return;
     }
     resultsEl.innerHTML = list
       .slice(0, 8)
       .map(
         (item) => `
-        <a href="${item.url}" class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl hover:bg-slate-50">
+        <a href="${esc(item.url)}" class="flex items-center justify-between gap-3 px-4 py-3 rounded-lg hover:bg-slate-50">
           <span>
-            <span class="block text-sm font-medium text-[color:var(--color-ink)]">${item.title}</span>
-            ${item.subtitle ? `<span class="block text-xs text-slate-500">${item.subtitle}</span>` : ''}
+            <span class="block text-sm font-medium text-[color:var(--color-ink)]">${esc(item.title)}</span>
+            ${item.subtitle ? `<span class="block text-xs text-slate-500">${esc(item.subtitle)}</span>` : ''}
           </span>
-          <span class="text-[10px] uppercase tracking-wide font-semibold text-slate-400 shrink-0">${typeLabels[item.type] ?? item.type}</span>
+          <span class="text-[10px] uppercase tracking-wide font-semibold text-slate-500 shrink-0">${esc(typeLabels[item.type] ?? item.type)}</span>
         </a>`
       )
       .join('');
   }
 
+  let searchTimer: ReturnType<typeof setTimeout> | undefined;
   inputEl?.addEventListener('input', async () => {
     await ensureIndex();
     const q = inputEl.value.trim();
+    clearTimeout(searchTimer);
+    if (q.length >= 3) searchTimer = setTimeout(() => (window as any).pxTrack?.('product_search', { search_term: q, source: 'site_search' }), 900);
     if (!q) { render(items.slice(0, 8)); return; }
-    const results = fuse!.search(q).map((r) => r.item);
-    render(results);
+    render(fuse!.search(q).map((r) => r.item));
   });
 
-  document.getElementById('search-trigger')?.addEventListener('click', async () => {
-    await ensureIndex();
-    render(items.slice(0, 8));
-  });
-  document.getElementById('mobile-search-trigger')?.addEventListener('click', async () => {
-    await ensureIndex();
-    render(items.slice(0, 8));
-  });
+  ['search-trigger', 'mobile-search-trigger'].forEach((id) =>
+    document.getElementById(id)?.addEventListener('click', async () => {
+      await ensureIndex();
+      render(items.slice(0, 8));
+    })
+  );
 </script>

@@ -9,10 +9,10 @@ export const site = {
   domain: 'pharmaxports.com',
   // www is canonical — the apex 308-redirects to it on Vercel.
   url: 'https://www.pharmaxports.com',
-  email: 'export@indiapharmaexport.com', // CONFIGURE: replace with a real monitored inbox
-  partnershipEmail: 'partnerships@indiapharmaexport.com', // CONFIGURE
-  phone: '+91 00000 00000', // CONFIGURE
-  whatsapp: '+91 00000 00000', // CONFIGURE
+  email: 'info@pharmaxports.com',
+  partnershipEmail: 'info@pharmaxports.com',
+  phone: '+91 76663 99821',
+  whatsapp: '+91 76663 99821',
   address: 'India', // CONFIGURE: registered business address
   // Web3Forms (https://web3forms.com) — delivers form submissions to
   // mukundkadu48@gmail.com (the account owner). No backend required.

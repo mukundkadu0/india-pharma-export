@@ -1,20 +1,30 @@
 @import "tailwindcss";
+@import "@fontsource-variable/inter/wght.css";
 
+/* PharmaXports design tokens. Brand: Deep Navy #123451, Healthcare Teal #149C9A,
+   Premium Gold #D3A94D, White, Soft Background #F4F7F9. Variable names from the
+   earlier palette are kept so existing components pick the new brand up. */
 @theme {
-  --color-navy: #0b2a4a;
-  --color-navy-deep: #071d33;
-  --color-blue: #1261a0;
-  --color-blue-light: #eaf4fb;
-  --color-bg: #f7f9fb;
-  --color-ink: #102336;
-  --color-accent: #f58220;
-  --color-success: #17845b;
-  --color-warning: #c98a18;
-  --color-error: #c33b3b;
+  --color-navy: #123451;
+  --color-navy-deep: #0c2438;
+  --color-teal: #149c9a;           /* fills, icons, borders */
+  --color-teal-dark: #0e7573;      /* teal for text and white-on-teal buttons (>= 4.5:1) */
+  --color-gold: #d3a94d;           /* accents, rules, highlights (never text on white) */
+  --color-gold-dark: #7d5f17;      /* gold for small text on white (>= 5:1) */
+  --color-blue: #0e7573;           /* legacy name: links and hover = teal-dark */
+  --color-blue-light: #e7f4f4;
+  --color-bg: #f4f7f9;
+  --color-ink: #14263a;
+  --color-accent: #d3a94d;         /* legacy name */
+  --color-accent-dark: #7d5f17;    /* legacy name: eyebrow text */
+  --color-success: #0f6b48;
+  --color-warning: #7f5608;
+  --color-error: #b3342f;
 
-  --font-serif: "DM Serif Display", "Libre Baskerville", Georgia, serif;
-  --font-sans: "Inter", "Manrope", system-ui, -apple-system, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --color-slate-500: #55677f;      /* default slate-500 is 4.4:1 on the soft background; this is 5.4:1 */
+  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: var(--font-sans); /* serif display face retired: one family, clear hierarchy */
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
 :root {
@@ -33,11 +43,13 @@ body {
 }
 
 h1, h2, h3, .font-display {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 ::selection {
-  background: var(--color-accent);
+  background: var(--color-teal);
   color: white;
 }
 
@@ -46,10 +58,55 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
+summary:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 3px solid var(--color-teal);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: 4px;
+}
+
+/* ---- Reusable design-system classes (see docs/DESIGN_SYSTEM.md) ---- */
+@layer components {
+.eyebrow {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--color-teal-dark);
+}
+.section-title { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.25rem); line-height: 1.15; color: var(--color-navy); }
+.section-lead { color: #475569; max-width: 42rem; line-height: 1.65; }
+.gold-rule { display: block; width: 3rem; height: 3px; background: var(--color-gold); border-radius: 2px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  font-weight: 600; font-size: .9375rem; line-height: 1.2; text-align: center;
+  padding: .75rem 1.25rem; border-radius: .5rem; border: 2px solid transparent;
+  transition: background-color .15s, color .15s, border-color .15s; min-height: 44px; cursor: pointer;
+}
+.btn-primary { background: var(--color-teal-dark); color: #fff; }
+.btn-primary:hover { background: #0a5f5d; }
+.btn-navy { background: var(--color-navy); color: #fff; }
+.btn-navy:hover { background: var(--color-navy-deep); }
+.btn-outline { border-color: var(--color-navy); color: var(--color-navy); background: #fff; }
+.btn-outline:hover { background: var(--color-navy); color: #fff; }
+.btn-ghost { color: var(--color-navy); }
+.btn-ghost:hover { background: var(--color-blue-light); }
+.btn-lg { padding: .9rem 1.6rem; font-size: 1rem; }
+.btn-sm { padding: .5rem .9rem; font-size: .8125rem; min-height: 40px; }
+
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: .75rem; }
+.card-hover { transition: border-color .15s, box-shadow .15s; }
+.card-hover:hover { border-color: var(--color-teal); box-shadow: 0 8px 24px -12px rgba(18, 52, 81, .25); }
+
+.field { display: block; width: 100%; border: 1px solid #94a3b8; border-radius: .5rem; background: #fff; padding: .65rem .85rem; font-size: .9375rem; color: var(--color-ink); }
+.field:focus { border-color: var(--color-teal-dark); outline: 3px solid color-mix(in srgb, var(--color-teal) 35%, transparent); outline-offset: 0; }
+.label { display: block; font-size: .8125rem; font-weight: 600; color: var(--color-navy); margin-bottom: .35rem; }
+
+.chip { display: inline-flex; align-items: center; gap: .35rem; font-size: .75rem; font-weight: 600; padding: .2rem .55rem; border-radius: 999px; border: 1px solid #cbd5e1; background: #fff; color: #334155; }
+
+a.chip, button.chip { min-height: 40px; }
+.skeleton { background: linear-gradient(90deg, #e8eef2 25%, #f4f7f9 50%, #e8eef2 75%); background-size: 200% 100%; animation: sk 1.4s infinite; border-radius: .5rem; }
+@keyframes sk { to { background-position: -200% 0; } }
+.state-empty, .state-error { border: 1px dashed #cbd5e1; border-radius: .75rem; padding: 2rem 1.25rem; text-align: center; color: #475569; background: #fff; }
+.state-error { border-color: var(--color-error); color: var(--color-error); }
 }
 
 .container-page {
@@ -153,4 +210,17 @@ select:focus-visible,
   .card-lift:hover {
     transform: none;
   }
+}
+
+/* ---- Mobile / touch usability: 44px minimum tap targets ---- */
+@media (pointer: coarse), (max-width: 1023px) {
+  footer li > a { display: inline-block; padding-block: 0.7rem; }
+  header button, header a[aria-label] { min-width: 44px; min-height: 44px; }
+  main a.inline-flex:not(.rounded-full):not([class*="py-"]),
+  main a.hover\:underline { min-height: 44px; display: inline-flex; align-items: center; }
+  .add-to-inquiry { min-height: 44px; }
+  main a.rounded-full { min-height: 40px; display: inline-flex; align-items: center; }
+  main input:not([type="checkbox"]):not([type="radio"]), main select { min-height: 48px; }
+  /* 16px+ inputs stop iOS zooming the page on focus */
+  input, select, textarea { font-size: max(16px, 1em); }
 }

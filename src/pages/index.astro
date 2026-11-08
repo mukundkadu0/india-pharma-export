@@ -1,30 +1,29 @@
 ---
-import CertSeal from '../components/CertSeal.astro';
-import{ getCollection } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Button from '../components/Button.astro';
 import Icon from '../components/Icon.astro';
-import StatCard from '../components/StatCard.astro';
-import CategoryTile from '../components/CategoryTile.astro';
 import ProductCard from '../components/ProductCard.astro';
 import MarketCard from '../components/MarketCard.astro';
 import TrustPillar from '../components/TrustPillar.astro';
 import Accordion from '../components/Accordion.astro';
 import QuoteForm from '../components/QuoteForm.astro';
 import HeroIllustration from '../components/HeroIllustration.astro';
-import { categoryGroups, buyerTypes, marketSkyline } from '../data/taxonomy';
+import { categoryGroups, marketSkyline } from '../data/taxonomy';
+import { buyerSegments } from '../data/buyers';
 
 const allProducts = await getCollection('products');
 const featured = allProducts.filter((p) => p.data.featured).slice(0, 8);
-const featuredProducts = (featured.length >= 4 ? featured : allProducts.slice(0, 6)).map((p) => p.data);
+const featuredProducts = (featured.length >= 4 ? featured : allProducts.slice(0, 6)).map((p) => p.data).slice(0, 4);
 
-const homeCategoryIds = ['formulations', 'apis', 'biologicals', 'devices', 'ayush', 'nutraceuticals'];
-const homeCategories = homeCategoryIds.map((id) => categoryGroups.find((c) => c.id === id)!);
+const classes = (await getCollection('classes')).map((c) => c.data);
+const categoryCounts = Object.fromEntries(categoryGroups.map((c) => [c.id, classes.filter((cl) => cl.categoryGroup === c.id).length]));
+const topClasses = classes
+  .filter((c) => c.exportStatus === 'free' && c.listedCount > 0)
+  .sort((a, b) => b.listedCount - a.listedCount)
+  .slice(0, 10);
 
 const marketOrder = ['united-states', 'europe-uk', 'africa', 'latin-america', 'cis-russia', 'middle-east', 'southeast-asia'];
-const markets = (await getCollection('markets')).sort(
-  (a, b) => marketOrder.indexOf(a.data.id) - marketOrder.indexOf(b.data.id)
-);
+const markets = (await getCollection('markets')).sort((a, b) => marketOrder.indexOf(a.data.id) - marketOrder.indexOf(b.data.id));
 const resources = await getCollection('resources');
 const featuredResources = resources.filter((r) => r.data.featured).concat(resources).slice(0, 3);
 const faqs = await getCollection('faqs');
@@ -34,344 +33,263 @@ const homeFaqs = homeFaqIds
   .filter(Boolean)
   .map((f) => ({ question: f!.data.question, answer: f!.data.answer }));
 
-const searchExamples = ['Paracetamol', 'Amoxicillin', 'Omeprazole', 'Metformin', 'Azithromycin', 'Dolutegravir', 'Artemether + Lumefantrine'];
+const searchExamples = ['Paracetamol', 'Amoxicillin', 'Omeprazole', 'Metformin', 'Azithromycin', 'Dolutegravir'];
 
-const complianceBadges = [
-  { label: 'WHO-GMP', top: 'Partner Standard', bottom: 'Good Manufacturing' },
-  { label: 'EU-GMP', top: 'Aligned Facilities', bottom: 'Quality Assured' },
-  { label: 'EDQM CEP', top: 'API Certification', bottom: 'Pharmacopoeia' },
-  { label: 'ISO 9001', top: 'Quality Management', bottom: 'Systems Standard' },
-  { label: 'CDSCO', top: 'India Framework', bottom: 'Export Regulation' },
+const steps = [
+  { t: 'Send your requirement', d: 'Product or product list, destination and quantity.' },
+  { t: 'Supply and regulatory review', d: 'We match partners and check export and destination status.' },
+  { t: 'Written quotation', d: 'Pricing, MOQ, packaging and lead time in writing.' },
+  { t: 'Documents and shipment', d: 'Documentation prepared and shipped against agreed Incoterms.' },
+];
+
+const credentialLayers = [
+  { icon: 'building', t: 'PharmaXports', d: 'Our own company details and licences are shown only where verified and configured.' },
+  { icon: 'flask', t: 'Manufacturing partners', d: 'GMP certificates and licences belong to each manufacturer. Provided on request, per product.' },
+  { icon: 'document', t: 'Product documents', d: 'Certificate of Analysis, specification and COPP where issued, per batch or product.' },
+  { icon: 'globe', t: 'Destination rules', d: 'Import authority and registration requirements are checked per country before quoting.' },
 ];
 ---
 
 <BaseLayout
-  title="PharmaXports — India's Trusted Partner in Pharmaceutical Exports"
-  description="PharmaXports is a B2B pharmaceutical sourcing and export platform connecting international buyers with WHO-GMP partner-manufactured formulations, APIs, biologicals, devices, AYUSH and nutraceutical products from India."
+  title="PharmaXports | Global Pharmaceutical Sourcing Partner from India"
+  description="PharmaXports is a B2B pharmaceutical sourcing and export platform. Discover formulations, APIs, medical devices and healthcare supplies through Indian manufacturing partners and request a quotation."
 >
-  <!-- HERO -->
-  <section class="relative overflow-hidden bg-gradient-to-b from-white to-[color:var(--color-blue-light)]">
-    <div class="container-page py-14 sm:py-20 grid lg:grid-cols-2 gap-12 items-center">
+  <!-- 3. HERO -->
+  <section class="bg-white border-b border-slate-200">
+    <div class="container-page py-12 sm:py-16 grid lg:grid-cols-2 gap-10 items-center">
       <div>
-        <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-4">Global Access to Better Health</p>
-        <h1 class="font-display text-4xl sm:text-5xl lg:text-[3.25rem] leading-[1.08] text-[color:var(--color-navy)]">
-          India&rsquo;s <em class="italic">Trusted</em> Partner in Pharmaceutical Exports
-        </h1>
-        <p class="mt-5 text-base sm:text-lg text-slate-600 max-w-xl leading-relaxed">
-          High-quality formulations, APIs, and healthcare products for a healthier world — sourced from WHO-GMP certified Indian manufacturing partners.
+        <p class="eyebrow">B2B pharmaceutical sourcing · India</p>
+        <h1 class="mt-3 text-4xl sm:text-5xl leading-[1.08] text-[color:var(--color-navy)]">Your Global Pharmaceutical Sourcing Partner from India</h1>
+        <span class="gold-rule mt-5"></span>
+        <p class="mt-5 text-lg text-slate-600 max-w-xl leading-relaxed">
+          Discover pharmaceutical formulations, APIs, medical devices and healthcare supplies through Indian manufacturing partners.
         </p>
-        <div class="mt-8 flex flex-wrap gap-4">
-          <Button href="/request-quote/" size="lg">Export Enquiry</Button>
-          <Button href="/products/" variant="outline" size="lg" icon="">Our Product Catalogue</Button>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="/request-quote/" class="btn btn-primary btn-lg">Request a Quote <Icon name="arrow-right" class="w-4 h-4" /></a>
+          <a href="/products/" class="btn btn-outline btn-lg">Explore Products</a>
         </div>
-        <div class="mt-10 flex flex-wrap gap-x-10 gap-y-4">
-          {[
-            { icon: 'shield-check', label: 'Quality Assured', sub: 'Partner-network standards' },
-            { icon: 'globe', label: 'Global Reach', sub: '200+ Countries' },
-            { icon: 'user-group', label: 'Reliable Partnership', sub: 'From India to the World' },
-          ].map((t) => (
-            <div class="flex items-start gap-2.5">
-              <Icon name={t.icon} class="w-5 h-5 text-[color:var(--color-accent)] mt-0.5 shrink-0" />
-              <div>
-                <p class="text-sm font-semibold text-[color:var(--color-navy)] leading-tight">{t.label}</p>
-                <p class="text-xs text-slate-500 mt-0.5">{t.sub}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <ul class="mt-8 grid sm:grid-cols-3 gap-4 text-sm">
+          <li class="flex gap-2.5"><Icon name="building" class="w-5 h-5 text-[color:var(--color-teal)] shrink-0" /><span><strong class="block text-[color:var(--color-navy)]">Merchant exporter</strong><span class="text-slate-500">Sourced from partner manufacturers</span></span></li>
+          <li class="flex gap-2.5"><Icon name="user-group" class="w-5 h-5 text-[color:var(--color-teal)] shrink-0" /><span><strong class="block text-[color:var(--color-navy)]">Licensed B2B buyers</strong><span class="text-slate-500">Importers, distributors, tenders</span></span></li>
+          <li class="flex gap-2.5"><Icon name="document" class="w-5 h-5 text-[color:var(--color-teal)] shrink-0" /><span><strong class="block text-[color:var(--color-navy)]">Written quotations</strong><span class="text-slate-500">Documents supplied on request</span></span></li>
+        </ul>
       </div>
-
       <HeroIllustration />
     </div>
   </section>
 
-  <!-- INDUSTRY STATS -->
-  <section class="bg-white">
-    <div class="container-page py-8">
-      <div class="grid grid-cols-2 sm:grid-cols-4 rounded-2xl border border-slate-200 bg-white shadow-sm sm:divide-x divide-slate-100">
-        {[
-          { icon: 'bar-chart', value: '$30.4Bn', label: 'Pharma exports (FY 2024–25)' },
-          { icon: 'trending-up', value: '+9.4%', label: 'Year-on-year growth' },
-          { icon: 'capsule', value: '75.7%', label: 'From formulations & biologicals' },
-          { icon: 'globe', value: '200+', label: 'Destination countries' },
-        ].map((s) => (
-          <div class="flex items-center gap-3 px-5 py-6">
-            <span class="hidden sm:grid place-items-center w-10 h-10 rounded-full bg-[color:var(--color-blue-light)] text-[color:var(--color-navy)] shrink-0">
-              <Icon name={s.icon} class="w-5 h-5" />
-            </span>
-            <div>
-              <p class="font-display text-xl sm:text-2xl text-[color:var(--color-navy)] leading-none">{s.value}</p>
-              <p class="text-xs text-slate-500 mt-1 leading-snug">{s.label}</p>
-            </div>
-          </div>
+  <!-- 4. PRODUCT / MOLECULE SEARCH -->
+  <section class="bg-[color:var(--color-navy)]" aria-labelledby="home-search-title">
+    <div class="container-page py-8 sm:py-10">
+      <h2 id="home-search-title" class="text-lg sm:text-xl font-bold text-white">Find a product, molecule or HS code</h2>
+      <form action="/products/" method="get" role="search" class="mt-4 flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <Icon name="search" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+          <label for="home-q" class="sr-only">Search product, molecule or HS code</label>
+          <input id="home-q" type="search" name="q" placeholder="e.g. Amoxicillin, Metformin, 3004" class="field !pl-12 !py-3.5 !border-0" autocomplete="off" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg">Search catalogue</button>
+      </form>
+      <div class="mt-4 flex flex-wrap gap-2" aria-label="Example searches">
+        {searchExamples.map((ex) => <a href={`/products/?q=${encodeURIComponent(ex)}`} class="text-xs px-3 py-1.5 rounded-full bg-white/10 text-white hover:bg-white/20 min-h-[32px] inline-flex items-center">{ex}</a>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. EIGHT CATEGORIES -->
+  <section class="container-page py-14 sm:py-16">
+    <div class="flex items-end justify-between flex-wrap gap-3 mb-8">
+      <div>
+        <p class="eyebrow">Product categories</p>
+        <h2 class="section-title mt-2">Eight categories, one sourcing desk</h2>
+      </div>
+      <a href="/products/" class="text-sm font-semibold text-[color:var(--color-teal-dark)] hover:underline inline-flex items-center gap-1">All products <Icon name="arrow-right" class="w-3.5 h-3.5" /></a>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {categoryGroups.map((c) => (
+        <a href={`/products/${c.id}/`} class="card card-hover p-4 sm:p-5 flex flex-col">
+          <span class="grid place-items-center w-10 h-10 rounded-lg bg-[color:var(--color-blue-light)] text-[color:var(--color-teal-dark)]"><Icon name={c.icon} class="w-5 h-5" /></span>
+          <h3 class="mt-3 font-bold text-[color:var(--color-navy)] leading-snug">{c.name}</h3>
+          <p class="mt-1 text-sm text-slate-600 leading-snug flex-1">{c.shortDescription}</p>
+          <span class="mt-3 text-xs text-slate-500">{categoryCounts[c.id]} classes tracked</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- 6. FEATURED SOURCING-READY PRODUCTS -->
+  <section class="bg-white border-y border-slate-100">
+    <div class="container-page py-14 sm:py-16">
+      <div class="flex items-end justify-between flex-wrap gap-3 mb-8">
+        <div>
+          <p class="eyebrow">Featured products</p>
+          <h2 class="section-title mt-2">Products you can request a quote for today</h2>
+          <p class="section-lead mt-2 text-sm">Each product page lists export and prescription status. Availability and pricing are confirmed per enquiry.</p>
+        </div>
+        <a href="/products/" class="text-sm font-semibold text-[color:var(--color-teal-dark)] hover:underline inline-flex items-center gap-1">View catalogue <Icon name="arrow-right" class="w-3.5 h-3.5" /></a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {featuredProducts.map((p) => <ProductCard {...p} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. MOLECULE DISCOVERY -->
+  <section class="container-page py-14 sm:py-16">
+    <div class="grid lg:grid-cols-3 gap-8 items-start">
+      <div>
+        <p class="eyebrow">Molecule discovery</p>
+        <h2 class="section-title mt-2">Browse by therapeutic class</h2>
+        <p class="section-lead mt-3 text-sm">The molecule index covers more than 2,400 molecules. A molecule appearing in the index is a sourcing starting point: availability from a manufacturing partner is confirmed per enquiry.</p>
+        <a href="/products/molecules/" class="btn btn-navy mt-5">Open molecule index</a>
+      </div>
+      <div class="lg:col-span-2 flex flex-wrap gap-2.5">
+        {topClasses.map((c) => (
+          <a href={`/products/therapeutic-class/${c.id}/`} class="card card-hover px-4 py-3 min-w-[12rem] flex-1 basis-[12rem]">
+            <span class="block text-sm font-semibold text-[color:var(--color-navy)] leading-snug">{c.name}</span>
+            <span class="block text-xs text-slate-500 mt-0.5">{c.listedCount} molecules · HS {c.hsCode}</span>
+          </a>
         ))}
       </div>
-      <p class="text-center text-xs text-slate-400 mt-6 max-w-2xl mx-auto">
-        Industry-wide figures for Indian pharmaceutical exports, not company-specific performance data. See our
-        <a href="/resources/pharma-export-market-compliance-guide-2026/" class="underline hover:text-[color:var(--color-blue)]">market guide</a> for sourcing.
-      </p>
     </div>
   </section>
 
-  <!-- PRODUCT CATEGORIES -->
-  <section class="container-page py-16 sm:py-20">
-    <div class="flex items-end justify-between flex-wrap gap-4 mb-10">
-      <h2 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)]">Our Product Categories</h2>
-      <a href="/products/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[color:var(--color-blue)] hover:underline">
-        View All Products <Icon name="arrow-right" class="w-3.5 h-3.5" />
-      </a>
-    </div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-      {homeCategories.map((c) => <CategoryTile {...c} />)}
-    </div>
-  </section>
-
-  <!-- KEY EXPORT MARKETS -->
+  <!-- 8. INTERNATIONAL MARKETS -->
   <section class="bg-[color:var(--color-blue-light)]">
-    <div class="container-page py-16 sm:py-20">
-      <div class="flex items-end justify-between flex-wrap gap-4 mb-10">
+    <div class="container-page py-14 sm:py-16">
+      <div class="flex items-end justify-between flex-wrap gap-3 mb-8">
         <div>
-          <h2 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)]">Key Export Markets</h2>
-          <p class="mt-2 text-slate-600 max-w-xl">Requirements vary by product and destination. Explore a region for buyer types and regulatory pathway.</p>
+          <p class="eyebrow">International markets</p>
+          <h2 class="section-title mt-2">Regulatory pathway by region</h2>
+          <p class="section-lead mt-2 text-sm">Requirements differ by product and destination. Region pages summarise buyer types, authorities and documents. Registration is never guaranteed.</p>
         </div>
-        <a href="/markets/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[color:var(--color-blue)] hover:underline shrink-0">
-          Explore Markets <Icon name="arrow-right" class="w-3.5 h-3.5" />
-        </a>
+        <a href="/markets/" class="text-sm font-semibold text-[color:var(--color-teal-dark)] hover:underline inline-flex items-center gap-1">All markets <Icon name="arrow-right" class="w-3.5 h-3.5" /></a>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
-        {markets.map((m) => (
-          <MarketCard id={m.data.id} name={m.data.name} character={m.data.character} skylineVariant={marketSkyline[m.data.id]} />
-        ))}
+        {markets.map((m) => <MarketCard id={m.data.id} name={m.data.name} character={m.data.character} skylineVariant={marketSkyline[m.data.id]} />)}
       </div>
     </div>
   </section>
 
-  <!-- FEATURED PRODUCTS -->
-  <section class="container-page py-16 sm:py-20">
-    <div class="flex items-end justify-between flex-wrap gap-4 mb-10">
+  <!-- 9. WHY PHARMAXPORTS -->
+  <section class="container-page py-14 sm:py-16">
+    <div class="grid lg:grid-cols-2 gap-10 items-start">
       <div>
-        <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Featured Products</p>
-        <h2 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)]">Ready for B2B Sourcing</h2>
+        <p class="eyebrow">Why PharmaXports</p>
+        <h2 class="section-title mt-2">Built for licensed international buyers</h2>
+        <p class="section-lead mt-4">We operate as a merchant exporter: we source from Indian manufacturing partners and do not manufacture in-house. Every enquiry is structured around verified product information, honest regulatory context and complete export documentation.</p>
       </div>
-      <a href="/products/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[color:var(--color-blue)] hover:underline">
-        View All Products <Icon name="arrow-right" class="w-3.5 h-3.5" />
-      </a>
-    </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      {featuredProducts.map((p) => <ProductCard {...p} />)}
-    </div>
-  </section>
-
-  <!-- PRODUCT DISCOVERY -->
-  <section class="bg-[color:var(--color-navy)]">
-    <div class="container-page py-16 sm:py-20 text-center">
-      <h2 class="font-display text-3xl sm:text-4xl text-white">Find the Pharmaceutical Product You Need</h2>
-      <p class="mt-3 text-white/70 max-w-xl mx-auto">Search by molecule, formulation, API, product or HS code across our full catalogue.</p>
-      <form id="home-search-form" action="/products/" method="get" class="mt-8 max-w-2xl mx-auto flex flex-col sm:flex-row gap-3">
-        <div class="relative flex-1">
-          <Icon name="search" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            name="q"
-            placeholder="Search molecule, formulation, API, product or HS code…"
-            class="w-full rounded-full pl-12 pr-4 py-3.5 text-sm text-[color:var(--color-ink)] outline-none focus:ring-2 focus:ring-[color:var(--color-accent)]"
-          />
-        </div>
-        <Button type="submit" size="lg">Search Catalogue</Button>
-      </form>
-      <div class="mt-6 flex flex-wrap justify-center gap-2">
-        {searchExamples.map((ex) => (
-          <a href={`/products/?q=${encodeURIComponent(ex)}`} class="text-xs px-3 py-1.5 rounded-full bg-white/10 text-white/80 hover:bg-white/20">{ex}</a>
-        ))}
-      </div>
-      <p class="mt-6 text-xs text-white/40 max-w-lg mx-auto">
-        Product discovery is for sourcing purposes only and does not constitute medical advice. See <a href="/glossary/" class="underline">Glossary</a> and <a href="/compliance/" class="underline">Compliance</a> for definitions and regulatory context.
-      </p>
-    </div>
-  </section>
-
-  <!-- WHY PharmaXports -->
-  <section class="container-page py-16 sm:py-20">
-    <div class="grid lg:grid-cols-2 gap-12 items-start">
-      <div>
-        <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Why PharmaXports</p>
-        <h2 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] leading-tight">Built for Global Buyers</h2>
-        <p class="mt-4 text-slate-600 leading-relaxed">
-          We operate as a merchant exporter — sourcing from WHO-GMP certified Indian manufacturing partners rather than manufacturing in-house — and structure every enquiry around what a licensed international buyer actually needs: verified product information, honest regulatory context, and complete export documentation.
-        </p>
-      </div>
-      <div class="grid sm:grid-cols-2 gap-x-8 gap-y-7">
-        <TrustPillar icon="building" title="Manufacturing Partner Network" description="Sourcing from WHO-GMP certified Indian manufacturing partners across formulations, APIs, biologicals and devices." />
-        <TrustPillar icon="globe" title="Global Market Coverage" description="Corridor-aware guidance across Africa, South-East Asia, the Middle East, Latin America, CIS and beyond." />
-        <TrustPillar icon="document" title="Export Documentation Support" description="COPP, Certificate of Analysis, GMP certificates and full shipment documentation coordinated per consignment." />
-        <TrustPillar icon="shield-check" title="Regulatory Awareness" description="Export and prescription status checked per product and destination — never assumed from a general listing." />
-        <TrustPillar icon="truck" title="Bulk Supply Capability" description="Institutional, tender and wholesale-volume supply coordinated with manufacturing partners." />
-        <TrustPillar icon="user-group" title="Long-Term Partnerships" description="Built around repeat B2B relationships, not one-off transactions." />
+      <div class="grid sm:grid-cols-2 gap-x-8 gap-y-6">
+        <TrustPillar icon="building" title="Partner network" description="Formulations, APIs, biologicals and devices sourced through Indian manufacturing partners." />
+        <TrustPillar icon="shield-check" title="Regulatory awareness" description="Export and prescription status checked per product and destination, not assumed from a listing." />
+        <TrustPillar icon="document" title="Documentation support" description="COPP, Certificate of Analysis and GMP certificates requested per consignment from the manufacturer." />
+        <TrustPillar icon="truck" title="Bulk and institutional supply" description="Wholesale, tender and institutional volumes coordinated with partners." />
       </div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
+  <!-- 10. BUYER-SPECIFIC SOLUTIONS -->
   <section class="bg-white border-y border-slate-100">
-    <div class="container-page py-16 sm:py-20">
-      <div class="max-w-2xl mx-auto text-center mb-10">
-        <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Buyer Flow</p>
-        <h2 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)]">How It Works</h2>
+    <div class="container-page py-14 sm:py-16">
+      <div class="flex items-end justify-between flex-wrap gap-3 mb-8">
+        <div>
+          <p class="eyebrow">Buyer solutions</p>
+          <h2 class="section-title mt-2">Sourcing built around how you buy</h2>
+        </div>
+        <a href="/buyers/" class="text-sm font-semibold text-[color:var(--color-teal-dark)] hover:underline inline-flex items-center gap-1">All buyer solutions <Icon name="arrow-right" class="w-3.5 h-3.5" /></a>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[
-          { n: '01', t: 'Tell us what you need', d: 'Submit a product, molecule or bulk requirement through our quote form.' },
-          { n: '02', t: 'We identify suitable supply options', d: 'Our team matches your requirement to WHO-GMP certified manufacturing partners.' },
-          { n: '03', t: 'Regulatory and destination review', d: 'Export and prescription status confirmed for your specific product and market.' },
-          { n: '04', t: 'Receive quotation', d: 'FOB/CIF pricing, MOQ, packaging and lead time confirmed in writing.' },
-          { n: '05', t: 'Documentation and order processing', d: 'COPP, Certificate of Analysis, GMP certificate and shipment paperwork prepared.' },
-          { n: '06', t: 'Shipment', d: 'Consignment shipped against agreed Incoterms with full documentation.' },
-        ].map((step) => (
-          <div class="p-6 rounded-2xl border border-slate-200 bg-slate-50/60">
-            <p class="font-display text-2xl text-[color:var(--color-accent)]">{step.n}</p>
-            <h3 class="mt-2 font-semibold text-[color:var(--color-navy)]">{step.t}</h3>
-            <p class="mt-1.5 text-sm text-slate-600 leading-relaxed">{step.d}</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {buyerSegments.map((b) => (
+          <a href={`/buyers/${b.slug}/`} class="card card-hover p-5 flex flex-col">
+            <h3 class="font-bold text-[color:var(--color-navy)]">{b.navLabel}</h3>
+            <p class="mt-1.5 text-sm text-slate-600 leading-snug flex-1">{b.summary}</p>
+            <span class="mt-3 text-sm font-semibold text-[color:var(--color-teal-dark)] inline-flex items-center gap-1">Learn more <Icon name="arrow-right" class="w-3.5 h-3.5" /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. HOW SOURCING WORKS -->
+  <section class="container-page py-14 sm:py-16">
+    <p class="eyebrow">How sourcing works</p>
+    <h2 class="section-title mt-2">From requirement to shipment in four steps</h2>
+    <ol class="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-0 relative">
+      {steps.map((s, i) => (
+        <li class="relative pr-6 pb-6 lg:pb-0">
+          <span class="grid place-items-center w-9 h-9 rounded-full bg-[color:var(--color-navy)] text-white text-sm font-bold">{i + 1}</span>
+          <span class="hidden lg:block absolute top-[1.1rem] left-11 right-2 h-px bg-[color:var(--color-gold)]/70" aria-hidden={i === steps.length - 1 ? 'true' : undefined} hidden={i === steps.length - 1}></span>
+          <h3 class="mt-3 font-bold text-[color:var(--color-navy)]">{s.t}</h3>
+          <p class="mt-1 text-sm text-slate-600 leading-snug">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 12. COMPLIANCE AND DOCUMENTATION -->
+  <section class="bg-[color:var(--color-navy)] text-white">
+    <div class="container-page py-14 sm:py-16">
+      <div class="flex items-end justify-between flex-wrap gap-3 mb-8">
+        <div>
+          <p class="text-xs font-bold tracking-[0.14em] uppercase text-[color:var(--color-gold)]">Quality and compliance</p>
+          <h2 class="mt-2 text-2xl sm:text-3xl text-white">Who holds which credential</h2>
+          <p class="mt-2 text-white/75 max-w-2xl text-sm">We keep four layers separate so a manufacturer&rsquo;s certificate is never presented as ours.</p>
+        </div>
+        <a href="/compliance/" class="btn btn-outline !bg-transparent !text-white !border-white hover:!bg-white hover:!text-[color:var(--color-navy)]">Compliance centre</a>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {credentialLayers.map((c) => (
+          <div class="rounded-xl border border-white/15 bg-white/5 p-5">
+            <Icon name={c.icon} class="w-6 h-6 text-[color:var(--color-gold)]" />
+            <h3 class="mt-3 font-bold text-white">{c.t}</h3>
+            <p class="mt-1 text-sm text-white/75 leading-snug">{c.d}</p>
           </div>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- BUYER TYPES -->
-  <section class="container-page py-16 sm:py-20">
-    <div class="max-w-2xl mx-auto text-center mb-10">
-      <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Who We Serve</p>
-      <h2 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)]">Built for Every Type of B2B Buyer</h2>
-    </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      {buyerTypes.map((b) => (
-        <div class="p-5 rounded-2xl border border-slate-200">
-          <h3 class="font-semibold text-[color:var(--color-navy)]">{b.name}</h3>
-          <p class="mt-1.5 text-sm text-slate-600 leading-relaxed">{b.description}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <!-- BULK REQUIREMENT FORM -->
-  <section id="get-quote" class="bg-slate-50 border-y border-slate-100">
-    <div class="container-page py-16 sm:py-20">
-      <div class="grid lg:grid-cols-5 gap-10">
-        <div class="lg:col-span-2">
-          <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Request a Quote</p>
-          <h2 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] leading-tight">Looking for Bulk Pharmaceutical Supply?</h2>
-          <p class="mt-4 text-slate-600 leading-relaxed">
-            Tell us the products, quantities and markets you're targeting. Our team reviews regulatory and supply considerations before responding with a formal quotation.
-          </p>
-          <div class="mt-6 flex items-center gap-3 text-sm text-slate-500">
-            <Icon name="shield-check" class="w-5 h-5 text-[color:var(--color-success)]" /> Protected against spam with honeypot verification.
-          </div>
-        </div>
-        <div class="lg:col-span-3">
-          <QuoteForm />
-        </div>
+  <!-- 13. RFQ -->
+  <section id="get-quote" class="bg-[color:var(--color-bg)]">
+    <div class="container-page py-14 sm:py-16 grid lg:grid-cols-5 gap-10">
+      <div class="lg:col-span-2">
+        <p class="eyebrow">Request a quote</p>
+        <h2 class="section-title mt-2">Looking for bulk pharmaceutical supply?</h2>
+        <p class="section-lead mt-3 text-sm">Tell us the product, destination and quantity. We review supply and regulatory considerations before replying with a written quotation. A reference number appears only after your enquiry has been accepted.</p>
+        <p class="mt-4 text-sm text-slate-600">Several products? Use the <a href="/inquiry/" class="underline text-[color:var(--color-teal-dark)]">RFQ list</a> or attach an Excel or PDF list.</p>
       </div>
+      <div class="lg:col-span-3"><QuoteForm /></div>
     </div>
   </section>
 
-  <!-- RESOURCES -->
-  <section class="container-page py-16 sm:py-20">
-    <div class="flex items-end justify-between flex-wrap gap-4 mb-10">
+  <!-- 14. RESOURCES -->
+  <section class="container-page py-14 sm:py-16">
+    <div class="flex items-end justify-between flex-wrap gap-3 mb-8">
       <div>
-        <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Buyer Resources</p>
-        <h2 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)]">From Product Search to Export Documentation</h2>
+        <p class="eyebrow">Resources</p>
+        <h2 class="section-title mt-2">Export guides for buyers</h2>
       </div>
-      <a href="/resources/" class="inline-flex items-center gap-1.5 text-sm font-semibold text-[color:var(--color-blue)] hover:underline">
-        Explore Resources <Icon name="arrow-right" class="w-3.5 h-3.5" />
-      </a>
+      <a href="/resources/" class="text-sm font-semibold text-[color:var(--color-teal-dark)] hover:underline inline-flex items-center gap-1">All resources <Icon name="arrow-right" class="w-3.5 h-3.5" /></a>
     </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {featuredResources.map((r) => (
-        <a href={`/resources/${r.id}/`} class="flex flex-col p-6 bg-white rounded-2xl border border-slate-200 hover:shadow-lg transition-shadow">
-          <span class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-blue)]">{r.data.category}</span>
-          <h3 class="mt-2 font-display text-lg text-[color:var(--color-navy)] leading-snug">{r.data.title}</h3>
-          <p class="mt-2 text-sm text-slate-600 leading-relaxed flex-1">{r.data.excerpt}</p>
-          <span class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[color:var(--color-blue)]">Read More <Icon name="arrow-right" class="w-3.5 h-3.5" /></span>
+        <a href={`/resources/${r.id}/`} class="card card-hover p-5 flex flex-col">
+          <span class="eyebrow">{r.data.category}</span>
+          <h3 class="mt-2 font-bold text-[color:var(--color-navy)] leading-snug">{r.data.title}</h3>
+          <p class="mt-2 text-sm text-slate-600 leading-snug flex-1">{r.data.excerpt}</p>
+          <span class="mt-3 text-sm font-semibold text-[color:var(--color-teal-dark)] inline-flex items-center gap-1">Read <Icon name="arrow-right" class="w-3.5 h-3.5" /></span>
         </a>
       ))}
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="bg-white border-y border-slate-100">
-    <div class="container-page py-16 sm:py-20 max-w-3xl mx-auto">
-      <div class="text-center mb-8">
-        <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">FAQ</p>
-        <h2 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)]">Common Questions</h2>
-      </div>
+  <!-- 15. FAQ -->
+  <section class="bg-white border-t border-slate-100">
+    <div class="container-page py-14 sm:py-16 max-w-3xl">
+      <p class="eyebrow">FAQ</p>
+      <h2 class="section-title mt-2 mb-6">Common questions</h2>
       <Accordion items={homeFaqs} idPrefix="home-faq" />
-      <div class="text-center mt-8">
-        <Button href="/faqs/" variant="ghost">View All FAQs</Button>
-      </div>
-    </div>
-  </section>
-
-  <!-- COMPLIANCE BAND -->
-  <section class="bg-[color:var(--color-navy)] text-white overflow-hidden relative">
-    <svg class="absolute inset-0 w-full h-full opacity-[0.06]" aria-hidden="true">
-      <defs>
-        <pattern id="compliance-dots" width="16" height="16" patternUnits="userSpaceOnUse">
-          <circle cx="1.3" cy="1.3" r="1.2" fill="#ffffff" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#compliance-dots)" />
-    </svg>
-    <div class="container-page py-16 sm:py-20 relative grid lg:grid-cols-5 gap-10 items-center">
-      <div class="lg:col-span-3">
-        <h2 class="font-display text-3xl sm:text-4xl">Compliance You Can Trust</h2>
-        <p class="mt-3 text-white/70 max-w-lg">
-          We work with WHO-GMP certified manufacturing partners and follow Indian export regulation to keep every shipment compliant. These are the standards our manufacturing partners operate under — not certifications held by this platform itself.
-        </p>
-        <div class="mt-8 flex flex-wrap justify-center gap-4 sm:grid sm:grid-cols-5 sm:justify-items-center">
-          {complianceBadges.map((b) => (
-            <CertSeal
-              label={b.label}
-              top={b.top}
-              bottom={b.bottom}
-              class="w-24 h-24 sm:w-28 sm:h-28 drop-shadow-[0_6px_14px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:scale-105 hover:-rotate-3"
-            />
-          ))}
-        </div>
-      </div>
-      <div class="lg:col-span-2 lg:border-l lg:border-white/15 lg:pl-10">
-        <p class="font-display text-2xl sm:text-3xl leading-snug">Partner with Confidence.<br />Export with Compliance.</p>
-        <Button href="/compliance/" variant="outline" class="mt-6 !border-white !text-white hover:!bg-white hover:!text-[color:var(--color-navy)]">Learn More</Button>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM CTA SPLIT -->
-  <section class="grid sm:grid-cols-2 border-b border-slate-100">
-    <div class="relative px-6 sm:px-10 py-12 flex flex-col justify-center overflow-hidden">
-      <img src="/images/cta-handshake.png" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-[color:var(--color-blue-light)]/90"></div>
-      <span class="relative grid place-items-center w-11 h-11 rounded-xl bg-white text-[color:var(--color-navy)] mb-4">
-        <Icon name="handshake" class="w-5 h-5" />
-      </span>
-      <h2 class="relative font-display text-2xl sm:text-3xl text-[color:var(--color-navy)]">Let&rsquo;s Build a Healthier Tomorrow</h2>
-      <p class="relative mt-3 text-slate-600 max-w-sm">Looking for a reliable partner for pharmaceutical exports? Get in touch with our team today.</p>
-      <Button href="/request-quote/" size="lg" class="relative mt-6 self-start">Get a Quote</Button>
-    </div>
-    <div class="bg-white px-6 sm:px-10 py-12 flex items-center gap-6">
-      <span class="grid place-items-center w-11 h-11 rounded-xl bg-[color:var(--color-blue-light)] text-[color:var(--color-navy)] shrink-0">
-        <Icon name="document" class="w-5 h-5" />
-      </span>
-      <div class="flex-1">
-        <h3 class="font-semibold text-[color:var(--color-navy)]">PharmaXports Guide 2026</h3>
-        <p class="mt-1.5 text-sm text-slate-600">Your complete reference for pharmaceutical export from India.</p>
-        <a href="/resources/pharma-export-market-compliance-guide-2026/" class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[color:var(--color-blue)] hover:underline">
-          Read the Guide <Icon name="arrow-right" class="w-3.5 h-3.5" />
-        </a>
-      </div>
-      <div class="hidden sm:flex w-16 h-20 rounded-md bg-[color:var(--color-navy)] text-white shrink-0 flex-col items-center justify-center text-center px-1 shadow-md">
-        <span class="text-[8px] font-semibold leading-tight">PharmaXports</span>
-        <span class="mt-1 text-[7px] text-white/70">GUIDE · 2026</span>
-      </div>
+      <p class="mt-6"><a href="/faqs/" class="btn btn-ghost">View all FAQs</a></p>
     </div>
   </section>
 </BaseLayout>

@@ -1,0 +1,45 @@
+---
+import { destinationSources, unverifiedCountries } from '../data/authorities';
+
+// Reusable "Relevant authorities" block for a market page. It lists only regulators recorded and checked in
+// src/data/authorities.ts, and says plainly which countries on the page have no verified entry yet.
+interface Props {
+  marketId: string;
+  countries: string[];
+}
+const { marketId, countries } = Astro.props;
+const entry = destinationSources[marketId];
+const items = entry?.items ?? [];
+const missing = unverifiedCountries(marketId, countries);
+---
+
+<div id="authorities">
+  <h2 class="text-xl font-bold text-[color:var(--color-navy)] mb-3">Relevant authorities</h2>
+  <p class="text-sm text-slate-600 mb-4 max-w-2xl">
+    Official websites for checking current rules. Links are external sites we do not control. A link does not mean PharmaXports holds a registration or approval there.
+  </p>
+
+  {items.length > 0 && (
+    <ul class="grid sm:grid-cols-2 gap-3">
+      {items.map((s) => (
+        <li>
+          <a href={s.url} target="_blank" rel="noopener noreferrer" class="card card-hover p-4 block h-full">
+            <p class="text-xs font-semibold uppercase tracking-wider text-slate-600">{s.country}</p>
+            <p class="mt-1 font-bold text-[color:var(--color-teal-dark)]">{s.name} <span class="sr-only">(opens the official site in a new tab)</span><span aria-hidden="true">↗</span></p>
+            <p class="text-xs text-slate-600">{s.org}</p>
+            <p class="mt-2 text-sm text-slate-700 leading-snug"><span class="font-semibold">What you can check:</span> {s.verify}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  {missing.length > 0 && (
+    <p class="mt-4 text-sm text-slate-600 rounded-lg border border-dashed border-slate-300 p-3 max-w-2xl">
+      {items.length === 0 ? 'Regulator links for this market are being verified.' : 'No verified regulator link yet for:'}
+      {items.length > 0 && <strong class="text-slate-800"> {missing.join(', ')}.</strong>}{' '}
+      Ask us which authority applies to your destination.
+    </p>
+  )}
+  <a href="/compliance/#official-sources" class="mt-3 inline-block text-sm font-semibold text-[color:var(--color-teal-dark)] hover:underline">All official sources in the Compliance centre</a>
+</div>

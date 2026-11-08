@@ -10,13 +10,13 @@ interface Props {
 const { id, name, character, skylineVariant = 'us' } = Astro.props;
 
 const photos: Record<string, string> = {
-  us: '/images/market-us.png',
-  eu: '/images/market-eu.png',
-  africa: '/images/market-africa.png',
-  latam: '/images/market-latam.png',
-  cis: '/images/market-cis.png',
-  'middle-east': '/images/market-middle-east.png',
-  sea: '/images/market-sea.png',
+  us: '/images/market-us.webp',
+  eu: '/images/market-eu.webp',
+  africa: '/images/market-africa.webp',
+  latam: '/images/market-latam.webp',
+  cis: '/images/market-cis.webp',
+  'middle-east': '/images/market-middle-east.webp',
+  sea: '/images/market-sea.webp',
 };
 const photo = photos[skylineVariant];
 ---

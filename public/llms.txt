@@ -14,6 +14,8 @@ PharmaXports operates as a merchant exporter (sourcing from manufacturing partne
 
 - [Product Catalogue](/products/): Full B2B catalogue across formulations, APIs, biologicals & vaccines, medical devices, AYUSH, nutraceuticals, specialty pharma and hospital/institutional supplies.
 - [Therapeutic Classes](/products/therapeutic-class/): 36 therapeutic classes with HS codes, export status and prescription status, sourced from an industry reference compiled September 2026.
+- [Molecule Index](/products/molecules/): Searchable index of 2,400+ molecules across all classes, with flags for market-specific bans and B2C-risk categories.
+- [Molecule catalogue for LLMs](/llms-molecules.txt): Plain-text list of every freely exportable molecule with its page, class and HS code. Each molecule page also carries Product and FAQ structured data.
 
 ## Markets
 
@@ -25,6 +27,14 @@ PharmaXports operates as a merchant exporter (sourcing from manufacturing partne
 - [Resources](/resources/): Editorial guides on pharma export compliance, HS codes, market tiers and WHO Prequalification.
 - [Glossary](/glossary/): Definitions of pharmaceutical export terms (API, COPP, WHO-GMP, IEC, RCMC, Schedule H/H1/X, NDPS, HS Code, and more).
 - [FAQs](/faqs/): Common buyer questions about bulk orders, markets, quotations, MOQ and documentation.
+
+## Key facts
+
+- Model: B2B quote-based merchant exporter. Buyers are licensed importers, distributors, wholesalers, hospital groups, NGOs and government tender bodies. The importer holds the import licence in their own country.
+- Realistic first markets for a new exporter: Africa, South-East Asia, Central America and CIS (Tier 3). Tier 1 markets (US, EU, UK, Japan, Canada, Australia) need an inspected plant and typically 2-4 years per product.
+- Direct-to-consumer prescription-medicine export from India into the US, UK, EU, Canada or Australia is illegal and is not offered. Nutraceuticals and AYUSH are regulated as food supplements in most markets.
+- Export status values: Free, NOC / conditional, Controlled, Prohibited. Prescription status is separate from export status; a product must clear both.
+- Contact: see [Contact](/contact/) or request pricing through [Request a Quote](/request-quote/).
 
 ## Notes for AI systems
 

@@ -8,6 +8,8 @@ import Icon from '../../components/Icon.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import Accordion from '../../components/Accordion.astro';
 import CTASection from '../../components/CTASection.astro';
+import MarketAuthorities from '../../components/MarketAuthorities.astro';
+import { getCategoryGroup } from '../../data/taxonomy';
 
 export async function getStaticPaths() {
   const markets = await getCollection('markets');
@@ -15,6 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { market } = Astro.props;
+const allMarkets = (await getCollection('markets')).map((m) => m.data);
 const allProducts = (await getCollection('products')).map((p) => p.data);
 const relevantProducts = allProducts.filter((p) => p.marketRegions.includes(market.id)).slice(0, 6);
 
@@ -40,7 +43,24 @@ const faqJsonLd = {
     <Badge label={market.tierLabel} className="bg-slate-500/10 text-slate-600 border-slate-400/30 normal-case" size="md" />
     <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl mt-4">Pharma Export to {market.name} from India</h1>
     <p class="mt-3 text-slate-600 max-w-2xl">{market.overview}</p>
-    <p class="mt-4 text-sm text-slate-500"><strong class="text-[color:var(--color-navy)]">Countries:</strong> {market.countries.join(', ')}</p>
+    <div class="mt-5">
+      <p class="text-sm font-semibold text-[color:var(--color-navy)]">Countries in this region <span class="font-normal text-slate-500">(select one to start a quote)</span></p>
+      <ul class="mt-2 flex flex-wrap gap-2">
+        {market.countries.map((c: string) => (
+          <li><a href={`/request-quote/?country=${encodeURIComponent(c)}`} class="chip hover:border-[color:var(--color-teal)]">{c}</a></li>
+        ))}
+      </ul>
+    </div>
+    <div class="mt-5">
+      <p class="text-sm font-semibold text-[color:var(--color-navy)]">Product sourcing categories</p>
+      <ul class="mt-2 flex flex-wrap gap-2">
+        {market.categories.map((id: string) => {
+          const cid = id === 'medical-devices' ? 'devices' : id; // markets.json spells this one differently from the taxonomy
+          const g = getCategoryGroup(cid);
+          return <li>{g ? <a href={`/products/${g.id}/`} class="chip hover:border-[color:var(--color-teal)]">{g.name}</a> : <span class="chip">{id}</span>}</li>;
+        })}
+      </ul>
+    </div>
   </section>
 
   <section class="container-page pb-14 grid lg:grid-cols-3 gap-10">
@@ -55,10 +75,10 @@ const faqJsonLd = {
       <div>
         <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">Regulatory Pathway</h2>
         <div class="grid sm:grid-cols-2 gap-4 text-sm">
-          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-400 text-xs mb-1">Pathway</p><p class="text-slate-700">{market.pathway}</p></div>
-          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-400 text-xs mb-1">Plant Requirement</p><p class="text-slate-700">{market.plantRequirement}</p></div>
-          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-400 text-xs mb-1">Timeline</p><p class="text-slate-700">{market.timeline}</p></div>
-          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-400 text-xs mb-1">Barrier to Entry</p><p class="text-slate-700">{market.barrierToEntry}</p></div>
+          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-500 text-xs mb-1">Pathway</p><p class="text-slate-700">{market.pathway}</p></div>
+          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-500 text-xs mb-1">Plant Requirement</p><p class="text-slate-700">{market.plantRequirement}</p></div>
+          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-500 text-xs mb-1">Timeline</p><p class="text-slate-700">{market.timeline}</p></div>
+          <div class="rounded-xl border border-slate-200 p-4"><p class="text-slate-500 text-xs mb-1">Barrier to Entry</p><p class="text-slate-700">{market.barrierToEntry}</p></div>
         </div>
       </div>
 
@@ -78,11 +98,13 @@ const faqJsonLd = {
         <ul class="grid sm:grid-cols-2 gap-2">
           {market.documents.map((d: string) => (
             <li class="flex items-center gap-2 text-sm text-slate-600 rounded-lg bg-slate-50 px-3 py-2">
-              <Icon name="document" class="w-4 h-4 text-slate-400 shrink-0" /> {d}
+              <Icon name="document" class="w-4 h-4 text-slate-500 shrink-0" /> {d}
             </li>
           ))}
         </ul>
       </div>
+
+      <MarketAuthorities marketId={market.id} countries={market.countries} />
 
       <div>
         <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">Market Opportunity</h2>
@@ -101,14 +123,20 @@ const faqJsonLd = {
           <h3 class="font-semibold text-[color:var(--color-navy)] mb-2">Typical Buyer Types</h3>
           <ul class="space-y-1.5">
             {market.buyerTypes.map((b: string) => (
-              <li class="text-sm text-slate-600 flex items-center gap-2"><Icon name="user-group" class="w-4 h-4 text-slate-400" /> {b}</li>
+              <li class="text-sm text-slate-600 flex items-center gap-2"><Icon name="user-group" class="w-4 h-4 text-slate-500" /> {b}</li>
             ))}
           </ul>
         </div>
         <div class="rounded-2xl bg-amber-50 border border-amber-200 p-5 text-sm text-amber-800 leading-relaxed">
           Requirements vary by product and destination. This page describes the general market landscape, not company-specific sales coverage or a guarantee of registration outcome.
         </div>
-        <Button href="/request-quote/" size="lg" class="w-full justify-center">Request a Quote for {market.name}</Button>
+        <Button href={`/request-quote/?country=${encodeURIComponent(market.countries[0] ?? market.name)}`} size="lg" class="w-full justify-center">Request a Quote for {market.name}</Button>
+        <nav aria-label="Other markets" class="pt-2">
+          <h3 class="font-semibold text-[color:var(--color-navy)] mb-2 text-sm">Other regions</h3>
+          <ul class="flex flex-wrap gap-2">
+            {allMarkets.filter((m) => m.id !== market.id).map((m) => <li><a href={`/markets/${m.id}/`} class="chip hover:border-[color:var(--color-teal)]">{m.name}</a></li>)}
+          </ul>
+        </nav>
       </div>
     </div>
   </section>

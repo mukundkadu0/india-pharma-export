@@ -3,13 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Icon from '../components/Icon.astro';
 import Button from '../components/Button.astro';
+import QuoteForm from '../components/QuoteForm.astro';
 import { site } from '../data/site';
 
 const enquiryTypes = [
   { icon: 'truck', title: 'Export Enquiry', desc: 'Bulk sourcing, tender supply or a specific market requirement.', href: '/request-quote/' },
   { icon: 'capsule', title: 'Product Enquiry', desc: 'Questions about a specific molecule, formulation or category.', href: '/products/' },
-  { icon: 'user-group', title: 'Partnership', desc: 'Manufacturing partnership, distribution or agent enquiries.', email: site.partnershipEmail },
-  { icon: 'mail', title: 'General Enquiry', desc: 'Anything else — we will route it to the right team.', email: site.email },
+  { icon: 'user-group', title: 'Partnership', desc: 'Manufacturing partnership, distribution or agent enquiries.', href: '/partner/' },
+  { icon: 'mail', title: 'General Enquiry', desc: 'Anything else — we will route it to the right team.', href: '#message' },
 ];
 
 const contactJsonLd = {
@@ -29,7 +30,7 @@ const contactJsonLd = {
   </div>
 
   <section class="container-page pt-6 pb-14">
-    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Contact</p>
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent-dark)] mb-3">Contact</p>
     <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Talk to Our Export Team</h1>
     <p class="mt-3 text-slate-600 max-w-2xl">Choose the enquiry type below, or use the details to reach us directly. We do not provide medical advice or handle individual consumer orders.</p>
   </section>
@@ -49,6 +50,11 @@ const contactJsonLd = {
         )}
       </div>
     ))}
+  </section>
+
+  <section id="message" class="container-page pb-16 max-w-3xl scroll-mt-24">
+    <h2 class="font-display text-2xl text-[color:var(--color-navy)] mb-4">Send a general message</h2>
+    <QuoteForm kind="general" />
   </section>
 
   <section class="bg-[color:var(--color-blue-light)]">

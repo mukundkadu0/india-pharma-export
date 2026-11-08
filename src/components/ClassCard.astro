@@ -1,4 +1,4 @@
----
+﻿---
 import Badge from './Badge.astro';
 import Icon from './Icon.astro';
 import { exportStatusMeta } from '../data/taxonomy';
@@ -21,7 +21,7 @@ const es = exportStatusMeta[exportStatus];
     <Badge label={es.shortLabel} className={`${es.className} shrink-0`} />
   </div>
   <p class="text-sm text-slate-600 leading-relaxed">{summary}</p>
-  <div class="mt-auto flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-100">
+  <div class="mt-auto flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
     <span>HS {hsCode}</span>
     <span>{listedCount} molecules tracked</span>
   </div>

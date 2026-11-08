@@ -1,69 +1,70 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import Button from '../../components/Button.astro';
 import { site } from '../../data/site';
 ---
 
 <BaseLayout
-  title="Your Direct-Order Cart — PharmaXports"
-  description="Review the products in your cart and submit a direct order request."
+  title="Your OTC Order Request — PharmaXports"
+  description="Review the products in your OTC and AYUSH order request and send it to our team."
   noindex
 >
   <div class="container-page pt-6">
-    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Products', href: '/products/' }, { label: 'Your Cart' }]} />
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'OTC & AYUSH Shop', href: '/shop/' }, { label: 'Your order request' }]} />
   </div>
 
   <section class="container-page pt-6 pb-10">
-    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Direct Order</p>
-    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Your Cart</h1>
+    <p class="eyebrow">OTC &amp; AYUSH direct order</p>
+    <h1 class="text-3xl sm:text-4xl font-bold text-[color:var(--color-navy)] max-w-2xl">Your order request</h1>
     <p class="mt-3 text-slate-600 max-w-2xl">
-      This is a direct order request — not a B2B bulk enquiry. We'll confirm pricing, quantity and payment (invoice or bank transfer) with you directly; no online payment is collected here. Prescription products are dispatched only after we verify your drug or import licence.
+      This is a direct order request, not a B2B export enquiry. There is no online payment and no price shown: our team confirms availability, price and payment (invoice or bank transfer) with you before anything ships.
+      Looking for bulk or export volumes? Use the <a href="/request-quote/" class="underline text-[color:var(--color-teal-dark)]">B2B quote</a> instead.
     </p>
   </section>
 
   <section class="container-page pb-20 grid lg:grid-cols-5 gap-10">
     <div class="lg:col-span-2 min-w-0">
-      <h2 class="font-semibold text-[color:var(--color-navy)] mb-4">Cart Items</h2>
+      <h2 class="font-bold text-[color:var(--color-navy)] mb-4">Products in this request</h2>
       <div id="cart-items" class="space-y-3"></div>
-      <p id="cart-empty" class="hidden text-sm text-slate-500 rounded-xl border border-dashed border-slate-300 p-6 text-center">
-        Your cart is empty. Browse the <a href="/products/" class="text-[color:var(--color-blue)] underline">product catalogue</a> and select "Buy Now" on any product.
+      <p id="cart-empty" class="hidden state-empty text-sm text-slate-600 p-6 text-center">
+        Your order request is empty. Browse the <a href="/shop/" class="text-[color:var(--color-teal-dark)] underline">OTC &amp; AYUSH shop</a> and select "Add to order request".
       </p>
-      <button id="clear-cart" type="button" class="hidden mt-3 text-xs text-slate-400 hover:text-[color:var(--color-error)]">Clear all</button>
+      <button id="clear-cart" type="button" class="hidden mt-3 text-xs text-slate-600 hover:text-[color:var(--color-error)] underline">Clear all</button>
     </div>
 
     <div class="lg:col-span-3 min-w-0">
-      <form id="cart-form" data-endpoint={site.formEndpoint} data-fallback-email={site.email} class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8" novalidate>
+      <form id="cart-form" data-endpoint={site.formEndpoint} data-fallback-email={site.email} class="card p-6 sm:p-8" novalidate>
         <input type="hidden" name="orderType" value="Direct Order Request" />
+        <p class="text-xs text-slate-500 mb-4">Fields marked * are required.</p>
         <div class="grid sm:grid-cols-2 gap-5">
           <div>
-            <label for="co-name" class="block text-sm font-medium text-slate-700 mb-1.5">Full Name *</label>
-            <input id="co-name" name="fullName" type="text" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+            <label for="co-name" class="label">Full name *</label>
+            <input id="co-name" name="fullName" type="text" required autocomplete="name" class="field" />
           </div>
           <div>
-            <label for="co-email" class="block text-sm font-medium text-slate-700 mb-1.5">Email *</label>
-            <input id="co-email" name="email" type="email" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+            <label for="co-email" class="label">Email *</label>
+            <input id="co-email" name="email" type="email" required autocomplete="email" inputmode="email" class="field" />
           </div>
           <div>
-            <label for="co-phone" class="block text-sm font-medium text-slate-700 mb-1.5">Phone / WhatsApp *</label>
-            <input id="co-phone" name="phone" type="tel" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+            <label for="co-phone" class="label">Phone / WhatsApp *</label>
+            <input id="co-phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" class="field" />
           </div>
           <div>
-            <label for="co-country" class="block text-sm font-medium text-slate-700 mb-1.5">Country *</label>
-            <input id="co-country" name="country" type="text" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+            <label for="co-country" class="label">Country *</label>
+            <input id="co-country" name="country" type="text" required autocomplete="country-name" class="field" />
           </div>
           <div class="sm:col-span-2">
-            <label for="co-address" class="block text-sm font-medium text-slate-700 mb-1.5">Shipping Address *</label>
-            <textarea id="co-address" name="shippingAddress" rows="3" required class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]"></textarea>
+            <label for="co-address" class="label">Delivery address *</label>
+            <textarea id="co-address" name="shippingAddress" rows="3" required autocomplete="street-address" class="field"></textarea>
           </div>
           <div id="co-licence-wrap" class="sm:col-span-2 hidden">
-            <label for="co-licence" class="block text-sm font-medium text-slate-700 mb-1.5">Drug / Import Licence Number *</label>
-            <input id="co-licence" name="licenceNumber" type="text" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
-            <p class="mt-1.5 text-xs text-slate-500">Required because your cart contains prescription products. We verify it before confirming the order.</p>
+            <label for="co-licence" class="label">Drug / import licence number *</label>
+            <input id="co-licence" name="licenceNumber" type="text" class="field" />
+            <p class="mt-1.5 text-xs text-slate-500">Required because your request contains a prescription item. We verify it before confirming.</p>
           </div>
           <div class="sm:col-span-2">
-            <label for="co-message" class="block text-sm font-medium text-slate-700 mb-1.5">Notes (quantities, preferred packaging, delivery timing)</label>
-            <textarea id="co-message" name="message" rows="3" class="w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]"></textarea>
+            <label for="co-message" class="label">Notes (quantities, preferred packaging, delivery timing)</label>
+            <textarea id="co-message" name="message" rows="3" class="field"></textarea>
           </div>
           <div class="hidden" aria-hidden="true">
             <label for="co-hp">Leave blank</label>
@@ -72,10 +73,10 @@ import { site } from '../../data/site';
           <input type="hidden" name="access_key" value={site.formAccessKey} />
           <input type="hidden" name="subject" value="New Direct Order Request — PharmaXports" />
         </div>
-        <p id="co-status" class="mt-4 text-sm hidden" role="status"></p>
+        <p id="co-status" class="mt-4 text-sm hidden" role="status" aria-live="polite"></p>
         <div class="mt-6 flex items-center justify-between flex-wrap gap-3">
-          <p class="text-xs text-slate-400 max-w-sm">No payment is collected on this site. Our team will confirm pricing and payment method (invoice or bank transfer) after reviewing your request.</p>
-          <Button type="submit" size="lg" icon="cart">Submit Order Request</Button>
+          <p class="text-xs text-slate-500 max-w-sm">No payment is collected on this site. Our team confirms price and payment method after reviewing your request.</p>
+          <button type="submit" class="btn btn-primary btn-lg">Send order request</button>
         </div>
       </form>
     </div>
@@ -83,8 +84,11 @@ import { site } from '../../data/site';
 </BaseLayout>
 
 <script>
+  import { submitEnquiry, trackRfqSubmit } from '../../lib/rfq-client';
   const CART_STORAGE_KEY = 'ipe-direct-cart';
   type CartItem = { id: string; name: string; meta?: string; rx?: boolean };
+
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string);
 
   function readCart(): CartItem[] {
     try {
@@ -97,7 +101,9 @@ import { site } from '../../data/site';
   function writeCart(list: CartItem[]) {
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(list));
-    } catch {}
+    } catch {
+      /* the request still works for this visit; it just won't persist */
+    }
     render();
     window.dispatchEvent(new Event('storage'));
   }
@@ -128,14 +134,14 @@ import { site } from '../../data/site';
     itemsEl.innerHTML = list
       .map(
         (item, i) => `
-      <div class="flex items-center justify-between gap-3 rounded-xl border border-slate-200 p-4">
+      <div class="card flex items-center justify-between gap-3 p-4">
         <div class="min-w-0">
-          <p class="text-sm font-medium text-[color:var(--color-ink)] truncate">${item.name}${item.rx ? ' <span class="ml-1 align-middle text-[10px] font-semibold uppercase tracking-wide text-slate-600 bg-slate-100 border border-slate-200 rounded-full px-1.5 py-0.5">Rx</span>' : ''}</p>
-          ${item.meta ? `<p class="text-xs text-slate-400 truncate">${item.meta}</p>` : ''}
-          <label class="text-xs text-slate-400" for="qty-${i}">Quantity</label>
-          <input id="qty-${i}" data-idx="${i}" class="qty-input mt-1 block w-32 rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" placeholder="e.g. 2 boxes" />
+          <p class="text-sm font-semibold text-[color:var(--color-ink)]">${esc(item.name)}${item.rx ? ' <span class="ml-1 align-middle text-[10px] font-semibold uppercase tracking-wide text-slate-700 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5">Rx</span>' : ''}</p>
+          ${item.meta ? `<p class="text-xs text-slate-600">${esc(item.meta)}</p>` : ''}
+          <label class="text-xs text-slate-600 mt-2 block" for="qty-${i}">Quantity</label>
+          <input id="qty-${i}" data-idx="${i}" class="qty-input field mt-1 w-40 !py-1.5 !text-sm" placeholder="e.g. 2 boxes" />
         </div>
-        <button type="button" data-remove="${item.id}" aria-label="Remove ${item.name}" class="shrink-0 text-slate-400 hover:text-[color:var(--color-error)]">
+        <button type="button" data-remove="${esc(item.id)}" aria-label="Remove ${esc(item.name)}" class="shrink-0 grid place-items-center w-10 h-10 rounded-md text-slate-500 hover:text-[color:var(--color-error)] hover:bg-slate-50">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="w-5 h-5"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
         </button>
       </div>`
@@ -155,6 +161,11 @@ import { site } from '../../data/site';
 
   const form = document.getElementById('cart-form') as HTMLFormElement | null;
   const status = document.getElementById('co-status');
+  const setStatus = (msg: string, cls: string) => {
+    if (!status) return;
+    status.textContent = msg;
+    status.className = `mt-4 text-sm ${cls}`;
+  };
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -167,10 +178,7 @@ import { site } from '../../data/site';
 
     const list = readCart();
     if (list.length === 0) {
-      if (status) {
-        status.textContent = 'Add at least one product to your cart before submitting.';
-        status.className = 'mt-4 text-sm text-[color:var(--color-error)]';
-      }
+      setStatus('Add at least one product to your order request before sending.', 'text-[color:var(--color-error)]');
       return;
     }
 
@@ -178,48 +186,33 @@ import { site } from '../../data/site';
     const productLines = list.map((item, i) => `${item.name}${item.rx ? ' [Rx]' : ''}${qtyInputs[i]?.value ? ` — ${qtyInputs[i].value}` : ''}`);
 
     const data = new FormData(form);
-    const endpoint = form.dataset.endpoint;
-    const fallbackEmail = form.dataset.fallbackEmail;
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+    if (submitBtn) submitBtn.disabled = true;
+    setStatus('Sending…', 'text-slate-600');
 
-    if (endpoint) {
-      data.append('products', productLines.join('; '));
-      try {
-        const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
-        if (!res.ok) throw new Error('failed');
-        if (status) {
-          status.textContent = 'Thank you — your order request has been received. Our team will confirm pricing and payment within 1–2 business days.';
-          status.className = 'mt-4 text-sm text-[color:var(--color-success)]';
-        }
-        writeCart([]);
-        form.reset();
-      } catch {
-        if (status) {
-          status.textContent = `Something went wrong sending this automatically. Please email us directly at ${fallbackEmail}.`;
-          status.className = 'mt-4 text-sm text-[color:var(--color-error)]';
-        }
-      }
-      return;
-    }
+    const result = await submitEnquiry(form, 'buyer', form.dataset.endpoint || '', {
+      buyerType: 'Direct order (OTC / AYUSH)',
+      product: productLines.join('; '),
+      quantity: 'As listed against each product',
+      message: [
+        `Order type: ${data.get('orderType') ?? ''}`,
+        `Shipping address: ${data.get('shippingAddress') ?? ''}`,
+        `Licence number: ${data.get('licenceNumber') ?? ''}`,
+        `Products (${list.length}):`,
+        ...productLines.map((x) => `- ${x}`),
+        '',
+        `Notes: ${data.get('message') ?? ''}`,
+      ].join('\n'),
+    });
 
-    const lines = [
-      `Order Type: ${data.get('orderType') ?? ''}`,
-      `Full Name: ${data.get('fullName') ?? ''}`,
-      `Email: ${data.get('email') ?? ''}`,
-      `Phone/WhatsApp: ${data.get('phone') ?? ''}`,
-      `Country: ${data.get('country') ?? ''}`,
-      `Shipping Address: ${data.get('shippingAddress') ?? ''}`,
-      `Licence Number: ${data.get('licenceNumber') ?? ''}`,
-      `Notes: ${data.get('message') ?? ''}`,
-      '',
-      'Products:',
-      ...productLines.map((l) => `- ${l}`),
-    ];
-    const subject = encodeURIComponent(`Direct Order Request — ${data.get('fullName') ?? 'New Order'}`);
-    const body = encodeURIComponent(lines.join('\n'));
-    window.location.href = `mailto:${fallbackEmail}?subject=${subject}&body=${body}`;
-    if (status) {
-      status.textContent = 'Opening your email client with this order pre-filled — please send it to complete your request.';
-      status.className = 'mt-4 text-sm text-slate-600';
+    if (result.ok) {
+      trackRfqSubmit('buyer', result.reference, { item_name: `${list.length} products`, country: String(data.get('country') ?? ''), source: 'direct_order' });
+      setStatus(`Thank you. Your order request has been received. Reference: ${result.reference}. Our team will confirm availability, price and payment within 1-2 business days.`, 'text-[color:var(--color-success)]');
+      writeCart([]);
+      form.reset();
+    } else {
+      setStatus(`${result.error} If it keeps failing, email us at ${form.dataset.fallbackEmail}.`, 'text-[color:var(--color-error)]');
     }
+    if (submitBtn) submitBtn.disabled = false;
   });
 </script>

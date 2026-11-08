@@ -1,4 +1,4 @@
----
+﻿---
 interface Item { question: string; answer: string }
 interface Props {
   items: Item[];
@@ -22,7 +22,7 @@ const { items, idPrefix = 'faq' } = Astro.props;
             class="accordion-trigger w-full flex items-center justify-between gap-4 py-5 text-left"
           >
             <span class="font-medium text-[color:var(--color-ink)]">{item.question}</span>
-            <svg class="accordion-icon w-5 h-5 text-slate-400 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="accordion-icon w-5 h-5 text-slate-500 shrink-0 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M6 9l6 6 6-6" />
             </svg>
           </button>

@@ -1,141 +1,88 @@
 ---
 import Icon from './Icon.astro';
-import Logo from './Logo.astro';
 import { site, legalNav } from '../data/site';
 import { categoryGroups } from '../data/taxonomy';
+import { buyerSegments } from '../data/buyers';
 
-const quickLinks = [
-  { label: 'About Us', href: '/about/' },
-  { label: 'Products', href: '/products/' },
-  { label: 'Export Markets', href: '/markets/' },
-  { label: 'Compliance', href: '/compliance/' },
-  { label: 'Resources', href: '/resources/' },
+const company = [
+  { label: 'About', href: '/about/' },
   { label: 'Contact', href: '/contact/' },
+  { label: 'Become a partner', href: '/partner/' },
+  { label: 'Markets', href: '/markets/' },
 ];
-
-const supportLinks = [
-  { label: 'Export Enquiry', href: '/request-quote/' },
-  { label: 'Shop OTC & AYUSH', href: '/shop/' },
-  { label: 'Molecule Index', href: '/products/molecules/' },
-  { label: 'FAQs', href: '/faqs/' },
+const compliance = [
+  { label: 'Quality & Compliance', href: '/compliance/' },
+  { label: 'Export guides', href: '/resources/' },
   { label: 'Glossary', href: '/glossary/' },
+  { label: 'FAQs', href: '/faqs/' },
   ...legalNav,
 ];
 
-// Only real, configured profiles render — see the CONFIGURE note in data/site.ts.
+// Only real, configured profiles render. See the CONFIGURE note in data/site.ts.
 const socials = [
   { id: 'linkedin', label: 'LinkedIn', href: site.social.linkedin },
-  { id: 'twitter', label: 'Twitter', href: site.social.twitter },
+  { id: 'twitter', label: 'X (Twitter)', href: site.social.twitter },
 ].filter((s) => s.href);
+const colTitle = 'text-sm font-bold text-[color:var(--color-navy)] mb-3';
+const link = 'hover:text-[color:var(--color-teal-dark)] hover:underline';
 ---
 
-<footer class="bg-[color:var(--color-bg)] border-t border-slate-200 text-slate-600">
-  <div class="container-page py-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.9fr_1fr_1fr_1fr_1.6fr]">
-    <div>
-      <a href="/" class="flex items-center gap-2.5">
-        <Logo class="w-9 h-9 shrink-0" gap="#f7f9fb" />
-        <span class="leading-tight">
-          <span class="block font-display text-base text-[color:var(--color-navy)]">PharmaXports</span>
-          <span class="block text-[10px] text-slate-500">{site.tagline}</span>
-        </span>
+<footer class="bg-white border-t border-slate-200 text-slate-600">
+  <div class="container-page py-12 grid grid-cols-2 gap-x-6 gap-y-9 lg:grid-cols-[1.6fr_1fr_1fr_1fr_1fr]">
+    <div class="col-span-2 lg:col-span-1">
+      <a href="/" class="inline-block" aria-label="PharmaXports home">
+        <img src="/logo-full.jpg" alt="PharmaXports - Global Pharmaceutical Sourcing" width="640" height="174" class="h-16 w-auto mix-blend-multiply" loading="lazy" />
       </a>
-      <p class="mt-4 text-sm leading-relaxed max-w-xs">
-        Connecting global markets with high-quality Indian pharmaceuticals.
-      </p>
-      <p class="mt-3 text-xs leading-relaxed text-slate-500 max-w-xs">
-        A B2B pharmaceutical sourcing and export platform. We do not sell prescription medicines to individual consumers — OTC nutraceuticals and AYUSH products are available for <a href="/shop/" class="underline hover:text-[color:var(--color-blue)]">direct order</a> separately.
-      </p>
-      <div class="mt-5 flex items-center gap-2.5">
-        {socials.map((s) => (
-          <a
-            href={s.href}
-            aria-label={s.label}
-            rel="noopener"
-            class="grid place-items-center w-9 h-9 rounded-lg bg-[color:var(--color-navy)] text-white hover:bg-[color:var(--color-navy-deep)]"
-          >
-            <Icon name="globe" class="w-4 h-4" />
-          </a>
-        ))}
-        <a
-          href={`mailto:${site.email}`}
-          aria-label="Email us"
-          class="grid place-items-center w-9 h-9 rounded-lg bg-[color:var(--color-navy)] text-white hover:bg-[color:var(--color-navy-deep)]"
-        >
-          <Icon name="mail" class="w-4 h-4" />
-        </a>
-      </div>
-    </div>
-
-    <div>
-      <h3 class="text-sm font-semibold text-[color:var(--color-navy)] mb-3">Quick Links</h3>
-      <ul class="space-y-2 text-sm">
-        {quickLinks.map((l) => (
-          <li><a href={l.href} class="hover:text-[color:var(--color-blue)]">{l.label}</a></li>
-        ))}
+      <p class="mt-4 text-sm leading-relaxed max-w-xs">A B2B pharmaceutical sourcing and export platform connecting licensed international buyers with Indian manufacturing partners.</p>
+      <ul class="mt-4 space-y-2 text-sm">
+        <li class="flex gap-2"><Icon name="mail" class="w-4 h-4 mt-0.5 text-[color:var(--color-teal)] shrink-0" /><a href={`mailto:${site.email}`} class={link}>{site.email}</a></li>
+        <li class="flex gap-2"><Icon name="phone" class="w-4 h-4 mt-0.5 text-[color:var(--color-teal)] shrink-0" /><a href={`tel:${site.phone.replace(/\s/g, '')}`} class={link}>{site.phone}</a></li>
+        <li class="flex gap-2"><Icon name="map-pin" class="w-4 h-4 mt-0.5 text-[color:var(--color-teal)] shrink-0" /><span>{site.address}</span></li>
       </ul>
+      {socials.length > 0 && (
+        <div class="mt-4 flex items-center gap-2.5">
+          {socials.map((s) => (
+            <a href={s.href} aria-label={s.label} rel="noopener" class="grid place-items-center w-10 h-10 rounded-lg bg-[color:var(--color-navy)] text-white hover:bg-[color:var(--color-navy-deep)]"><Icon name="globe" class="w-4 h-4" /></a>
+          ))}
+        </div>
+      )}
     </div>
 
-    <div>
-      <h3 class="text-sm font-semibold text-[color:var(--color-navy)] mb-3">Our Products</h3>
-      <ul class="space-y-2 text-sm">
-        {categoryGroups.slice(0, 6).map((c) => (
-          <li><a href={`/products/${c.id}/`} class="hover:text-[color:var(--color-blue)]">{c.name}</a></li>
-        ))}
+    <nav aria-label="Products">
+      <h2 class={colTitle}>Products</h2>
+      <ul class="space-y-1 text-sm">
+        {categoryGroups.map((c) => <li><a href={`/products/${c.id}/`} class={link}>{c.name}</a></li>)}
+        <li><a href="/products/molecules/" class={link}>Molecule index</a></li>
       </ul>
-    </div>
+    </nav>
 
-    <div>
-      <h3 class="text-sm font-semibold text-[color:var(--color-navy)] mb-3">Support</h3>
-      <ul class="space-y-2 text-sm">
-        {supportLinks.map((l) => (
-          <li><a href={l.href} class="hover:text-[color:var(--color-blue)]">{l.label}</a></li>
-        ))}
+    <nav aria-label="Buyer solutions">
+      <h2 class={colTitle}>Buyer solutions</h2>
+      <ul class="space-y-1 text-sm">
+        {buyerSegments.map((b) => <li><a href={`/buyers/${b.slug}/`} class={link}>{b.navLabel}</a></li>)}
       </ul>
-    </div>
+    </nav>
 
-    <div class="sm:col-span-2 lg:col-span-1 lg:border-l lg:border-slate-200 lg:pl-10">
-      <h3 class="text-sm font-semibold text-[color:var(--color-navy)] mb-3">Subscribe to Updates</h3>
-      <p class="text-sm leading-relaxed">
-        Get the latest insights on pharma exports, regulatory updates and market opportunities.
-      </p>
-      <form id="newsletter-form" data-fallback-email={site.email} class="mt-4 flex gap-2">
-        <input
-          type="email"
-          name="email"
-          required
-          placeholder="Enter your email"
-          class="flex-1 min-w-0 rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-[color:var(--color-ink)] outline-none focus:border-[color:var(--color-blue)]"
-        />
-        <button
-          type="submit"
-          class="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-[color:var(--color-navy)] text-white text-sm font-semibold px-4 py-2.5 hover:bg-[color:var(--color-navy-deep)]"
-        >
-          Subscribe <Icon name="arrow-right" class="w-3.5 h-3.5" />
-        </button>
-      </form>
-    </div>
+    <nav aria-label="Company">
+      <h2 class={colTitle}>Company</h2>
+      <ul class="space-y-1 text-sm">
+        {company.map((l) => <li><a href={l.href} class={link}>{l.label}</a></li>)}
+        <li><a href="/shop/" class={link}>OTC &amp; AYUSH shop</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="Compliance and legal" class="col-span-2 lg:col-span-1">
+      <h2 class={colTitle}>Compliance &amp; legal</h2>
+      <ul class="space-y-1 text-sm max-lg:columns-2 max-lg:gap-x-6">
+        {compliance.map((l) => <li><a href={l.href} class={link}>{l.label}</a></li>)}
+      </ul>
+    </nav>
   </div>
 
-  <div class="border-t border-slate-200">
-    <div class="container-page py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+  <div class="border-t border-slate-200 bg-[color:var(--color-bg)]">
+    <div class="container-page py-5 text-xs text-slate-500 space-y-2">
+      <p>PharmaXports is a B2B pharmaceutical sourcing and export platform. It does not sell prescription medicines to individual consumers. OTC nutraceutical and AYUSH products are available through the separate <a href="/shop/" class="underline">direct-order shop</a>. Manufacturer certifications and licences belong to the respective manufacturers and are provided on request, per product. Product information is for sourcing purposes and is not medical advice.</p>
       <p>&copy; {new Date().getFullYear()} {site.legalName}. All rights reserved.</p>
-      <p class="flex items-center gap-2">
-        Made in India
-        <span aria-hidden="true" class="inline-flex w-5 h-3.5 rounded-sm overflow-hidden border border-slate-200">
-          <span class="flex-1 bg-[#FF9933]"></span><span class="flex-1 bg-white"></span><span class="flex-1 bg-[#138808]"></span>
-        </span>
-        For a Healthier World.
-      </p>
     </div>
   </div>
 </footer>
-
-<script>
-  document.getElementById('newsletter-form')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const form = e.currentTarget as HTMLFormElement;
-    const email = (form.elements.namedItem('email') as HTMLInputElement)?.value;
-    const fallback = form.dataset.fallbackEmail;
-    window.location.href = `mailto:${fallback}?subject=${encodeURIComponent('Newsletter signup')}&body=${encodeURIComponent(`Please add ${email} to the pharma export updates list.`)}`;
-  });
-</script>

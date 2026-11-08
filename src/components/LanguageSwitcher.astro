@@ -1,0 +1,23 @@
+---
+// Renders nothing until a second language is enabled in src/i18n/config.ts.
+// Plain links to real, crawlable language URLs: no JavaScript, no IP redirect.
+import { enabledLocales, locales, localeFromPath, localePath } from '../i18n/config';
+
+const current = localeFromPath(Astro.url.pathname);
+const show = enabledLocales.length > 1;
+---
+
+{show && (
+  <nav aria-label="Language" class="relative">
+    <details class="group">
+      <summary class="flex items-center gap-1 px-2.5 min-h-[44px] text-sm font-semibold text-slate-700 cursor-pointer list-none rounded-lg hover:bg-slate-100">
+        {locales[current].label}
+      </summary>
+      <ul class="absolute right-0 mt-1 w-40 bg-white border border-slate-200 rounded-xl shadow-lg p-1 z-50">
+        {enabledLocales.map((l) => (
+          <li><a href={localePath(Astro.url.pathname, l)} hreflang={locales[l].hreflang} lang={locales[l].hreflang} aria-current={l === current ? 'true' : undefined} class="block px-3 py-2 rounded-lg text-sm hover:bg-[color:var(--color-bg)]">{locales[l].label}</a></li>
+        ))}
+      </ul>
+    </details>
+  </nav>
+)}

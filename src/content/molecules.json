@@ -315,15 +315,6 @@
     "buyDirect": false
   },
   {
-    "id": "antibiotics--chloramphenicol",
-    "name": "Chloramphenicol",
-    "classId": "antibiotics",
-    "categoryGroup": "formulations",
-    "buyDirect": false,
-    "flag": "Market-specific ban",
-    "flagDetail": "Systemic form withdrawn/restricted in several destinations"
-  },
-  {
     "id": "antibiotics--cefadroxil",
     "name": "Cefadroxil",
     "classId": "antibiotics",
@@ -1092,15 +1083,6 @@
     "classId": "antimalarials",
     "categoryGroup": "formulations",
     "buyDirect": false
-  },
-  {
-    "id": "antimalarials--halofantrine",
-    "name": "Halofantrine",
-    "classId": "antimalarials",
-    "categoryGroup": "formulations",
-    "buyDirect": false,
-    "flag": "Market-specific ban",
-    "flagDetail": "Banned/withdrawn in several destinations"
   },
   {
     "id": "antimalarials--pyrimethamine",
@@ -3723,15 +3705,6 @@
     "buyDirect": false
   },
   {
-    "id": "diabetes-metabolic--rosiglitazone",
-    "name": "Rosiglitazone",
-    "classId": "diabetes-metabolic",
-    "categoryGroup": "formulations",
-    "buyDirect": false,
-    "flag": "Market-specific ban",
-    "flagDetail": "Banned/withdrawn in several destinations"
-  },
-  {
     "id": "diabetes-metabolic--lobeglitazone",
     "name": "Lobeglitazone",
     "classId": "diabetes-metabolic",
@@ -6301,24 +6274,8 @@
     "buyDirect": false
   },
   {
-    "id": "analgesics-nsaids-opioids--nimesulide",
-    "name": "Nimesulide",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false,
-    "flag": "Market-specific ban",
-    "flagDetail": "Banned/withdrawn in several destinations over hepatotoxicity — legal to export from India, will be destroyed at a market that has withdrawn it"
-  },
-  {
     "id": "analgesics-nsaids-opioids--flurbiprofen",
     "name": "Flurbiprofen",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--pentazocine",
-    "name": "Pentazocine",
     "classId": "analgesics-nsaids-opioids",
     "categoryGroup": "formulations",
     "buyDirect": false
@@ -6443,24 +6400,6 @@
     "buyDirect": false
   },
   {
-    "id": "analgesics-nsaids-opioids--phenylbutazone",
-    "name": "Phenylbutazone",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false,
-    "flag": "Market-specific ban",
-    "flagDetail": "Banned/withdrawn in several destinations"
-  },
-  {
-    "id": "analgesics-nsaids-opioids--metamizole-dipyrone",
-    "name": "Metamizole (Dipyrone)",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false,
-    "flag": "Market-specific ban",
-    "flagDetail": "Banned/withdrawn in several destinations over agranulocytosis risk"
-  },
-  {
     "id": "analgesics-nsaids-opioids--propyphenazone",
     "name": "Propyphenazone",
     "classId": "analgesics-nsaids-opioids",
@@ -6482,15 +6421,6 @@
     "buyDirect": false
   },
   {
-    "id": "analgesics-nsaids-opioids--valdecoxib",
-    "name": "Valdecoxib",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false,
-    "flag": "Market-specific ban",
-    "flagDetail": "Banned/withdrawn in several destinations"
-  },
-  {
     "id": "analgesics-nsaids-opioids--dexketoprofen",
     "name": "Dexketoprofen",
     "classId": "analgesics-nsaids-opioids",
@@ -6500,97 +6430,6 @@
   {
     "id": "analgesics-nsaids-opioids--dexibuprofen",
     "name": "Dexibuprofen",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--hydromorphone",
-    "name": "Hydromorphone",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--hydrocodone",
-    "name": "Hydrocodone",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--dihydrocodeine",
-    "name": "Dihydrocodeine",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--tilidine",
-    "name": "Tilidine",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--nalbuphine",
-    "name": "Nalbuphine",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--butorphanol",
-    "name": "Butorphanol",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--dezocine",
-    "name": "Dezocine",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--levorphanol",
-    "name": "Levorphanol",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--remifentanil",
-    "name": "Remifentanil",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--sufentanil",
-    "name": "Sufentanil",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--alfentanil",
-    "name": "Alfentanil",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--oxymorphone",
-    "name": "Oxymorphone",
-    "classId": "analgesics-nsaids-opioids",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "analgesics-nsaids-opioids--meptazinol",
-    "name": "Meptazinol",
     "classId": "analgesics-nsaids-opioids",
     "categoryGroup": "formulations",
     "buyDirect": false
@@ -6741,15 +6580,6 @@
     "classId": "gastrointestinal",
     "categoryGroup": "formulations",
     "buyDirect": false
-  },
-  {
-    "id": "gastrointestinal--ranitidine",
-    "name": "Ranitidine",
-    "classId": "gastrointestinal",
-    "categoryGroup": "formulations",
-    "buyDirect": false,
-    "flag": "Market-specific ban",
-    "flagDetail": "Withdrawn in US, EU and many other markets over NDMA contamination"
   },
   {
     "id": "gastrointestinal--domperidone",
@@ -7258,20 +7088,6 @@
   {
     "id": "gastrointestinal--hyoscine-butylbromide",
     "name": "Hyoscine butylbromide",
-    "classId": "gastrointestinal",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "gastrointestinal--dronabinol",
-    "name": "Dronabinol",
-    "classId": "gastrointestinal",
-    "categoryGroup": "formulations",
-    "buyDirect": false
-  },
-  {
-    "id": "gastrointestinal--nabilone",
-    "name": "Nabilone",
     "classId": "gastrointestinal",
     "categoryGroup": "formulations",
     "buyDirect": false
@@ -8958,15 +8774,6 @@
     "buyDirect": false
   },
   {
-    "id": "dermatology--lindane",
-    "name": "Lindane",
-    "classId": "dermatology",
-    "categoryGroup": "formulations",
-    "buyDirect": false,
-    "flag": "Market-specific ban",
-    "flagDetail": "Banned/withdrawn in several destinations"
-  },
-  {
     "id": "dermatology--malathion-lotion",
     "name": "Malathion lotion",
     "classId": "dermatology",
@@ -9280,15 +9087,6 @@
     "classId": "ophthalmic-ent",
     "categoryGroup": "formulations",
     "buyDirect": false
-  },
-  {
-    "id": "ophthalmic-ent--chloramphenicol-eye-ointment",
-    "name": "Chloramphenicol eye ointment",
-    "classId": "ophthalmic-ent",
-    "categoryGroup": "formulations",
-    "buyDirect": false,
-    "flag": "Market-specific ban",
-    "flagDetail": "Systemic form withdrawn/restricted in several destinations"
   },
   {
     "id": "ophthalmic-ent--ciprofloxacin-eye-drops",
@@ -13168,27 +12966,6 @@
   {
     "id": "anaesthesia--dexmedetomidine",
     "name": "Dexmedetomidine",
-    "classId": "anaesthesia",
-    "categoryGroup": "hospital",
-    "buyDirect": false
-  },
-  {
-    "id": "anaesthesia--remifentanil",
-    "name": "Remifentanil",
-    "classId": "anaesthesia",
-    "categoryGroup": "hospital",
-    "buyDirect": false
-  },
-  {
-    "id": "anaesthesia--sufentanil",
-    "name": "Sufentanil",
-    "classId": "anaesthesia",
-    "categoryGroup": "hospital",
-    "buyDirect": false
-  },
-  {
-    "id": "anaesthesia--alfentanil",
-    "name": "Alfentanil",
     "classId": "anaesthesia",
     "categoryGroup": "hospital",
     "buyDirect": false

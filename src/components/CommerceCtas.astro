@@ -5,8 +5,9 @@ import { countries, resolveCommerce, type CountryCode, type Cta } from '../lib/c
 interface Props {
   product: Record<string, any>;
   layout?: 'card' | 'detail';
+  hideBulk?: boolean;
 }
-const { product, layout = 'card' } = Astro.props;
+const { product, layout = 'card', hideBulk = false } = Astro.props;
 
 // Resolved server-side for every country; the client only picks one.
 const byCountry: Record<string, { ctas: Cta[]; reason: string | null }> = {};
@@ -14,6 +15,10 @@ for (const c of countries) {
   const r = resolveCommerce(product, c.code as CountryCode);
   byCountry[c.code] = { ctas: r.ctas, reason: r.reason };
 }
+
+// A button is only rendered if at least one country can show it. Prescription products never resolve
+// to BUY_NOW or ADD_TO_CART (see lib/commerce.ts), so those buttons do not exist in their markup.
+const used = new Set<string>(Object.values(byCountry).flatMap((v) => v.ctas as string[]));
 
 const name = product.name;
 const quoteHref = `/request-quote/?product=${encodeURIComponent(name)}`;
@@ -25,55 +30,65 @@ const outlineMotion = 'transition-all duration-200 hover:-translate-y-0.5 active
 ---
 
 <div class="commerce-ctas space-y-2" data-commerce={JSON.stringify(byCountry)} data-product-id={product.id} data-product-name={name}>
-  <button
-    type="button"
-    data-cta="BUY_NOW"
-    hidden
-    class={`buy-now w-full inline-flex items-center justify-center gap-2 rounded-full bg-[color:var(--color-accent)] text-white font-semibold hover:bg-[#d9700f] shadow-[0_6px_16px_-6px_rgba(245,130,32,0.55)] ${filledMotion} ${pill}`}
-    data-price={price}
-  >
-    <Icon name="cart" class="w-4 h-4" /> Buy Now{price ? ` — $${price.toFixed(2)}` : ''}
-  </button>
+  {used.has('BUY_NOW') && (
+    <button
+      type="button"
+      data-cta="BUY_NOW"
+      hidden
+      class={`buy-now w-full inline-flex items-center justify-center gap-2 rounded-lg bg-[color:var(--color-teal-dark)] text-white font-semibold hover:bg-[#0a5f5d] shadow-[0_6px_16px_-6px_rgba(14,117,115,0.45)] ${filledMotion} ${pill}`}
+      data-price={price}
+    >
+      <Icon name="cart" class="w-4 h-4" /> Buy Now{price ? ` — $${price.toFixed(2)}` : ''}
+    </button>
+  )}
 
-  <button
-    type="button"
-    data-cta="ADD_TO_CART"
-    hidden
-    class={`add-to-cart w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${outlineMotion} ${pill}`}
-    data-id={product.id}
-    data-name={name}
-    data-meta={product.strength}
-  >
-    Add to Cart
-  </button>
+  {used.has('ADD_TO_CART') && (
+    <button
+      type="button"
+      data-cta="ADD_TO_CART"
+      hidden
+      class={`add-to-cart w-full inline-flex items-center justify-center gap-2 rounded-lg border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${outlineMotion} ${pill}`}
+      data-id={product.id}
+      data-name={name}
+      data-meta={product.strength}
+    >
+      Add to Cart
+    </button>
+  )}
 
-  <button
-    type="button"
-    data-cta="BUY_IN_BULK"
-    hidden
-    class={`open-bulk-rfq w-full inline-flex items-center justify-center gap-2 rounded-full font-semibold shadow-[0_6px_16px_-6px_rgba(11,42,74,0.45)] ${filledMotion} ${pill} bg-[color:var(--color-navy)] text-white hover:bg-[color:var(--color-navy-deep)]`}
-    data-product={name}
-  >
-    Buy in Bulk <Icon name="arrow-right" class="w-3.5 h-3.5" />
-  </button>
+  {!hideBulk && used.has('BUY_IN_BULK') && (
+    <button
+      type="button"
+      data-cta="BUY_IN_BULK"
+      hidden
+      class={`open-bulk-rfq w-full inline-flex items-center justify-center gap-2 rounded-lg font-semibold shadow-[0_6px_16px_-6px_rgba(11,42,74,0.45)] ${filledMotion} ${pill} bg-[color:var(--color-navy)] text-white hover:bg-[color:var(--color-navy-deep)]`}
+      data-product={name}
+    >
+      Request Bulk Quote <Icon name="arrow-right" class="w-3.5 h-3.5" />
+    </button>
+  )}
 
-  <a
-    href={quoteHref}
-    data-cta="CHECK_AVAILABILITY"
-    hidden
-    class={`w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${outlineMotion} ${pill}`}
-  >
-    Check Availability
-  </a>
+  {used.has('CHECK_AVAILABILITY') && (
+    <a
+      href={quoteHref}
+      data-cta="CHECK_AVAILABILITY"
+      hidden
+      class={`w-full inline-flex items-center justify-center gap-2 rounded-lg border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${outlineMotion} ${pill}`}
+    >
+      Check Availability
+    </a>
+  )}
 
-  <a
-    href="/contact/"
-    data-cta="CONTACT_US"
-    hidden
-    class={`w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${outlineMotion} ${pill}`}
-  >
-    Contact Us
-  </a>
+  {used.has('CONTACT_US') && (
+    <a
+      href="/contact/"
+      data-cta="CONTACT_US"
+      hidden
+      class={`w-full inline-flex items-center justify-center gap-2 rounded-lg border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] font-semibold hover:bg-[color:var(--color-blue-light)] ${outlineMotion} ${pill}`}
+    >
+      Contact Us
+    </a>
+  )}
 
   <p class="cta-reason text-[11px] text-slate-500 text-center leading-snug" hidden></p>
 </div>

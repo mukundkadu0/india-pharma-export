@@ -1,14 +1,24 @@
----
+﻿---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import CategoryCard from '../../components/CategoryCard.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import Icon from '../../components/Icon.astro';
 import { categoryGroups } from '../../data/taxonomy';
+import { listableMolecules } from '../../lib/molecules';
 
 const products = (await getCollection('products')).map((p) => p.data);
 const classes = (await getCollection('classes')).map((c) => c.data);
+const allMolecules = (await getCollection('molecules')).map((m) => m.data);
+const listed = listableMolecules(allMolecules, classes, products);
+const moleculeGroups = classes
+  .filter((c) => c.exportStatus === 'free')
+  .map((c) => ({ cls: c, items: listed.filter((m) => m.classId === c.id).sort((a, b) => a.name.localeCompare(b.name)) }))
+  .filter((g) => g.items.length > 0);
+
+const uniq = (xs: string[]) => [...new Set(xs.filter(Boolean))].sort((a, b) => a.localeCompare(b));
+const dosageForms = uniq(products.map((p) => p.dosageForm));
+const therapeuticClasses = uniq(products.map((p) => p.therapeuticClass));
 
 const prescriptionOptions = [
   { value: 'otc', label: 'OTC / Non-scheduled' },
@@ -21,6 +31,8 @@ const exportOptions = [
   { value: 'noc', label: 'NOC / Conditional' },
   { value: 'controlled', label: 'Controlled' },
 ];
+// Destination filter is based on each product's marketRegions data (regions listed in the catalogue data),
+// not on a guarantee of registration or supply in any country.
 const markets = [
   { value: 'africa', label: 'Africa' },
   { value: 'southeast-asia', label: 'South-East Asia' },
@@ -40,59 +52,93 @@ const markets = [
     <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Products' }]} />
   </div>
 
-  <section class="container-page pt-6 pb-10">
-    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Product Catalogue</p>
-    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Source Pharmaceutical Products from India</h1>
-    <p class="mt-3 text-slate-600 max-w-2xl">
-      A B2B catalogue across formulations, APIs, biologicals, medical devices, AYUSH and nutraceuticals. Every listing shows export and prescription status — verify requirements against your destination before ordering.
+  <section class="container-page pt-6 pb-8">
+    <p class="eyebrow">Product catalogue</p>
+    <h1 class="section-title mt-2 text-3xl sm:text-4xl max-w-2xl">Source pharmaceutical products from India</h1>
+    <span class="gold-rule mt-4"></span>
+    <p class="section-lead mt-4">
+      A B2B catalogue across eight categories. Every listing shows export and prescription status. All supply is quoted per enquiry and confirmed against your destination before any commitment.
     </p>
-    <a href="/products/molecules/" class="inline-flex items-center gap-1.5 mt-4 text-sm font-semibold text-[color:var(--color-blue)] hover:underline">
-      Search the full 2,400+ molecule index <Icon name="arrow-right" class="w-3.5 h-3.5" />
-    </a>
+    <div class="mt-5 grid sm:grid-cols-2 gap-3 max-w-3xl text-sm">
+      <p class="card p-3.5"><strong class="text-[color:var(--color-navy)]">Product listings</strong><br /><span class="text-slate-600">Detailed pages with specifications. Request a bulk quote for any of them.</span></p>
+      <p class="card p-3.5"><strong class="text-[color:var(--color-navy)]">Molecule index</strong><br /><span class="text-slate-600">A wider sourcing index. A molecule listed here is a starting point, not stock; availability is confirmed per enquiry.</span></p>
+    </div>
   </section>
 
-  <section class="container-page pb-14">
-    <h2 class="font-display text-2xl text-[color:var(--color-navy)] mb-5">Browse by Category</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+  <section class="container-page pb-10" aria-labelledby="browse-cat">
+    <h2 id="browse-cat" class="text-xl font-bold text-[color:var(--color-navy)] mb-4">Browse by category</h2>
+    <div class="flex flex-wrap gap-2.5">
       {categoryGroups.map((c) => (
-        <CategoryCard {...c} count={classes.filter((cl) => cl.categoryGroup === c.id).length} />
+        <a href={`/products/${c.id}/`} class="card card-hover inline-flex items-center gap-2.5 px-4 py-3 min-h-[48px]">
+          <Icon name={c.icon} class="w-5 h-5 text-[color:var(--color-teal-dark)]" />
+          <span class="text-sm font-semibold text-[color:var(--color-navy)]">{c.name}</span>
+        </a>
       ))}
     </div>
   </section>
 
-  <section class="container-page pb-20">
-    <div class="flex items-center justify-between mb-5">
-      <h2 class="font-display text-2xl text-[color:var(--color-navy)]">All Products</h2>
-      <p id="result-count" class="text-sm text-slate-500"></p>
+  <section class="container-page pb-20" aria-labelledby="all-products">
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="all-products" class="text-xl font-bold text-[color:var(--color-navy)]">Product listings</h2>
+      <p id="result-count" class="text-sm text-slate-500" aria-live="polite"></p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 mb-8">
+    <div class="card p-4 sm:p-5 mb-6">
       <div class="flex flex-col sm:flex-row gap-3">
         <div class="relative flex-1">
-          <Icon name="search" class="w-4.5 h-4.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input id="filter-search" type="text" placeholder="Search molecule, formulation, API or HS code…" class="w-full rounded-lg border border-slate-300 pl-10 pr-3 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]" />
+          <Icon name="search" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+          <label for="filter-search" class="sr-only">Search product, generic name, molecule or HS code</label>
+          <input id="filter-search" type="search" placeholder="Search product, generic name, molecule or HS code" class="field !pl-11" autocomplete="off" list="search-suggest" />
+          <datalist id="search-suggest">
+            {products.slice(0, 40).map((p) => <option value={p.genericName}></option>)}
+          </datalist>
         </div>
-        <button id="filter-toggle" type="button" class="sm:hidden inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-600">
-          <Icon name="filter" class="w-4 h-4" /> Filters
+        <div>
+          <label for="filter-sort" class="sr-only">Sort</label>
+          <select id="filter-sort" class="field sm:w-48">
+            <option value="name">Sort: Name A to Z</option>
+            <option value="name-desc">Sort: Name Z to A</option>
+            <option value="category">Sort: Category</option>
+          </select>
+        </div>
+        <button id="filter-toggle" type="button" aria-expanded="false" aria-controls="filter-panel" class="sm:hidden btn btn-outline">
+          <Icon name="filter" class="w-4 h-4" /> Filters <span id="filter-active" class="chip" hidden>0</span>
         </button>
       </div>
       <div id="filter-panel" class="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
-        <select id="filter-category" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white">
-          <option value="">All Categories</option>
-          {categoryGroups.map((c) => <option value={c.id}>{c.name}</option>)}
-        </select>
-        <select id="filter-prescription" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white">
-          <option value="">Any Prescription Status</option>
-          {prescriptionOptions.map((o) => <option value={o.value}>{o.label}</option>)}
-        </select>
-        <select id="filter-export" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white">
-          <option value="">Any Export Status</option>
-          {exportOptions.map((o) => <option value={o.value}>{o.label}</option>)}
-        </select>
-        <select id="filter-market" class="rounded-lg border border-slate-300 px-3 py-2.5 text-sm bg-white">
-          <option value="">Any Market</option>
-          {markets.map((o) => <option value={o.value}>{o.label}</option>)}
-        </select>
+        <label class="block"><span class="label">Category</span>
+          <select id="filter-category" class="field">
+            <option value="">All categories</option>
+            {categoryGroups.map((c) => <option value={c.id}>{c.name}</option>)}
+          </select></label>
+        <label class="block"><span class="label">Therapeutic class</span>
+          <select id="filter-class" class="field">
+            <option value="">All classes</option>
+            {therapeuticClasses.map((c) => <option value={c}>{c}</option>)}
+          </select></label>
+        <label class="block"><span class="label">Dosage form</span>
+          <select id="filter-dosage" class="field">
+            <option value="">All forms</option>
+            {dosageForms.map((c) => <option value={c}>{c}</option>)}
+          </select></label>
+        <label class="block"><span class="label">Strength contains</span>
+          <input id="filter-strength" type="text" placeholder="e.g. 500 mg" class="field" /></label>
+        <label class="block"><span class="label">Export status</span>
+          <select id="filter-export" class="field">
+            <option value="">Any export status</option>
+            {exportOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+          </select></label>
+        <label class="block"><span class="label">Prescription classification</span>
+          <select id="filter-prescription" class="field">
+            <option value="">Any classification</option>
+            {prescriptionOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+          </select></label>
+        <label class="block"><span class="label">Listed destination region</span>
+          <select id="filter-market" class="field">
+            <option value="">Any region</option>
+            {markets.map((o) => <option value={o.value}>{o.label}</option>)}
+          </select></label>
+        <div class="flex items-end"><button id="filter-clear" type="button" class="btn btn-ghost w-full">Clear all filters</button></div>
       </div>
     </div>
 
@@ -100,8 +146,12 @@ const markets = [
       {products.map((p) => (
         <div
           class="product-card-wrap"
+          data-name={p.name.toLowerCase()}
           data-search={`${p.name} ${p.genericName} ${p.therapeuticClass} ${p.hsCode}`.toLowerCase()}
           data-category={p.category}
+          data-class={p.therapeuticClass}
+          data-dosage={p.dosageForm}
+          data-strength={p.strength.toLowerCase()}
           data-prescription={p.prescriptionStatus}
           data-export={p.exportStatus}
           data-markets={p.marketRegions.join(',')}
@@ -110,56 +160,157 @@ const markets = [
         </div>
       ))}
     </div>
-    <p id="empty-state" class="hidden text-center text-slate-500 py-16">No products match your filters yet. Try clearing a filter, or <a href="/request-quote/" class="text-[color:var(--color-blue)] underline">send us your requirement directly</a>.</p>
+    <div id="pager" class="mt-6 flex items-center justify-center gap-3" hidden>
+      <button id="show-more" type="button" class="btn btn-outline">Show more products</button>
+      <span id="pager-info" class="text-sm text-slate-500"></span>
+    </div>
+    <div id="empty-state" class="state-empty hidden mt-4">
+      <p class="font-semibold text-[color:var(--color-navy)]">No product listings match these filters.</p>
+      <p class="mt-1 text-sm">Clear a filter, check the molecule index below, or <a href="/request-quote/" class="underline text-[color:var(--color-teal-dark)]">send us your requirement</a>. Not every molecule has a detailed listing.</p>
+    </div>
+
+    <div id="molecule-section" class="mt-14">
+      <div class="flex items-end justify-between flex-wrap gap-2 mb-2">
+        <h2 class="text-xl font-bold text-[color:var(--color-navy)]">Molecule index: freely exportable molecules</h2>
+        <p id="molecule-count" class="text-sm text-slate-500">{listed.length.toLocaleString('en-US')} molecules</p>
+      </div>
+      <p class="text-sm text-slate-600 max-w-2xl mb-5">
+        Each molecule has its own page with HS code, regulatory notes and a quote request. Being listed here means it is in a freely exportable class; it does not mean a manufacturer has confirmed supply. The search box above filters this index too.
+      </p>
+      <div class="space-y-3">
+        {moleculeGroups.map((g, i) => (
+          <details class="molecule-group group card" open={i === 0}>
+            <summary class="flex items-center justify-between gap-3 cursor-pointer list-none px-4 py-3.5 min-h-[48px]">
+              <span class="font-semibold text-[color:var(--color-navy)]">{g.cls.name}</span>
+              <span class="flex items-center gap-2 text-xs text-slate-500 shrink-0">
+                <span class="group-count">{g.items.length}</span>
+                <Icon name="arrow-right" class="w-3.5 h-3.5 transition-transform group-open:rotate-90" />
+              </span>
+            </summary>
+            <ul class="flex flex-wrap gap-2 px-4 pb-4">
+              {g.items.map((m) => (
+                <li class="molecule-item" data-name={m.name.toLowerCase()}>
+                  <a href={`/products/${m.id}/`} class="inline-flex items-center min-h-[40px] rounded-full border border-slate-300 bg-white px-3.5 text-sm text-slate-700 hover:border-[color:var(--color-teal)] hover:text-[color:var(--color-teal-dark)]">{m.name}</a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))}
+      </div>
+    </div>
   </section>
 </BaseLayout>
 
 <script>
-  const grid = document.getElementById('product-grid');
+  const PAGE_SIZE = 12;
+  const grid = document.getElementById('product-grid')!;
   const cards = Array.from(document.querySelectorAll<HTMLElement>('.product-card-wrap'));
-  const searchInput = document.getElementById('filter-search') as HTMLInputElement | null;
-  const categorySelect = document.getElementById('filter-category') as HTMLSelectElement | null;
-  const prescriptionSelect = document.getElementById('filter-prescription') as HTMLSelectElement | null;
-  const exportSelect = document.getElementById('filter-export') as HTMLSelectElement | null;
-  const marketSelect = document.getElementById('filter-market') as HTMLSelectElement | null;
-  const countEl = document.getElementById('result-count');
-  const emptyState = document.getElementById('empty-state');
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+  const searchInput = $<HTMLInputElement>('filter-search');
+  const sortSel = $<HTMLSelectElement>('filter-sort');
+  const f = {
+    category: $<HTMLSelectElement>('filter-category'),
+    class: $<HTMLSelectElement>('filter-class'),
+    dosage: $<HTMLSelectElement>('filter-dosage'),
+    strength: $<HTMLInputElement>('filter-strength'),
+    export: $<HTMLSelectElement>('filter-export'),
+    prescription: $<HTMLSelectElement>('filter-prescription'),
+    market: $<HTMLSelectElement>('filter-market'),
+  };
+  let shown = PAGE_SIZE;
 
-  function applyFilters() {
-    const q = (searchInput?.value ?? '').trim().toLowerCase();
-    const category = categorySelect?.value ?? '';
-    const prescription = prescriptionSelect?.value ?? '';
-    const exportStatus = exportSelect?.value ?? '';
-    const market = marketSelect?.value ?? '';
-
-    let visible = 0;
-    cards.forEach((card) => {
-      const matchesQ = !q || card.dataset.search?.includes(q);
-      const matchesCategory = !category || card.dataset.category === category;
-      const matchesPrescription = !prescription || card.dataset.prescription === prescription;
-      const matchesExport = !exportStatus || card.dataset.export === exportStatus;
-      const matchesMarket = !market || card.dataset.markets?.split(',').includes(market);
-      const show = matchesQ && matchesCategory && matchesPrescription && matchesExport && matchesMarket;
-      card.style.display = show ? '' : 'none';
-      if (show) visible += 1;
+  function order() {
+    const mode = sortSel?.value || 'name';
+    const sorted = [...cards].sort((a, b) => {
+      if (mode === 'category') return (a.dataset.category || '').localeCompare(b.dataset.category || '') || (a.dataset.name || '').localeCompare(b.dataset.name || '');
+      const r = (a.dataset.name || '').localeCompare(b.dataset.name || '');
+      return mode === 'name-desc' ? -r : r;
     });
-
-    if (countEl) countEl.textContent = `${visible} product${visible === 1 ? '' : 's'}`;
-    if (emptyState) emptyState.classList.toggle('hidden', visible !== 0);
-    if (grid) grid.classList.toggle('hidden', visible === 0);
+    sorted.forEach((c) => grid.appendChild(c));
   }
 
-  [searchInput, categorySelect, prescriptionSelect, exportSelect, marketSelect].forEach((el) =>
-    el?.addEventListener('input', applyFilters)
-  );
+  function applyFilters(resetPage = true) {
+    if (resetPage) shown = PAGE_SIZE;
+    const q = (searchInput?.value ?? '').trim().toLowerCase();
+    const v = (k: keyof typeof f) => (f[k] as HTMLInputElement | null)?.value ?? '';
+    const strength = v('strength').trim().toLowerCase();
 
-  const params = new URLSearchParams(window.location.search);
-  const initialQ = params.get('q');
-  if (initialQ && searchInput) searchInput.value = initialQ;
+    const matching: HTMLElement[] = [];
+    cards.forEach((card) => {
+      const d = card.dataset;
+      const ok =
+        (!q || d.search?.includes(q)) &&
+        (!v('category') || d.category === v('category')) &&
+        (!v('class') || d.class === v('class')) &&
+        (!v('dosage') || d.dosage === v('dosage')) &&
+        (!strength || d.strength?.includes(strength)) &&
+        (!v('export') || d.export === v('export')) &&
+        (!v('prescription') || d.prescription === v('prescription')) &&
+        (!v('market') || d.markets?.split(',').includes(v('market')));
+      if (ok) matching.push(card);
+      card.style.display = 'none';
+    });
+    matching.slice(0, shown).forEach((c) => (c.style.display = ''));
 
-  document.getElementById('filter-toggle')?.addEventListener('click', () => {
-    document.getElementById('filter-panel')?.classList.toggle('hidden');
+    const cardFilterCount = (Object.keys(f) as (keyof typeof f)[]).filter((k) => v(k).trim() !== '').length;
+    const badge = $('filter-active');
+    if (badge) { badge.textContent = String(cardFilterCount); badge.hidden = cardFilterCount === 0; }
+
+    // Molecule index: filtered by the search text only; hidden when a card-only filter is active.
+    let molVisible = 0;
+    document.querySelectorAll<HTMLDetailsElement>('.molecule-group').forEach((group) => {
+      let n = 0;
+      group.querySelectorAll<HTMLElement>('.molecule-item').forEach((li) => {
+        const show = !q || (li.dataset.name ?? '').includes(q);
+        li.style.display = show ? '' : 'none';
+        if (show) n += 1;
+      });
+      const cnt = group.querySelector('.group-count');
+      if (cnt) cnt.textContent = String(n);
+      group.style.display = n ? '' : 'none';
+      if (q && n) group.open = true;
+      molVisible += n;
+    });
+    const molCount = $('molecule-count');
+    if (molCount) molCount.textContent = `${molVisible.toLocaleString('en-US')} molecule${molVisible === 1 ? '' : 's'}`;
+    $('molecule-section')?.classList.toggle('hidden', cardFilterCount > 0 || (q !== '' && molVisible === 0));
+
+    const countEl = $('result-count');
+    if (countEl) countEl.textContent = `${matching.length} product listing${matching.length === 1 ? '' : 's'}`;
+    $('empty-state')?.classList.toggle('hidden', matching.length !== 0);
+    grid.classList.toggle('hidden', matching.length === 0);
+    const pager = $('pager');
+    if (pager) {
+      pager.hidden = matching.length <= shown;
+      const info = $('pager-info');
+      if (info) info.textContent = `Showing ${Math.min(shown, matching.length)} of ${matching.length}`;
+    }
+  }
+
+  $('show-more')?.addEventListener('click', () => { shown += PAGE_SIZE; applyFilters(false); });
+  [searchInput, ...Object.values(f)].forEach((el) => el?.addEventListener('input', () => applyFilters()));
+  sortSel?.addEventListener('change', () => { order(); applyFilters(); });
+  $('filter-clear')?.addEventListener('click', () => {
+    Object.values(f).forEach((el) => { if (el) el.value = ''; });
+    if (searchInput) searchInput.value = '';
+    applyFilters();
+  });
+  $('filter-toggle')?.addEventListener('click', (e) => {
+    const panel = $('filter-panel');
+    const open = panel?.classList.toggle('hidden') === false;
+    (e.currentTarget as HTMLElement).setAttribute('aria-expanded', String(open));
   });
 
+  let searchTimer: ReturnType<typeof setTimeout> | undefined;
+  searchInput?.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    const term = searchInput.value.trim();
+    if (term.length < 3) return;
+    searchTimer = setTimeout(() => (window as any).pxTrack?.('product_search', { search_term: term, source: 'catalogue' }), 900);
+  });
+
+  const initialQ = new URLSearchParams(window.location.search).get('q');
+  if (initialQ && searchInput) searchInput.value = initialQ;
+  order();
   applyFilters();
 </script>

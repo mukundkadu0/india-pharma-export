@@ -4,6 +4,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Icon from '../components/Icon.astro';
 import Badge from '../components/Badge.astro';
 import CTASection from '../components/CTASection.astro';
+import { indiaSources, globalSources, destinationSources } from '../data/authorities';
 
 const licenceSteps = [
   { n: '01', title: 'Company, PAN & Current Account', authority: 'MCA / Bank', body: 'A private limited company or LLP, PAN and current account — foreign buyers and banks treat a private limited structure as materially more credible.' },
@@ -17,20 +18,27 @@ const licenceSteps = [
 ];
 
 const documents = [
-  'Commercial invoice — HS code, Incoterm, country of origin',
-  'Packing list — batch-wise, net and gross weights',
-  'Shipping bill — generated on ICEGATE against the AD Code',
-  'Bill of lading / airway bill',
-  'Certificate of Origin — preferential where an FTA applies',
-  'Certificate of Analysis — batch-specific',
-  'Certificate of Pharmaceutical Product (COPP) — WHO format',
-  'Free Sale Certificate',
-  'GMP certificate of the manufacturing plant',
-  'Manufacturing & wholesale licence copies — Form 25/28, 20B/21B',
-  'Import permit or licence of the buyer',
-  'Export NOC — where the product category requires one',
-  'Cold-chain / temperature log — for Schedule C & C(1) goods',
-  'Insurance certificate — for CIF terms',
+  ['Commercial invoice: HS code, Incoterm, country of origin', 'Exporter'],
+  ['Packing list: batch-wise, net and gross weights', 'Exporter'],
+  ['Shipping bill: generated on ICEGATE against the AD Code', 'Exporter / customs broker'],
+  ['Bill of lading / airway bill', 'Carrier'],
+  ['Certificate of Origin: preferential where an FTA applies', 'Authorised issuing agency'],
+  ['Certificate of Analysis: batch-specific', 'Manufacturing partner'],
+  ['Certificate of Pharmaceutical Product (COPP): WHO format', 'Licensing authority, via manufacturing partner'],
+  ['Free Sale Certificate', 'Licensing authority'],
+  ['GMP certificate of the manufacturing plant', 'Manufacturing partner (issued by its regulator)'],
+  ['Manufacturing and wholesale licence copies: Form 25/28, 20B/21B', 'Manufacturing partner / exporter'],
+  ['Import permit or licence of the buyer', 'Buyer, from its own authority'],
+  ['Export NOC: where the product category requires one', 'CDSCO'],
+  ['Cold-chain / temperature log: for Schedule C & C(1) goods', 'Carrier / manufacturing partner'],
+  ['Insurance certificate: for CIF terms', 'Insurer'],
+];
+
+const layers = [
+  { icon: 'building', t: 'PharmaXports company credentials', d: 'Our own registrations and licences. Shown only where verified and configured in the site. None are claimed on this page.' },
+  { icon: 'flask', t: 'Manufacturer credentials', d: 'GMP certificates, manufacturing licences and any WHO prequalification belong to each manufacturing partner. Provided on request, per product.' },
+  { icon: 'document', t: 'Product-specific documents', d: 'Certificate of Analysis, specification, COPP and stability data are issued per product or batch, not for PharmaXports as a whole.' },
+  { icon: 'globe', t: 'Destination-country requirements', d: 'Import authority, product registration, labelling and permits are set by the destination country and checked per enquiry.' },
 ];
 
 const exportStatuses = [
@@ -50,7 +58,7 @@ const exportStatuses = [
   </div>
 
   <section class="container-page pt-6 pb-10">
-    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Compliance</p>
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent-dark)] mb-3">Compliance</p>
     <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Compliance You Can Trust</h1>
     <p class="mt-3 text-slate-600 max-w-2xl">
       We operate as a merchant exporter — sourcing from WHO-GMP certified Indian manufacturing partners — within the regulatory framework below. Requirements vary by product, destination and export status; this page explains the framework, not a guarantee of outcome for any specific shipment.
@@ -67,21 +75,36 @@ const exportStatuses = [
     </div>
   </section>
 
-  <section class="container-page py-16">
-    <h2 class="font-display text-2xl sm:text-3xl text-[color:var(--color-navy)] mb-8">The Licence Stack, in Order</h2>
-    <p class="text-slate-600 max-w-2xl mb-8">These steps are sequential — several later steps require an earlier certificate as an input. Not every step applies identically to every product; a standard freely-exportable formulation, for example, does not require an Export NOC.</p>
-    <div class="grid sm:grid-cols-2 gap-5">
-      {licenceSteps.map((step) => (
-        <div class="rounded-2xl border border-slate-200 p-5">
-          <div class="flex items-center gap-3 mb-2">
-            <span class="font-display text-2xl text-[color:var(--color-accent)]">{step.n}</span>
-            <h3 class="font-semibold text-[color:var(--color-navy)]">{step.title}</h3>
-          </div>
-          <p class="text-sm text-slate-600 leading-relaxed">{step.body}</p>
-          <p class="mt-2 text-xs font-medium text-slate-400 uppercase tracking-wide">{step.authority}</p>
+  <section class="container-page pt-10">
+    <h2 class="text-xl sm:text-2xl font-bold text-[color:var(--color-navy)]">Who holds which credential</h2>
+    <p class="mt-2 text-slate-600 max-w-2xl text-sm">Four separate layers. A partner&rsquo;s certificate is never presented as PharmaXports&rsquo; own.</p>
+    <div class="mt-5 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {layers.map((l) => (
+        <div class="card p-5">
+          <span class="grid place-items-center w-10 h-10 rounded-lg bg-[color:var(--color-blue-light)] text-[color:var(--color-teal-dark)]"><Icon name={l.icon} class="w-5 h-5" /></span>
+          <h3 class="mt-3 font-bold text-[color:var(--color-navy)] leading-snug">{l.t}</h3>
+          <p class="mt-1.5 text-sm text-slate-600 leading-snug">{l.d}</p>
         </div>
       ))}
     </div>
+  </section>
+  <section class="container-page py-16">
+    <h2 class="font-display text-2xl sm:text-3xl text-[color:var(--color-navy)] mb-8">The Licence Stack, in Order</h2>
+    <p class="text-slate-600 max-w-2xl mb-8">These steps are sequential — several later steps require an earlier certificate as an input. Not every step applies identically to every product; a standard freely-exportable formulation, for example, does not require an Export NOC.</p>
+    <ol class="relative border-l-2 border-[color:var(--color-gold)]/60 ml-3 space-y-6">
+      {licenceSteps.map((step) => (
+        <li class="pl-6 relative">
+          <span class="absolute -left-[0.95rem] top-0 grid place-items-center w-7 h-7 rounded-full bg-[color:var(--color-navy)] text-white text-[11px] font-bold">{step.n}</span>
+          <div class="card p-4">
+            <div class="flex items-start justify-between gap-3 flex-wrap">
+              <h3 class="font-bold text-[color:var(--color-navy)]">{step.title}</h3>
+              <span class="chip">{step.authority}</span>
+            </div>
+            <p class="mt-1.5 text-sm text-slate-600 leading-relaxed">{step.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
   </section>
 
   <section class="bg-[color:var(--color-blue-light)]">
@@ -103,13 +126,18 @@ const exportStatuses = [
 
   <section class="container-page py-16">
     <h2 class="font-display text-2xl sm:text-3xl text-[color:var(--color-navy)] mb-8">Documents That Travel With Every Consignment</h2>
-    <div class="grid sm:grid-cols-2 gap-3">
-      {documents.map((d) => (
-        <div class="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">
-          <Icon name="document" class="w-4.5 h-4.5 text-slate-400 shrink-0" /> {d}
-        </div>
-      ))}
+    <div class="overflow-x-auto card">
+      <table class="w-full text-sm min-w-[32rem]">
+        <caption class="sr-only">Export documents and who provides each</caption>
+        <thead><tr class="bg-[color:var(--color-bg)] text-left text-slate-600"><th scope="col" class="px-4 py-3 font-semibold">Document</th><th scope="col" class="px-4 py-3 font-semibold">Provided by</th></tr></thead>
+        <tbody>
+          {documents.map(([d, who]) => (
+            <tr class="border-t border-slate-100"><th scope="row" class="px-4 py-2.5 text-left font-normal text-slate-800">{d}</th><td class="px-4 py-2.5 text-slate-600">{who}</td></tr>
+          ))}
+        </tbody>
+      </table>
     </div>
+    <p class="mt-3 text-xs text-slate-500">Which documents apply varies by product and destination. The list is a guide, not legal advice.</p>
   </section>
 
   <section class="bg-[color:var(--color-navy-deep)] text-white">
@@ -133,6 +161,48 @@ const exportStatuses = [
           <p class="text-white/70 leading-relaxed">Finished-formulation supply requires an ANDA/EU-GMP-inspected manufacturing partner. We do not claim capability we do not hold — see our <a href="/markets/united-states/" class="underline">United States</a> and <a href="/markets/europe-uk/" class="underline">Europe & UK</a> market pages.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="container-page py-16" id="official-sources">
+    <h2 class="text-2xl sm:text-3xl font-bold text-[color:var(--color-navy)] mb-3">Check it at the source</h2>
+    <p class="text-slate-600 max-w-2xl mb-8">
+      Requirements are set by regulators, not by PharmaXports. These are the official websites. We link to them so buyers can check current rules themselves. They are external sites that we do not control, and
+      a link is not a statement that any product is approved there.
+    </p>
+
+    {[{ t: 'India: export side', list: indiaSources }, { t: 'International', list: globalSources }].map((g) => (
+      <div class="mb-8">
+        <h3 class="font-bold text-[color:var(--color-navy)] mb-3">{g.t}</h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          {g.list.map((s) => (
+            <a href={s.url} target="_blank" rel="noopener noreferrer" class="card card-hover p-4 block">
+              <p class="font-bold text-[color:var(--color-teal-dark)]">{s.name} <span class="sr-only">(opens the official site in a new tab)</span><span aria-hidden="true">↗</span></p>
+              <p class="text-xs text-slate-600">{s.org}</p>
+              <p class="mt-2 text-sm text-slate-700 leading-snug"><span class="font-semibold">What you can check:</span> {s.verify}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+
+    <h3 class="font-bold text-[color:var(--color-navy)] mb-1">Destination-country regulators</h3>
+    <p class="text-sm text-slate-600 mb-4 max-w-2xl">A starting list of regulators for regions we are asked about. It is not complete, and it does not mean PharmaXports covers or holds registrations in these countries. Ask us if your country is not listed.</p>
+    <div class="space-y-6">
+      {Object.values(destinationSources).map((r) => (
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">{r.region}</p>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {r.items.map((s) => (
+              <a href={s.url} target="_blank" rel="noopener noreferrer" class="card card-hover p-4 block">
+                <p class="font-bold text-[color:var(--color-teal-dark)]">{s.name} <span class="sr-only">(opens the official site in a new tab)</span><span aria-hidden="true">↗</span></p>
+                <p class="text-xs text-slate-600">{s.org}</p>
+                <p class="mt-2 text-sm text-slate-700 leading-snug"><span class="font-semibold">What you can check:</span> {s.verify}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   </section>
 

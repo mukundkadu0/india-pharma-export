@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+---
+
+<BaseLayout
+  title="Partner With PharmaXports - Manufacturers, Distributors and Agents"
+  description="Manufacturers, suppliers, distributors and sourcing agents can enquire about working with PharmaXports on pharmaceutical exports from India."
+>
+  <div class="container-page pt-6">
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact', href: '/contact/' }, { label: 'Partner with us' }]} />
+  </div>
+
+  <section class="container-page pt-6 pb-16 grid lg:grid-cols-5 gap-10">
+    <div class="lg:col-span-2">
+      <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent-dark)] mb-3">Partnerships</p>
+      <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] leading-tight">Partner With PharmaXports</h1>
+      <p class="mt-4 text-slate-600 leading-relaxed">
+        We work with manufacturing partners, distributors and sourcing agents. Tell us about your company and what you offer; our team reviews each enquiry and replies by email. Submitting this form does not create any commitment on either side.
+      </p>
+      <p class="mt-6 text-sm text-slate-600">Looking to buy? Use the <a href="/request-quote/" class="text-[color:var(--color-blue)] underline font-medium">export quote form</a> instead.</p>
+    </div>
+    <div class="lg:col-span-3">
+      <QuoteForm kind="partnership" />
+    </div>
+  </section>
+</BaseLayout>

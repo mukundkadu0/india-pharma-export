@@ -1,0 +1,74 @@
+---
+// Google integration points. Everything is driven by environment variables, so no
+// tracking ID is ever hard-coded and nothing loads until an ID is configured:
+//   PUBLIC_GTM_ID   e.g. GTM-XXXXXXX  (preferred: manage GA4 + Ads inside Tag Manager)
+//   PUBLIC_GA4_ID   e.g. G-XXXXXXXXXX (only used when no GTM ID is set)
+// See docs/GOOGLE_SETUP_GUIDE.md.
+const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim();
+const ga4Id = (import.meta.env.PUBLIC_GA4_ID ?? '').trim();
+const mode = gtmId ? 'gtm' : ga4Id ? 'ga4' : 'none';
+const config = JSON.stringify({ mode, gtmId, ga4Id });
+---
+
+<!-- Consent defaults must run before any Google tag. Denied until the visitor accepts. -->
+<script is:inline set:html={`
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+window.gtag = gtag;
+window.__px = ${config};
+gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', wait_for_update: 500 });
+try { if (localStorage.getItem('px-consent') === 'granted') gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' }); } catch (e) {}
+`} />
+
+{mode === 'gtm' && (
+  <script is:inline set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`} />
+)}
+{mode === 'ga4' && <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>}
+{mode === 'ga4' && <script is:inline set:html={`gtag('js', new Date()); gtag('config', '${ga4Id}', { anonymize_ip: true });`} />}
+
+<script is:inline>
+  // ---- Attribution: first touch of the session, kept for the RFQ forms --------------
+  (function () {
+    try {
+      var keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid'];
+      var q = new URLSearchParams(location.search);
+      var hasParams = keys.some(function (k) { return q.get(k); });
+      var stored = null;
+      try { stored = JSON.parse(sessionStorage.getItem('px-attr') || 'null'); } catch (e) {}
+      var storedHasParams = stored && keys.some(function (k) { return stored[k]; });
+      // Keep the first touch, but let a tagged campaign visit replace an untagged one.
+      if (stored && (storedHasParams || !hasParams)) return;
+      var a = { landing_page: location.pathname, referrer: document.referrer || '', first_seen: new Date().toISOString() };
+      keys.forEach(function (k) { if (q.get(k)) a[k] = q.get(k); });
+      sessionStorage.setItem('px-attr', JSON.stringify(a));
+    } catch (e) {}
+  })();
+
+  // ---- Event helper: window.pxTrack(name, params) ---------------------------------
+  // GTM mode pushes {event: name, ...params}; GA4 mode sends a gtag event. With no ID
+  // configured it is a no-op, so the site never errors without analytics.
+  window.pxTrack = function (name, params) {
+    var cfg = window.__px || { mode: 'none' };
+    params = params || {};
+    if (cfg.mode === 'gtm') window.dataLayer.push(Object.assign({ event: name }, params));
+    else if (cfg.mode === 'ga4') window.gtag('event', name, params);
+  };
+
+  // ---- Contact-click events (delegated; no per-link wiring) -------------------------
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    var where = location.pathname;
+    if (/^https:\/\/wa\.me\//.test(href)) window.pxTrack('whatsapp_click', { page: where });
+    else if (href.indexOf('tel:') === 0) window.pxTrack('phone_click', { page: where });
+    else if (href.indexOf('mailto:') === 0) window.pxTrack('email_click', { page: where });
+    else if (/\.(pdf|xlsx?|docx?|zip)(\?|$)/i.test(href)) window.pxTrack('catalogue_download', { file: href.split('/').pop(), page: where });
+  });
+
+  // ---- product_view: any page marked with data-product-view ------------------------
+  document.addEventListener('DOMContentLoaded', function () {
+    var el = document.querySelector('[data-product-view]');
+    if (el) window.pxTrack('product_view', { item_id: el.getAttribute('data-product-view'), item_name: el.getAttribute('data-product-name') || '' });
+  });
+</script>

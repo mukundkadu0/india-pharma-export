@@ -1,0 +1,32 @@
+---
+// Only rendered when a Google ID is configured; otherwise there is nothing to consent to.
+const enabled = Boolean((import.meta.env.PUBLIC_GTM_ID ?? '').trim() || (import.meta.env.PUBLIC_GA4_ID ?? '').trim());
+---
+
+{enabled && (
+  <div id="consent-banner" hidden role="region" aria-label="Cookie consent" class="fixed left-3 right-3 bottom-3 sm:left-6 sm:right-auto sm:max-w-md z-[55] rounded-2xl bg-white border border-slate-200 shadow-xl p-4">
+    <p class="text-sm text-slate-600 leading-relaxed">
+      We use analytics and advertising cookies to understand how buyers find us and to improve this site. You can decline and still use everything. See our <a href="/privacy/" class="underline text-[color:var(--color-blue)]">Privacy Policy</a>.
+    </p>
+    <div class="mt-3 flex gap-2">
+      <button type="button" id="consent-accept" class="flex-1 min-h-[44px] rounded-full bg-[color:var(--color-navy)] text-white text-sm font-semibold">Accept</button>
+      <button type="button" id="consent-decline" class="flex-1 min-h-[44px] rounded-full border-2 border-slate-300 text-slate-700 text-sm font-semibold">Decline</button>
+    </div>
+  </div>
+  <script is:inline>
+    (function () {
+      var el = document.getElementById('consent-banner');
+      if (!el) return;
+      var choice = null;
+      try { choice = localStorage.getItem('px-consent'); } catch (e) {}
+      if (!choice) el.hidden = false;
+      function set(v) {
+        try { localStorage.setItem('px-consent', v); } catch (e) {}
+        if (v === 'granted' && window.gtag) window.gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' });
+        el.hidden = true;
+      }
+      document.getElementById('consent-accept').addEventListener('click', function () { set('granted'); });
+      document.getElementById('consent-decline').addEventListener('click', function () { set('denied'); });
+    })();
+  </script>
+)}

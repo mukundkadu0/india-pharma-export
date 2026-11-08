@@ -8,6 +8,7 @@ import ProductCard from '../../../components/ProductCard.astro';
 import CTASection from '../../../components/CTASection.astro';
 import Icon from '../../../components/Icon.astro';
 import { getCategoryGroup, exportStatusMeta, prescriptionStatusMeta } from '../../../data/taxonomy';
+import { listableMolecules } from '../../../lib/molecules';
 
 export async function getStaticPaths() {
   const classes = await getCollection('classes');
@@ -24,7 +25,14 @@ const classMolecules = (await getCollection('molecules'))
   .map((m) => m.data)
   .filter((m) => m.classId === classData.id)
   .sort((a, b) => a.name.localeCompare(b.name));
-const buyDirectClass = classMolecules.length > 0 && classMolecules[0].buyDirect;
+const pageIds = new Set(
+  listableMolecules(
+    (await getCollection('molecules')).map((m) => m.data),
+    (await getCollection('classes')).map((c) => c.data),
+    allProducts,
+  ).map((m) => m.id),
+);
+const buyDirectClass =classMolecules.length > 0 && classMolecules[0].buyDirect;
 ---
 
 <BaseLayout
@@ -78,10 +86,10 @@ const buyDirectClass = classMolecules.length > 0 && classMolecules[0].buyDirect;
         <div class="not-prose">
           <div class="flex items-center justify-between gap-3 mb-3 not-prose">
             <h2 class="!mt-0">Full Molecule List</h2>
-            <p id="mol-count" class="text-xs text-slate-400 shrink-0"></p>
+            <p id="mol-count" class="text-xs text-slate-500 shrink-0"></p>
           </div>
           <div class="relative mb-3">
-            <Icon name="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Icon name="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
               id="mol-search"
               type="text"
@@ -92,9 +100,11 @@ const buyDirectClass = classMolecules.length > 0 && classMolecules[0].buyDirect;
           <div class="border border-slate-200 rounded-2xl overflow-hidden">
             <div id="mol-list" class="max-h-[28rem] overflow-y-auto divide-y divide-slate-100">
               {classMolecules.map((m) => (
-                <div id={`mol-${m.id}`} class="mol-row flex items-center justify-between gap-3 px-4 py-2.5" data-search={m.name.toLowerCase()}>
+                <div id={`mol-${m.id}`} class="mol-row flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 px-4 py-3" data-search={m.name.toLowerCase()}>
                   <div class="min-w-0">
-                    <p class="text-sm text-[color:var(--color-ink)] sm:truncate">{m.name}</p>
+                    <p class="text-sm text-[color:var(--color-ink)] sm:truncate">
+                      {pageIds.has(m.id) ? <a href={`/products/${m.id}/`} class="hover:text-[color:var(--color-blue)] hover:underline">{m.name}</a> : m.name}
+                    </p>
                     {m.flag && (
                       <p class="inline-flex items-center text-[11px] font-medium text-[color:var(--color-warning)] bg-[color:var(--color-warning)]/10 border border-[color:var(--color-warning)]/30 rounded-full px-2 py-0.5 mt-1">
                         {m.flag}{m.flagDetail ? ` — ${m.flagDetail}` : ''}
@@ -102,29 +112,40 @@ const buyDirectClass = classMolecules.length > 0 && classMolecules[0].buyDirect;
                     )}
                   </div>
                   <div class="shrink-0 flex items-center gap-1.5">
+                    {m.buyDirect && (
+                      <button
+                        type="button"
+                        class="add-to-cart inline-flex items-center gap-1 text-xs font-semibold text-white bg-[color:var(--color-teal-dark)] hover:bg-[#0a5f5d] rounded-md px-2.5 py-1.5"
+                        data-id={m.id}
+                        data-name={m.name}
+                        data-meta={classData.name}
+                      >
+                        <Icon name="cart" class="w-3.5 h-3.5" /> Buy Now
+                      </button>
+                    )}
                     <button
                       type="button"
-                      class="add-to-cart inline-flex items-center gap-1 text-xs font-semibold text-white bg-[color:var(--color-accent)] hover:bg-[#d9700f] rounded-full px-2.5 py-1.5"
+                      class="open-bulk-rfq inline-flex items-center text-xs font-semibold text-white bg-[color:var(--color-navy)] hover:bg-[color:var(--color-navy-deep)] rounded-md px-2.5 py-1.5"
+                      data-product={m.name}
+                    >
+                      Request Bulk Quote
+                    </button>
+                    <button
+                      type="button"
+                      class="add-to-inquiry inline-flex items-center text-xs font-semibold text-[color:var(--color-navy)] border border-[color:var(--color-navy)] hover:bg-[color:var(--color-blue-light)] rounded-md px-2.5 py-1.5"
                       data-id={m.id}
                       data-name={m.name}
                       data-meta={classData.name}
-                      data-rx={m.buyDirect ? undefined : 'true'}
                     >
-                      <Icon name="cart" class="w-3.5 h-3.5" /> Buy Now
+                      Add to RFQ list
                     </button>
-                    <a
-                      href={`/request-quote/?product=${encodeURIComponent(m.name)}`}
-                      class="inline-flex items-center text-xs font-semibold text-[color:var(--color-navy)] border border-[color:var(--color-navy)] hover:bg-[color:var(--color-blue-light)] rounded-full px-2.5 py-1.5"
-                    >
-                      Bulk Order
-                    </a>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          <p id="mol-empty" class="hidden text-center text-sm text-slate-400 py-8">No molecules match your search.</p>
-          <p class="text-xs text-slate-400 mt-3">
+          <p id="mol-empty" class="hidden text-center text-sm text-slate-500 py-8">No molecules match your search.</p>
+          <p class="text-xs text-slate-500 mt-3">
             Showing {classMolecules.length} of {classData.listedCount} molecules tracked in this class
             {classData.listedCount > classMolecules.length && ' (narcotics, psychotropics and other Schedule X / NDPS-controlled molecules are excluded from this catalogue)'}.
             Contact us for a specific molecule not listed here.
@@ -157,8 +178,8 @@ const buyDirectClass = classMolecules.length > 0 && classMolecules[0].buyDirect;
         Export and prescription status vary by molecule, strength, pack size and destination. Verify current requirements with the relevant authority before shipment.
       </div>
       {buyDirectClass && (
-        <div class="rounded-2xl border border-[color:var(--color-accent)]/30 bg-[color:var(--color-accent)]/5 p-5 mt-5 text-sm text-slate-700 leading-relaxed">
-          Every molecule in this class is OTC and available through <strong>Buy Now</strong> — no B2B minimum order. Use the buttons in the list above, or <a href="/shop/" class="font-semibold text-[color:var(--color-accent)] hover:underline">browse the full direct-order shop</a>.
+        <div class="rounded-2xl border border-[color:var(--color-accent)]/30 bg-[color:var(--color-teal-dark)]/5 p-5 mt-5 text-sm text-slate-700 leading-relaxed">
+          Every molecule in this class is OTC and available through <strong>Buy Now</strong> — no B2B minimum order. Use the buttons in the list above, or <a href="/shop/" class="font-semibold text-[color:var(--color-accent-dark)] hover:underline">browse the full direct-order shop</a>.
         </div>
       )}
       <Button href="/request-quote/" size="lg" class="w-full justify-center mt-5">Request Quote for This Class</Button>

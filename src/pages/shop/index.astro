@@ -4,157 +4,190 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Icon from '../../components/Icon.astro';
 import { categoryGroups } from '../../data/taxonomy';
+import { listableMolecules } from '../../lib/molecules';
 
 const allMolecules = (await getCollection('molecules')).map((m) => m.data);
 const classes = (await getCollection('classes')).map((c) => c.data);
+const products = (await getCollection('products')).map((p) => p.data);
 const classById = Object.fromEntries(classes.map((c) => [c.id, c]));
 const categoryById = Object.fromEntries(categoryGroups.map((c) => [c.id, c]));
 const items = allMolecules.filter((m) => m.buyDirect).sort((a, b) => a.name.localeCompare(b.name));
+// Items that also have a detail page (same rule as the molecule pages).
+const pageIds = new Set(listableMolecules(allMolecules, classes, products).map((m) => m.id));
 
+const countBy = (key: 'categoryGroup' | 'classId') => items.reduce<Record<string, number>>((a, m) => ((a[m[key]] = (a[m[key]] || 0) + 1), a), {});
+const catCounts = countBy('categoryGroup');
+const classCounts = countBy('classId');
 const categoryTabs = [
-  { id: '', label: 'All' },
-  { id: 'nutraceuticals', label: 'Nutraceuticals & Vitamins' },
-  { id: 'ayush', label: 'AYUSH — Ayurveda & Herbal' },
+  { id: '', label: 'All', n: items.length },
+  ...Object.keys(catCounts).map((id) => ({ id, label: categoryById[id]?.name ?? id, n: catCounts[id] })),
 ];
+const classOptions = Object.keys(classCounts)
+  .map((id) => ({ id, name: classById[id]?.name ?? id, n: classCounts[id] }))
+  .sort((a, b) => a.name.localeCompare(b.name));
 ---
 
 <BaseLayout
   title="Shop Nutraceuticals & AYUSH Products Direct — PharmaXports"
-  description="Order OTC nutraceuticals, vitamins and AYUSH products directly, no B2B minimum order. Prescription and Schedule H/H1/X products remain quote-only."
+  description="Request OTC nutraceuticals, vitamins and AYUSH products directly, no B2B minimum order. Pricing and payment are confirmed by our team. Prescription products stay quote-only."
 >
+  <div class="bg-[#E9F5F4] border-b border-[color:var(--color-teal)]/20">
+    <div class="container-page py-3 flex flex-wrap items-center justify-between gap-2 text-sm">
+      <p class="text-[color:var(--color-navy)]"><strong>OTC &amp; AYUSH direct orders.</strong> This is a separate service from PharmaXports' B2B export sourcing.</p>
+      <a href="/request-quote/" class="font-semibold text-[color:var(--color-teal-dark)] underline">Need bulk or export volumes? Request a B2B quote</a>
+    </div>
+  </div>
+
   <div class="container-page pt-6">
-    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Shop OTC & AYUSH' }]} />
+    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'OTC & AYUSH Shop' }]} />
   </div>
 
   <section class="container-page pt-6 pb-8">
-    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Direct Order</p>
-    <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">Shop Nutraceuticals &amp; AYUSH, Direct</h1>
+    <p class="eyebrow">Direct order requests</p>
+    <h1 class="text-3xl sm:text-4xl font-bold text-[color:var(--color-navy)] max-w-2xl">Nutraceuticals &amp; AYUSH, direct</h1>
     <p class="mt-3 text-slate-600 max-w-2xl">
-      These {items.length} products are non-prescription (OTC) nutraceuticals, vitamins and AYUSH items — add what you need and submit a direct order request, no B2B minimum quantity required.
-      Everything else in our catalogue is Schedule H / H1 / X or prescription-only and stays on the <a href="/request-quote/" class="text-[color:var(--color-blue)] underline">B2B quote system</a>.
+      {items.length} non-prescription (OTC) nutraceuticals, vitamins and AYUSH items. Build an order request with no B2B minimum quantity.
+      Everything else in our catalogue is prescription or scheduled and stays on the <a href="/request-quote/" class="text-[color:var(--color-teal-dark)] underline">B2B quote system</a>.
     </p>
-    <div class="mt-6 grid sm:grid-cols-3 gap-4 max-w-3xl">
+    <p class="mt-3 text-sm text-slate-700 max-w-2xl rounded-lg border border-slate-200 bg-white p-3">
+      <strong class="text-[color:var(--color-navy)]">No online checkout.</strong> There are no prices or card payments on this site. You send an order request, and our team confirms availability, price and payment (invoice or bank transfer) with you directly.
+    </p>
+    <ol class="mt-6 grid sm:grid-cols-3 gap-4 max-w-3xl">
       {[
-        { n: '1', t: 'Add what you need', d: 'Buy Now on any product below adds it to your cart.' },
-        { n: '2', t: 'Send your details', d: 'Shipping address and contact info — no account required.' },
-        { n: '3', t: 'We confirm and ship', d: 'Pricing and payment (invoice or bank transfer) confirmed directly with you.' },
+        { n: '1', t: 'Add products', d: 'Use "Add to order request" on each product.' },
+        { n: '2', t: 'Send your details', d: 'Delivery address and contact information. No account is needed.' },
+        { n: '3', t: 'We confirm', d: 'Price, availability and payment are confirmed with you before anything ships.' },
       ].map((step) => (
-        <div class="relative rounded-xl border border-slate-200 bg-white p-4">
-          <span class="font-display text-2xl text-[color:var(--color-accent)]/30">{step.n}</span>
+        <li class="card p-4">
+          <span class="text-2xl font-bold text-[color:var(--color-teal)]/50">{step.n}</span>
           <p class="mt-1 text-sm font-semibold text-[color:var(--color-navy)]">{step.t}</p>
-          <p class="mt-1 text-xs text-slate-500 leading-relaxed">{step.d}</p>
-        </div>
+          <p class="mt-1 text-xs text-slate-600 leading-relaxed">{step.d}</p>
+        </li>
       ))}
-    </div>
+    </ol>
   </section>
 
   <section class="container-page pb-20">
-    <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 mb-6 sm:sticky sm:top-[4.5rem] z-10">
+    <div class="card p-4 sm:p-5 mb-6 sm:sticky sm:top-[4.5rem] z-10">
       <div class="flex flex-col sm:flex-row gap-3">
         <div class="relative flex-1">
-          <Icon name="search" class="w-4.5 h-4.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            id="shop-search"
-            type="text"
-            placeholder="Search product name…"
-            class="w-full rounded-lg border border-slate-300 pl-10 pr-3 py-2.5 text-sm outline-none focus:border-[color:var(--color-blue)]"
-          />
+          <Icon name="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+          <label for="shop-search" class="sr-only">Search products</label>
+          <input id="shop-search" type="search" placeholder="Search product name…" class="field pl-10" autocomplete="off" />
+        </div>
+        <div class="sm:w-64">
+          <label for="shop-class" class="sr-only">Filter by type</label>
+          <select id="shop-class" class="field">
+            <option value="">All types ({classOptions.length})</option>
+            {classOptions.map((c) => <option value={c.id}>{c.name} ({c.n})</option>)}
+          </select>
         </div>
       </div>
-      <div class="flex flex-wrap gap-2 mt-4">
+      <div class="flex flex-wrap gap-2 mt-4" role="group" aria-label="Category">
         {categoryTabs.map((t) => (
-          <button type="button" class="shop-tab rounded-full border px-4 py-1.5 text-sm font-medium border-slate-300 text-slate-600 data-[active=true]:bg-[color:var(--color-navy)] data-[active=true]:text-white data-[active=true]:border-[color:var(--color-navy)]" data-category={t.id} data-active={t.id === '' ? 'true' : 'false'}>
-            {t.label}
+          <button type="button" class="shop-tab chip data-[active=true]:bg-[color:var(--color-navy)] data-[active=true]:text-white data-[active=true]:border-[color:var(--color-navy)]" data-category={t.id} data-active={t.id === '' ? 'true' : 'false'}>
+            {t.label} <span class="font-normal">({t.n})</span>
           </button>
         ))}
       </div>
-      <p id="shop-count" class="text-xs text-slate-500 mt-3"></p>
+      <p id="shop-count" class="text-xs text-slate-500 mt-3" role="status" aria-live="polite"></p>
     </div>
 
     <div id="shop-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {items.map((m, i) => {
+      {items.map((m) => {
         const cls = classById[m.classId];
         const cat = categoryById[m.categoryGroup];
         return (
-          <div
-            class="shop-item card-in card-lift flex flex-col bg-white ring-1 ring-slate-900/5 rounded-2xl overflow-hidden group"
-            data-search={m.name.toLowerCase()}
-            data-category={m.categoryGroup}
-            style={`animation-delay: ${Math.min(i, 11) * 40}ms`}
-          >
-            <div class="relative aspect-[4/3] tile-pattern overflow-hidden">
-              <div class="tile-dots absolute inset-0 opacity-70"></div>
-              <div class="relative w-full h-full grid place-items-center">
-                <span class="grid place-items-center w-14 h-14 rounded-2xl bg-white/80 backdrop-blur-sm shadow-[0_10px_24px_-8px_rgba(11,42,74,0.28)] transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-2">
-                  <Icon name={cat?.icon ?? 'capsule'} class="w-7 h-7 text-[color:var(--color-navy)]/70" />
-                </span>
-              </div>
-              <span class="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md bg-white/95 backdrop-blur-sm px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[color:var(--color-success)] shadow-sm ring-1 ring-inset ring-[color:var(--color-success)]/25">
-                <span class="w-1.5 h-1.5 rounded-full bg-current"></span> OTC
+          <article class="shop-item card flex flex-col" data-search={m.name.toLowerCase()} data-category={m.categoryGroup} data-class={m.classId}>
+            <div class="flex items-start gap-3 p-4 pb-0">
+              <span class="grid place-items-center w-11 h-11 rounded-lg bg-[#E9F5F4] text-[color:var(--color-teal-dark)] shrink-0">
+                <Icon name={cat?.icon ?? 'capsule'} class="w-5 h-5" />
               </span>
-            </div>
-            <div class="p-4 flex-1 flex flex-col">
-              <p class="text-sm font-medium text-[color:var(--color-ink)] group-hover:text-[color:var(--color-blue)] transition-colors">{m.name}</p>
-              <p class="text-xs text-slate-500 mt-0.5">{cls?.name ?? m.classId}</p>
-              <div class="mt-3 space-y-1.5">
-                <button
-                  type="button"
-                  class="add-to-cart w-full inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-white bg-[color:var(--color-accent)] hover:bg-[#d9700f] shadow-[0_6px_16px_-6px_rgba(245,130,32,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:scale-[0.98] rounded-full py-2"
-                  data-id={m.id}
-                  data-name={m.name}
-                  data-meta={cls?.name ?? ''}
-                >
-                  <Icon name="cart" class="w-3.5 h-3.5" /> Buy Now
-                </button>
-                <a
-                  href={`/request-quote/?product=${encodeURIComponent(m.name)}`}
-                  class="w-full inline-flex items-center justify-center text-xs font-semibold text-[color:var(--color-navy)] border border-[color:var(--color-navy)] hover:bg-[color:var(--color-blue-light)] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] rounded-full py-2"
-                >
-                  Bulk Order
-                </a>
+              <div class="min-w-0">
+                <h2 class="text-sm font-semibold text-[color:var(--color-ink)] leading-snug">
+                  {pageIds.has(m.id) ? <a href={`/products/${m.id}/`} class="hover:text-[color:var(--color-teal-dark)] hover:underline">{m.name}</a> : m.name}
+                </h2>
+                <p class="text-xs text-slate-600 mt-0.5">{cls?.name ?? m.classId}</p>
               </div>
             </div>
-          </div>
+            <div class="px-4 pt-3 flex flex-wrap gap-1.5">
+              <span class="inline-flex items-center rounded-md bg-[color:var(--color-success)]/10 text-[color:var(--color-success)] px-2 py-0.5 text-[11px] font-semibold">OTC</span>
+              <span class="inline-flex items-center rounded-md bg-slate-100 text-slate-700 px-2 py-0.5 text-[11px] font-medium">{cat?.name ?? 'Nutraceuticals'}</span>
+            </div>
+            <div class="p-4 mt-auto space-y-2">
+              <button
+                type="button"
+                class="add-to-cart btn btn-primary btn-sm w-full"
+                data-id={m.id}
+                data-name={m.name}
+                data-meta={cls?.name ?? ''}
+              >
+                <Icon name="cart" class="w-3.5 h-3.5" /> Add to order request
+              </button>
+              <div class="flex items-center justify-between text-xs">
+                {pageIds.has(m.id) ? <a href={`/products/${m.id}/`} class="text-slate-600 hover:underline">Details</a> : <span></span>}
+                <a href={`/request-quote/?product=${encodeURIComponent(m.name)}`} class="font-semibold text-[color:var(--color-navy)] hover:underline">Bulk quote (B2B)</a>
+              </div>
+            </div>
+          </article>
         );
       })}
     </div>
-    <p id="shop-empty" class="hidden text-center text-slate-500 py-16">No products match your search.</p>
+
+    <div id="shop-more" class="mt-8 text-center" hidden>
+      <button type="button" id="shop-more-btn" class="btn btn-outline">Show more products</button>
+    </div>
+    <div id="shop-empty" class="hidden state-empty text-center py-16">
+      <p class="font-semibold text-[color:var(--color-navy)]">No products match your filters.</p>
+      <p class="mt-1 text-sm text-slate-600">Clear a filter, or <a href="/contact/" class="underline text-[color:var(--color-teal-dark)]">ask us about a product that is not listed</a>.</p>
+      <button type="button" id="shop-clear" class="btn btn-outline btn-sm mt-4">Clear filters</button>
+    </div>
   </section>
 </BaseLayout>
 
 <script>
+  const PAGE = 24;
   const searchInput = document.getElementById('shop-search') as HTMLInputElement | null;
+  const classSel = document.getElementById('shop-class') as HTMLSelectElement | null;
   const tabs = Array.from(document.querySelectorAll<HTMLElement>('.shop-tab'));
   const rows = Array.from(document.querySelectorAll<HTMLElement>('.shop-item'));
   const countEl = document.getElementById('shop-count');
   const gridEl = document.getElementById('shop-grid');
   const emptyEl = document.getElementById('shop-empty');
+  const moreWrap = document.getElementById('shop-more');
 
   let activeCategory = '';
+  let limit = PAGE;
 
   function applyFilters() {
     const q = (searchInput?.value ?? '').trim().toLowerCase();
-    let visible = 0;
-    rows.forEach((row) => {
-      const matchesQ = !q || (row.dataset.search ?? '').includes(q);
-      const matchesCategory = !activeCategory || row.dataset.category === activeCategory;
-      const show = matchesQ && matchesCategory;
-      row.style.display = show ? '' : 'none';
-      if (show) visible += 1;
-    });
-    if (countEl) countEl.textContent = `${visible} of ${rows.length} products shown`;
-    emptyEl?.classList.toggle('hidden', visible !== 0);
-    gridEl?.classList.toggle('hidden', visible === 0);
+    const cls = classSel?.value ?? '';
+    const matches = rows.filter((row) =>
+      (!q || (row.dataset.search ?? '').includes(q)) && (!activeCategory || row.dataset.category === activeCategory) && (!cls || row.dataset.class === cls),
+    );
+    const shown = new Set(matches.slice(0, limit));
+    rows.forEach((row) => { row.style.display = shown.has(row) ? '' : 'none'; });
+    if (countEl) countEl.textContent = `Showing ${shown.size} of ${matches.length} matching products (${rows.length} in the shop)`;
+    emptyEl?.classList.toggle('hidden', matches.length !== 0);
+    gridEl?.classList.toggle('hidden', matches.length === 0);
+    if (moreWrap) moreWrap.hidden = matches.length <= limit;
   }
+  const reset = () => { limit = PAGE; applyFilters(); };
 
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      activeCategory = tab.dataset.category ?? '';
-      tabs.forEach((t) => t.setAttribute('data-active', String(t === tab)));
-      applyFilters();
-    });
+  tabs.forEach((tab) => tab.addEventListener('click', () => {
+    activeCategory = tab.dataset.category ?? '';
+    tabs.forEach((t) => t.setAttribute('data-active', String(t === tab)));
+    reset();
+  }));
+  searchInput?.addEventListener('input', reset);
+  classSel?.addEventListener('change', reset);
+  document.getElementById('shop-more-btn')?.addEventListener('click', () => { limit += PAGE; applyFilters(); });
+  document.getElementById('shop-clear')?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    if (classSel) classSel.value = '';
+    activeCategory = '';
+    tabs.forEach((t) => t.setAttribute('data-active', String(t.dataset.category === '')));
+    reset();
   });
-
-  searchInput?.addEventListener('input', applyFilters);
   applyFilters();
 </script>

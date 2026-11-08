@@ -1,4 +1,4 @@
----
+﻿---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
@@ -18,7 +18,7 @@ const categories = [...new Set(resources.map((r) => r.data.category))];
   </div>
 
   <section class="container-page pt-6 pb-10">
-    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Buyer Resources</p>
+    <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent-dark)] mb-3">Buyer Resources</p>
     <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">From Product Search to Export Documentation</h1>
     <p class="mt-3 text-slate-600 max-w-2xl">Practical, factual guides for international buyers evaluating pharmaceutical supply from India — market intelligence, compliance explainers, HS codes and documentation.</p>
     <div class="mt-6 flex flex-wrap gap-2">
@@ -30,7 +30,7 @@ const categories = [...new Set(resources.map((r) => r.data.category))];
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {resources.map((r) => (
         <a href={`/resources/${r.id}/`} class={`flex flex-col p-6 rounded-2xl border transition-shadow hover:shadow-lg ${r.data.featured ? 'border-[color:var(--color-accent)]/40 bg-[color:var(--color-blue-light)]' : 'border-slate-200 bg-white'}`}>
-          {r.data.featured && <span class="text-[10px] font-bold uppercase tracking-wide text-[color:var(--color-accent)] mb-2">Featured</span>}
+          {r.data.featured && <span class="text-[10px] font-bold uppercase tracking-wide text-[color:var(--color-accent-dark)] mb-2">Featured</span>}
           <span class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-blue)]">{r.data.category}</span>
           <h2 class="mt-2 font-display text-lg text-[color:var(--color-navy)] leading-snug">{r.data.title}</h2>
           <p class="mt-2 text-sm text-slate-600 leading-relaxed flex-1">{r.data.excerpt}</p>

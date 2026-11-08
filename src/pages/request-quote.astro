@@ -15,7 +15,7 @@ import Icon from '../components/Icon.astro';
 
   <section class="container-page pt-6 pb-16 grid lg:grid-cols-5 gap-10">
     <div class="lg:col-span-2">
-      <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Request a Quote</p>
+      <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent-dark)] mb-3">Request a Quote</p>
       <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] leading-tight">Looking for Bulk Pharmaceutical Supply?</h1>
       <p class="mt-4 text-slate-600 leading-relaxed">
         This form is for licensed importers, distributors, wholesalers, hospitals and government procurement buyers. Tell us the products, quantities and markets you're targeting — our team reviews regulatory and supply considerations before responding with a formal quotation.
@@ -34,11 +34,3 @@ import Icon from '../components/Icon.astro';
   </section>
 </BaseLayout>
 
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const product = params.get('product');
-  if (product) {
-    const field = document.getElementById('qf-product') as HTMLInputElement | null;
-    if (field) field.value = product;
-  }
-</script>

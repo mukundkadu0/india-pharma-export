@@ -10,10 +10,10 @@ interface Props {
 }
 const { href, variant = 'primary', size = 'md', icon = 'arrow-right', class: className = '', type, id } = Astro.props;
 
-const base = 'inline-flex items-center justify-center gap-2 font-semibold rounded-full whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-2';
+const base = 'inline-flex items-center justify-center gap-2 font-semibold rounded-lg text-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 min-h-[44px]';
 const sizes = { md: 'px-5 py-2.5 text-sm', lg: 'px-7 py-3.5 text-base' };
 const variants = {
-  primary: 'bg-[color:var(--color-accent)] text-white hover:bg-[#d9700f]',
+  primary: 'bg-[color:var(--color-teal-dark)] text-white hover:bg-[#0a5f5d]',
   secondary: 'bg-[color:var(--color-navy)] text-white hover:bg-[color:var(--color-navy-deep)]',
   outline: 'border-2 border-[color:var(--color-navy)] text-[color:var(--color-navy)] hover:bg-[color:var(--color-navy)] hover:text-white',
   ghost: 'text-[color:var(--color-navy)] hover:bg-[color:var(--color-blue-light)]',

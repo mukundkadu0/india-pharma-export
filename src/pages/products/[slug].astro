@@ -10,6 +10,8 @@ import ProductCard from '../../components/ProductCard.astro';
 import CTASection from '../../components/CTASection.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import CommerceCtas from '../../components/CommerceCtas.astro';
+import MoleculePage from '../../components/MoleculePage.astro';
+import { listableMolecules } from '../../lib/molecules';
 import { categoryGroups, getCategoryGroup, exportStatusMeta, prescriptionStatusMeta, marketMeta } from '../../data/taxonomy';
 
 export async function getStaticPaths() {
@@ -26,13 +28,35 @@ export async function getStaticPaths() {
     props: { type: 'product' as const, product: p.data },
   }));
 
-  return [...categoryPaths, ...productPaths];
+  const allMolecules = (await getCollection('molecules')).map((m) => m.data);
+  const classData = classes.map((c) => c.data);
+  const classById = Object.fromEntries(classData.map((c) => [c.id, c]));
+  const listable = listableMolecules(allMolecules, classData, products.map((p) => p.data));
+  const byClass: Record<string, typeof listable> = {};
+  for (const m of listable) (byClass[m.classId] ??= []).push(m);
+
+  const moleculePaths = listable.map((m) => {
+    const pool = byClass[m.classId];
+    const i = pool.indexOf(m);
+    // Up to 12 neighbours (rotating through the class) keeps every page linked without bloating it.
+    const siblings = Array.from({ length: Math.min(12, pool.length - 1) }, (_, k) => pool[(i + 1 + k) % pool.length]).map((s) => ({ id: s.id, name: s.name }));
+    return {
+      params: { slug: m.id },
+      props: { type: 'molecule' as const, molecule: m, moleculeClass: classById[m.classId], siblings },
+    };
+  });
+
+  return [...categoryPaths, ...productPaths, ...moleculePaths];
 }
 
 const { type } = Astro.props;
 const allProducts = (await getCollection('products')).map((p) => p.data);
 const allClasses = (await getCollection('classes')).map((c) => c.data);
 ---
+
+{type === 'molecule' && (
+  <MoleculePage molecule={Astro.props.molecule} classData={Astro.props.moleculeClass} siblings={Astro.props.siblings} />
+)}
 
 {type === 'category' && (() => {
   const category = getCategoryGroup(Astro.props.categoryId)!;
@@ -47,7 +71,7 @@ const allClasses = (await getCollection('classes')).map((c) => c.data);
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Products', href: '/products/' }, { label: category.name }]} />
       </div>
       <section class="container-page pt-6 pb-12">
-        <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent)] mb-3">Product Category</p>
+        <p class="text-xs font-semibold tracking-[0.2em] uppercase text-[color:var(--color-accent-dark)] mb-3">Product Category</p>
         <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] max-w-2xl">{category.name}</h1>
         <p class="mt-3 text-slate-600 max-w-2xl">{category.shortDescription}</p>
       </section>
@@ -131,23 +155,35 @@ const allClasses = (await getCollection('classes')).map((c) => c.data);
         />
       </div>
 
-      <section class="container-page pt-6 pb-14 grid lg:grid-cols-5 gap-10">
+      <section class="container-page pt-6 pb-14 grid lg:grid-cols-5 gap-10" data-product-view={product.id} data-product-name={product.name}>
         <div class="lg:col-span-3">
           <div class="flex flex-wrap gap-2 mb-4">
             <Badge label={category?.name ?? ''} className="bg-[color:var(--color-blue-light)] text-[color:var(--color-navy)] border-transparent normal-case" size="md" />
             <Badge label={es.label} className={es.className} size="md" />
+            <Badge label={ps.label} className={ps.className} size="md" />
           </div>
           <h1 class="font-display text-3xl sm:text-4xl text-[color:var(--color-navy)] leading-tight">{product.name}</h1>
           <p class="mt-2 text-lg text-slate-500">{product.genericName}</p>
 
+          <img
+            src={`/images/products/${product.id}.webp`}
+            alt={`${product.name} export pack illustration`}
+            width="800"
+            height="600"
+            fetchpriority="high"
+            decoding="async"
+            class="mt-6 w-full max-w-md rounded-2xl ring-1 ring-slate-900/5"
+          />
+          <p class="mt-2 text-xs text-slate-500">Illustrative pack image. Actual pack and artwork are confirmed per order.</p>
+
           <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
-              { icon: 'shield-check', label: 'WHO-GMP Partner-Manufactured' },
-              { icon: 'globe', label: `Target: ${product.marketRegions.map((m: string) => marketMeta[m]?.flagLabel ?? m).join(', ')}` },
-              { icon: 'check-circle', label: 'Regulatory-Aware Support' },
-              { icon: 'truck', label: 'Reliable Supply Chain' },
+              { icon: 'building', label: 'Partner-manufactured. Partner confirmed per enquiry' },
+              { icon: 'globe', label: `Listed regions: ${product.marketRegions.map((m: string) => marketMeta[m]?.flagLabel ?? m).join(', ')}` },
+              { icon: 'document', label: 'GMP and analysis documents on request' },
+              { icon: 'quote', label: 'Quoted per quantity and destination' },
             ].map((t) => (
-              <div class="flex flex-col items-start gap-2 p-3 rounded-xl bg-slate-50">
+              <div class="flex flex-col items-start gap-2 p-3 rounded-lg bg-[color:var(--color-bg)] border border-slate-200">
                 <Icon name={t.icon} class="w-5 h-5 text-[color:var(--color-navy)]" />
                 <span class="text-xs font-medium text-slate-600 leading-snug">{t.label}</span>
               </div>
@@ -182,6 +218,8 @@ const allClasses = (await getCollection('classes')).map((c) => c.data);
                     ['Strength', product.strength],
                     ['HS Code', product.hsCode],
                     ['Packaging', product.packaging],
+                    ['Export classification', es.label],
+                    ['Prescription classification', ps.label],
                     ['MOQ', product.moq],
                     ...(product.shelfLife ? [['Shelf Life', product.shelfLife]] : []),
                     ...(product.storage ? [['Storage', product.storage]] : []),
@@ -213,6 +251,27 @@ const allClasses = (await getCollection('classes')).map((c) => c.data);
             </div>
           </div>
 
+          <div class="mt-10 grid sm:grid-cols-2 gap-8">
+            <div>
+              <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">Destination considerations</h2>
+              <p class="text-sm text-slate-600 leading-relaxed">Regions below are listed in our catalogue data for this product. A listing is not a registration or a guarantee of supply. Import authority, registration status and labelling are checked per destination before we quote.</p>
+              <ul class="mt-3 flex flex-wrap gap-2">
+                {product.marketRegions.map((m: string) => (
+                  <li><a href={`/markets/${m}/`} class="chip hover:border-[color:var(--color-teal)]">{marketMeta[m]?.flagLabel ?? m}</a></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">Documentation available on request</h2>
+              <ul class="space-y-2 text-sm text-slate-700">
+                {['Certificate of Analysis (per batch)', 'Product specification and shelf-life data', 'GMP certificate and manufacturing licence of the partner site', 'COPP, where issued for the product'].map((d) => (
+                  <li class="flex gap-2"><Icon name="document" class="w-4 h-4 mt-0.5 text-[color:var(--color-teal)] shrink-0" />{d}</li>
+                ))}
+              </ul>
+              <p class="mt-2 text-xs text-slate-500">These belong to the manufacturing partner, not to PharmaXports.</p>
+            </div>
+          </div>
+
           {product.faqs?.length > 0 && (
             <div class="mt-10">
               <h2 class="font-display text-xl text-[color:var(--color-navy)] mb-3">Quick Answers</h2>
@@ -230,25 +289,38 @@ const allClasses = (await getCollection('classes')).map((c) => c.data);
 
         <div class="lg:col-span-2">
           <div class="sticky top-24 space-y-4">
-            <div class="rounded-2xl border border-slate-200 bg-[color:var(--color-blue-light)] p-6">
-              <h2 class="font-semibold text-[color:var(--color-navy)]">Order {product.name}</h2>
-              {product.pricing?.retailPriceUsd ? (
-                <p class="mt-2 text-2xl font-bold text-[color:var(--color-navy)]">${product.pricing.retailPriceUsd.toFixed(2)}</p>
-              ) : (
-                <p class="mt-1.5 text-sm text-slate-600">Pricing is quoted per requirement, destination and quantity.</p>
-              )}
-              <div class="mt-4">
-                <CommerceCtas product={product} layout="detail" />
-              </div>
+            <div class="card p-5 border-t-4 border-t-[color:var(--color-gold)]">
+              <h2 class="font-bold text-[color:var(--color-navy)]">Request a bulk quote</h2>
+              <p class="mt-1 text-sm text-slate-600">Pricing is quoted per quantity and destination. No price is shown until we confirm supply.</p>
+              <form action="/request-quote/" method="get" class="mt-4 space-y-3">
+                <input type="hidden" name="product" value={`${product.name} (${product.strength})`} />
+                <div>
+                  <label for="pq-qty" class="label">Estimated quantity</label>
+                  <input id="pq-qty" name="quantity" type="text" class="field" placeholder="e.g. 100,000 tablets" />
+                </div>
+                <div>
+                  <label for="pq-country" class="label">Destination country</label>
+                  <input id="pq-country" name="country" type="text" class="field" autocomplete="country-name" />
+                </div>
+                <button type="submit" class="btn btn-primary w-full">Request Bulk Quote <Icon name="arrow-right" class="w-4 h-4" /></button>
+              </form>
               <button
                 type="button"
-                class="add-to-inquiry mt-3 inline-flex items-center justify-center gap-2 w-full text-sm font-medium text-[color:var(--color-navy)] hover:underline py-1"
+                class="add-to-inquiry btn btn-outline w-full mt-3"
                 data-id={product.id}
                 data-name={product.name}
+                data-meta={product.strength}
               >
-                <Icon name="clipboard" class="w-4 h-4" /> Add to Inquiry List
+                <Icon name="clipboard" class="w-4 h-4" /> Add to RFQ list
               </button>
+              <a href="/inquiry/" class="mt-2 block text-center text-xs text-slate-500 underline">View my RFQ list</a>
             </div>
+            {product.commerceStatus === 'DTC_AND_BULK' && product.prescriptionStatus === 'otc' && (
+              <div class="card p-5">
+                <h2 class="text-sm font-bold text-[color:var(--color-navy)]">Direct order (OTC, where available)</h2>
+                <div class="mt-3"><CommerceCtas product={product} layout="detail" hideBulk /></div>
+              </div>
+            )}
             <div class="rounded-2xl border border-slate-200 p-5 text-sm text-slate-600">
               <p class="font-medium text-[color:var(--color-ink)] mb-2">Need documentation first?</p>
               <p>Our team can share a product brochure and manufacturing-partner regulatory summary on request — just mention it in your enquiry.</p>

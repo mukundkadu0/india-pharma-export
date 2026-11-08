@@ -143,5 +143,6 @@ export const buyerTypes = [
   { id: 'government', name: 'Government / Tender Buyers', description: 'Ministries of health and government procurement bodies buying through formal tender processes.' },
   { id: 'ngo', name: 'NGOs', description: 'NGOs and donor-funded health programmes procuring essential medicines, ARVs, antimalarials and vaccines at scale.' },
   { id: 'pharmacy-chain', name: 'Pharmacy Chains', description: 'Registered retail pharmacy chains sourcing OTC, nutraceutical and prescription lines through licensed wholesale channels.' },
+  { id: 'drop-shipper', name: 'Drop Shippers', description: 'Licensed online sellers fulfilling orders to end customers where permitted. Limited to OTC, nutraceutical, AYUSH and device lines; prescription medicines are never drop-shipped to consumers.' },
   { id: 'manufacturer', name: 'Pharmaceutical Manufacturers', description: 'Formulators and manufacturers sourcing APIs and pharmaceutical intermediates.' },
 ] as const;

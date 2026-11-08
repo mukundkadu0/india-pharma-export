@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
+import { listableMolecules } from '../lib/molecules';
 
 export const prerender = true;
 
@@ -27,6 +28,13 @@ export const GET: APIRoute = async () => {
     getCollection('molecules'),
   ]);
   const classNameById = Object.fromEntries(classes.map((c) => [c.data.id, c.data.name]));
+  const pageIds = new Set(
+    listableMolecules(
+      molecules.map((m) => m.data),
+      classes.map((c) => c.data),
+      products.map((p) => p.data),
+    ).map((m) => m.id),
+  );
 
   const items = [
     ...products.map((p) => ({
@@ -75,7 +83,7 @@ export const GET: APIRoute = async () => {
       type: m.data.buyDirect ? 'molecule-buy' : 'molecule',
       title: m.data.name,
       subtitle: classNameById[m.data.classId] ?? m.data.classId,
-      url: `/products/therapeutic-class/${m.data.classId}/#mol-${m.data.id}`,
+      url: pageIds.has(m.data.id) ? `/products/${m.data.id}/` : `/products/therapeutic-class/${m.data.classId}/#mol-${m.data.id}`,
       keywords: [],
     })),
   ];
