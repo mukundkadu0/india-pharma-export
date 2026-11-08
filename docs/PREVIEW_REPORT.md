@@ -1,5 +1,7 @@
 # Preview deployment report (2026-11-07)
 
+> **Correction (2026-11-09):** the "Not tested / outstanding" section below says preview submissions return "could not send". That was wrong. Before the 2026-11-09 fix, a failed server call fell back to Web3Forms, which emails the owner, so a submission on that preview would have been a live enquiry. The fallback now runs only on the production hostnames (see `RFQ_INTEGRATION_AUDIT.md`). Previews built before that fix still have the old behaviour.
+
 Preview (not production): https://india-pharma-export-o7chtcwp2-mikki4823s-projects.vercel.app
 Protected by Vercel login (project default, unchanged). Sign in to Vercel to open it.
 Superseded earlier previews: `...-3gji4oi37-...` (same build without the badge-contrast fix), `...-1te2ebfmt-...` (round 1).
