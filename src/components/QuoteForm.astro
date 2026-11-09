@@ -1,10 +1,10 @@
-﻿---
+---
 import { site } from '../data/site';
 import { buyerTypes } from '../data/taxonomy';
 import { countries } from '../lib/commerce';
 
 // One component for every enquiry entry point: the Request a Quote page, home, product, molecule, the
-// bulk-quote modal (variant="modal"), partnership and general contact. The buyer RFQ is a 3-step workflow;
+// bulk-quote modal (variant="modal"), partnership and general contact. The buyer RFQ is one short form;
 // partnership and general enquiries are single-step. Several forms can share a page: give each its own `idp`.
 interface Props {
   prefillProduct?: string;
@@ -18,7 +18,7 @@ const modal = variant === 'modal';
 
 const copy = {
   buyer: {
-    intro: 'Three short steps. Only the required fields are needed to start; extra detail helps us quote faster.',
+    intro: 'Tell us what you need and where it is going. We reply by email within 1-2 business days.',
     submit: 'Submit RFQ',
     subject: 'New Export Quote Request - PharmaXports',
     done: 'Our team will reply by email within 1-2 business days.',
@@ -60,107 +60,51 @@ const id = (s: string) => `${idp}-${s}`;
   <div id={id('fields')}>
     {!modal && <p class="text-sm text-slate-600 mb-4">{copy.intro}</p>}
 
-    {kind === 'buyer' && (
-      <ol id={id('progress')} class="flex items-center gap-2 mb-6" aria-label="RFQ progress">
-        {steps.map((s, i) => (
-          <li class="flex items-center gap-2 flex-1 last:flex-none" data-progress={i + 1}>
-            <span class="qf-dot grid place-items-center w-7 h-7 rounded-full text-xs font-bold border-2 border-slate-300 text-slate-500 bg-white shrink-0">{i + 1}</span>
-            <span class="qf-dot-label text-xs font-semibold text-slate-500 hidden sm:inline whitespace-nowrap">{s}</span>
-            {i < steps.length - 1 && <span class="flex-1 h-px bg-slate-200" aria-hidden="true"></span>}
-          </li>
-        ))}
-      </ol>
-    )}
     <p class="text-xs text-slate-500 mb-4">Fields marked * are required.</p>
 
     {kind === 'buyer' && (
-      <>
-        <!-- STEP 1: requirement -->
-        <fieldset data-step="1" class="border-0 p-0 m-0 min-w-0">
-          <legend class="text-base font-bold text-[color:var(--color-navy)] mb-4" tabindex="-1">Step 1 of 3: What do you need?</legend>
-          <div class="space-y-5">
-            <div>
-              <label for={id('product')} class="label">Product(s) or molecule(s) *</label>
-              <textarea id={id('product')} name="product" rows="2" required class="field" placeholder="e.g. Paracetamol tablets IP 500 mg. For several products, list one per line.">{prefillProduct}</textarea>
-              <div id={id('rfq-list')} hidden class="mt-2 text-sm">
-                <button type="button" id={id('use-list')} class="font-semibold text-[color:var(--color-teal-dark)] underline">Use my RFQ list (<span id={id('list-count')}>0</span> products)</button>
-              </div>
-              <p class="mt-1 text-xs text-slate-500">Many products? Add them from the <a href="/products/" class="underline">catalogue</a> to your <a href="/inquiry/" class="underline">RFQ list</a>, or attach a list in step 3.</p>
-            </div>
-            <div class="grid sm:grid-cols-2 gap-5">
-              <div>
-                <label for={id('country')} class="label">Destination country *</label>
-                <input id={id('country')} name="country" type="text" required autocomplete="country-name" class="field" />
-              </div>
-              <div>
-                <label for={id('quantity')} class="label">Estimated quantity *</label>
-                <input id={id('quantity')} name="quantity" type="text" required placeholder="e.g. 100,000 tablets per month" class="field" />
-              </div>
+      <fieldset data-step="1" class="border-0 p-0 m-0 min-w-0">
+        <legend class="sr-only" tabindex="-1">Request a quote</legend>
+        <div class="space-y-5">
+          <div>
+            <label for={id('product')} class="label">Medicine(s) you need *</label>
+            <textarea id={id('product')} name="product" rows="2" required class="field" placeholder="e.g. Paracetamol tablets IP 500 mg. For several products, list one per line.">{prefillProduct}</textarea>
+            <div id={id('rfq-list')} hidden class="mt-2 text-sm">
+              <button type="button" id={id('use-list')} class="font-semibold text-[color:var(--color-teal-dark)] underline">Use my RFQ list (<span id={id('list-count')}>0</span> products)</button>
             </div>
           </div>
-        </fieldset>
-
-        <!-- STEP 2: contact -->
-        <fieldset data-step="2" hidden class="border-0 p-0 m-0 min-w-0">
-          <legend class="text-base font-bold text-[color:var(--color-navy)] mb-4" tabindex="-1">Step 2 of 3: Who are we replying to?</legend>
           <div class="grid sm:grid-cols-2 gap-5">
             <div>
-              <label for={id('name')} class="label">Full name *</label>
-              <input id={id('name')} name="fullName" type="text" required autocomplete="name" class="field" />
+              <label for={id('quantity')} class="label">Quantity *</label>
+              <input id={id('quantity')} name="quantity" type="text" required placeholder="e.g. 100,000 tablets per month" class="field" />
+            </div>
+            <div>
+              <label for={id('country')} class="label">Country *</label>
+              <input id={id('country')} name="country" type="text" required autocomplete="country-name" class="field" />
             </div>
             <div>
               <label for={id('company')} class="label">Company name *</label>
               <input id={id('company')} name="companyName" type="text" required autocomplete="organization" class="field" />
             </div>
             <div>
-              <label for={id('email')} class="label">Business email *</label>
-              <input id={id('email')} name="email" type="email" required autocomplete="email" inputmode="email" class="field" />
-            </div>
-            <div>
               <label for={id('buyer-type')} class="label">Buyer type *</label>
               <select id={id('buyer-type')} name="buyerType" required class="field">
-                <option value="">Select buyer type…</option>
+                <option value="">Select buyer typeâ€¦</option>
                 {buyerTypes.map((b) => <option value={b.name}>{b.name}</option>)}
                 <option value="Other">Other</option>
               </select>
             </div>
-            <div class="sm:col-span-2 sm:max-w-sm">
-              <label for={id('phone')} class="label">Phone / WhatsApp (optional)</label>
-              <input id={id('phone')} name="phone" type="tel" autocomplete="tel" inputmode="tel" pattern={phoneAttrs.pattern} title={phoneAttrs.title} class="field" />
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- STEP 3: specifications (all optional) -->
-        <fieldset data-step="3" hidden class="border-0 p-0 m-0 min-w-0">
-          <legend class="text-base font-bold text-[color:var(--color-navy)] mb-1" tabindex="-1">Step 3 of 3: Specifications (optional)</legend>
-          <p class="text-sm text-slate-500 mb-4">Skip anything you do not know yet. You can submit now.</p>
-          <div class="grid sm:grid-cols-2 gap-5">
-            <div><label for={id('dosage')} class="label">Dosage form</label><input id={id('dosage')} name="dosageForm" type="text" placeholder="Tablet, capsule, injection…" class="field" /></div>
-            <div><label for={id('strength')} class="label">Strength</label><input id={id('strength')} name="strength" type="text" class="field" /></div>
-            <div><label for={id('packaging')} class="label">Packaging</label><input id={id('packaging')} name="packaging" type="text" placeholder="e.g. 10 x 10 blister" class="field" /></div>
-            <div><label for={id('market')} class="label">Target market</label><input id={id('market')} name="targetMarket" type="text" placeholder="e.g. Nigeria, UAE, Philippines" class="field" /></div>
-            <div><label for={id('price')} class="label">Target price</label><input id={id('price')} name="targetPrice" type="text" placeholder="e.g. 0.02 per tablet" class="field" /></div>
             <div>
-              <label for={id('currency')} class="label">Currency preference</label>
-              <select id={id('currency')} name="currency" class="field">{currencies.map((c) => <option value={c === 'No preference' ? '' : c}>{c}</option>)}</select>
+              <label for={id('email')} class="label">Email *</label>
+              <input id={id('email')} name="email" type="email" required autocomplete="email" inputmode="email" class="field" />
             </div>
             <div>
-              <label for={id('incoterm')} class="label">Incoterm</label>
-              <select id={id('incoterm')} name="incoterm" class="field">{incoterms.map((c) => <option value={c.startsWith('Not sure') ? '' : c}>{c}</option>)}</select>
+              <label for={id('phone')} class="label">Mobile number *</label>
+              <input id={id('phone')} name="phone" type="tel" required autocomplete="tel" inputmode="tel" pattern={phoneAttrs.pattern} title={phoneAttrs.title} placeholder="+91 98765 43210" class="field" />
             </div>
-            <div><label for={id('port')} class="label">Destination port</label><input id={id('port')} name="destinationPort" type="text" placeholder="e.g. Lagos (Apapa)" class="field" /></div>
-            <div><label for={id('date')} class="label">Expected delivery</label><input id={id('date')} name="deliveryDate" type="date" class="field" /></div>
-            <div><label for={id('list')} class="label">Link to a product list</label><input id={id('list')} name="attachmentUrl" type="url" placeholder="https:// Drive, Dropbox or OneDrive" class="field" /></div>
-            <div class="sm:col-span-2">
-              <label for={id('file')} class="label">Upload an RFQ or product list (PDF, XLSX, XLS or CSV, up to 4 MB)</label>
-              <input id={id('file')} name="attachment" type="file" accept=".pdf,.xlsx,.xls,.csv" aria-describedby={id('file-help')} class={fileClass} />
-              <p id={id('file-help')} class="mt-1 text-xs text-slate-500">Checked on our server before it is accepted. Macro-enabled workbooks are refused. Uploads need email delivery to be configured; if not, you will be told.</p>
-            </div>
-            <div class="sm:col-span-2"><label for={id('message')} class="label">Additional information</label><textarea id={id('message')} name="message" rows="3" class="field"></textarea></div>
           </div>
-        </fieldset>
-      </>
+        </div>
+      </fieldset>
     )}
 
     {kind !== 'buyer' && (
@@ -174,7 +118,7 @@ const id = (s: string) => `${idp}-${s}`;
             <div>
               <label for={id('ptype')} class="label">Partnership type *</label>
               <select id={id('ptype')} name="partnershipType" required class="field">
-                <option value="">Select type…</option>
+                <option value="">Select typeâ€¦</option>
                 {partnershipTypes.map((t) => <option value={t}>{t}</option>)}
               </select>
             </div>
@@ -350,7 +294,7 @@ const id = (s: string) => `${idp}-${s}`;
 
       sending = true;
       if (submitBtn) submitBtn.disabled = true;
-      if (status) { status.textContent = 'Sending…'; status.className = 'mt-4 text-sm text-slate-600'; }
+      if (status) { status.textContent = 'Sendingâ€¦'; status.className = 'mt-4 text-sm text-slate-600'; }
 
       const result = await submitEnquiry(form, kind, form.dataset.endpoint || '');
       sending = false;

@@ -79,7 +79,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const kind = (['buyer', 'partnership', 'general'] as const).find((k) => k === clean(form.get('enquiry_type'))) ?? 'general';
   const lead = {
     kind,
-    name: clean(form.get('fullName')),
+    name: clean(form.get('fullName')) || clean(form.get('companyName')),
     company: clean(form.get('companyName')) || clean(form.get('company')),
     email: clean(form.get('email')),
     phone: clean(form.get('phone')),
@@ -115,7 +115,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const full = clean(form.get('rfq_mode')) === 'full';
   const required: (keyof typeof lead)[] =
     kind === 'buyer'
-      ? full ? ['name', 'company', 'email', 'country', 'buyerType', 'product', 'quantity'] : ['name', 'email', 'country', 'product', 'quantity']
+      ? full ? ['company', 'email', 'phone', 'country', 'buyerType', 'product', 'quantity'] : ['name', 'email', 'country', 'product', 'quantity']
       : kind === 'partnership'
         ? ['name', 'company', 'email', 'country', 'partnershipType', 'message']
         : ['name', 'email', 'message'];
